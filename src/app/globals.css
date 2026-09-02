@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@theme {
+  --animate-spin-slow: spin-slow 60s linear infinite;
+  --animate-spin-slower: spin-slower 90s linear infinite;
+  --animate-pulse-soft: pulse-soft 5s ease-in-out infinite;
+
+  @keyframes spin-slow {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-slower {
+    to {
+      transform: rotate(-360deg);
+    }
+  }
+
+  @keyframes pulse-soft {
+    0%,
+    100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background-color: #09090b;
+  color: #fafafa;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background-color: #fafafa;
+  color: #09090b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin-slow,
+  .animate-spin-slower,
+  .animate-pulse-soft {
+    animation: none;
+  }
+}
