@@ -39,3 +39,36 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# OS - Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# OS - macOS (extra safety, .DS_Store already covered)
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.iml
+
+# Bundler / build caches
+.turbo/
+.cache/
+.parcel-cache/
+.eslintcache
+
+# Tooling local de agentes (no parte del proyecto)
+.agents/
+.atl/
+skills-lock.json
+
+# Logs
+*.log
+lerna-debug.log*
+.npm/
+.yarn-integrity
