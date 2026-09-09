@@ -1,34 +1,24 @@
-import Image from "next/image";
 import { Container } from "@/components/ui/container";
+import { LogoCarousel, type CarouselLogo } from "@/components/ui/logo-carousel";
 
-const platforms = [
-  { name: "Instagram", slug: "instagram" },
-  { name: "Facebook", slug: "facebook" },
-  { name: "LinkedIn", slug: "linkedin" },
-  { name: "WhatsApp", slug: "whatsapp" },
-  { name: "Meta", slug: "meta" },
+const platforms: CarouselLogo[] = [
+  { name: "Instagram", src: "https://cdn.simpleicons.org/instagram/ffffff" },
+  { name: "Facebook", src: "https://cdn.simpleicons.org/facebook/ffffff" },
+  // Simple Icons dropped LinkedIn, so this one is served locally.
+  { name: "LinkedIn", src: "/logos/linkedin.svg" },
+  { name: "WhatsApp", src: "https://cdn.simpleicons.org/whatsapp/ffffff" },
+  { name: "Meta", src: "https://cdn.simpleicons.org/meta/ffffff" },
 ];
 
 export function Integrations() {
   return (
-    <section className="border-y border-zinc-900 py-12">
-      <Container className="flex flex-col items-center gap-8 md:flex-row md:justify-between">
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500">
-          Conectado con
+    <section className="border-y border-zinc-900 py-10">
+      <Container className="flex flex-col items-center gap-6 md:flex-row md:justify-between">
+        <p className="max-w-[36ch] text-center text-sm text-zinc-500 md:text-left">
+          Integraciones previstas mediante APIs oficiales, sujetas a los
+          permisos de cada plataforma.
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-8 md:gap-10">
-          {platforms.map((platform) => (
-            <Image
-              key={platform.slug}
-              src={`https://cdn.simpleicons.org/${platform.slug}/ffffff`}
-              alt={platform.name}
-              width={20}
-              height={20}
-              unoptimized
-              className="h-5 w-5 opacity-40 transition-opacity duration-300 hover:opacity-90"
-            />
-          ))}
-        </div>
+        <LogoCarousel logos={platforms} columnCount={3} />
       </Container>
     </section>
   );

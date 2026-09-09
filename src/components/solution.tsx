@@ -40,22 +40,22 @@ const pillars = [
   {
     icon: Database,
     title: "Motor de contexto",
-    body: "Ingiere tu Brand Book: inventario, tono de voz, colores y objetivos. Coherencia en cada iteración.",
+    body: "Tu oferta, tu público, tu tono, tus colores y tus objetivos en una sola base. Cada pieza sale con identidad y no tenés que explicar el negocio de cero.",
   },
   {
     icon: Sparkle,
-    title: "Pipeline generativo",
-    body: "Diseña flyers y redacta captions optimizados con modelos de lenguaje y generación gráfica.",
+    title: "Generación con contexto",
+    body: "Ideas, captions, llamados a la acción y piezas visuales adaptadas a tu marca. Nada genérico.",
   },
   {
     icon: PaperPlaneTilt,
-    title: "Distribución automática",
-    body: "Calendariza y publica en Instagram y otras plataformas vía APIs oficiales como Meta Graph.",
+    title: "Publicación multicanal",
+    body: "Lo aprobado se agenda y se distribuye en Instagram, Facebook y LinkedIn mediante APIs oficiales.",
   },
   {
     icon: ChartLineUp,
-    title: "Analítica y recomendación",
-    body: "Monitorea engagement y alcance. Si caen, ajusta los prompts y te avisa con recomendaciones.",
+    title: "Analítica que explica",
+    body: "Alcance, interacciones y evolución, traducidos a una recomendación concreta: qué repetir, qué cambiar y por qué.",
   },
 ];
 
@@ -66,9 +66,9 @@ export function Solution() {
     <section id="solucion" className="py-24 md:py-32">
       <Container>
         <SectionHeader
-          eyebrow="La solución"
-          title="Un agente que hace el trabajo completo."
-          sub="Quark gestiona el ciclo de vida del contenido en redes: del contexto del negocio a la publicación y la optimización."
+          eyebrow="Cómo funciona por dentro"
+          title="Un sistema completo, no un generador de textos."
+          sub="QUARK conecta contexto, generación, publicación y análisis en un mismo flujo. La IA propone; vos decidís qué representa a tu negocio."
         />
 
         <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3">

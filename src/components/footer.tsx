@@ -29,8 +29,9 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-zinc-500">
-              Agente conversacional y generativo de marketing para PyMEs y
-              comercios. {site.tagline}.
+              Plataforma de marketing con inteligencia artificial para
+              comercios, emprendedores y PyMEs. Convierte la información de tu
+              negocio en una presencia digital constante, coherente y medible.
             </p>
           </div>
 

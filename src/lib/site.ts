@@ -8,6 +8,7 @@ export const site = {
   nav: [
     { label: "Producto", href: "#solucion" },
     { label: "Cómo funciona", href: "#como-funciona" },
+    { label: "Quiénes somos", href: "#quienes-somos" },
     { label: "Planes", href: "#planes" },
   ],
 } as const;

@@ -3,36 +3,43 @@ import { Container } from "@/components/ui/container";
 import { SectionHeader } from "@/components/ui/section-header";
 import { Reveal } from "@/components/ui/reveal";
 
-const barriers = [
+const pains = [
   {
-    title: "Económica",
-    body: "Una agencia o un community manager cuesta un fijo mensual que una microempresa no puede sostener.",
+    title: "Económico",
+    body: "Diseño, redacción, planificación y análisis por separado son un costo fijo que una microempresa no sostiene. Hacerlo vos también cuesta: horas.",
   },
   {
-    title: "Tiempo y foco",
-    body: "Crear contenido saca al dueño del negocio y termina en publicaciones esporádicas y de baja calidad.",
+    title: "Operativo",
+    body: "La comunicación se posterga cuando aparece lo urgente. Publicás unos días, abandonás, volvés para una promo y nunca construís presencia.",
   },
   {
-    title: "Técnica y estética",
-    body: "Sin diseño, copywriting ni lectura de métricas, la comunicación se ve pobre y daña la marca.",
+    title: "De calidad",
+    body: "Piezas sin identidad visual, textos poco claros y llamados a la acción débiles. La marca se ve menos profesional de lo que es.",
+  },
+  {
+    title: "Estratégico",
+    body: "Publicar no es comunicar. Sin objetivos ni métricas, no sabés qué repetir, qué cambiar ni qué contenido trae consultas.",
   },
 ];
 
 export function Problem() {
   return (
-    <section className="py-24 md:py-32">
+    <section id="problema" className="py-24 md:py-32">
       <Container className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
         <div>
-          <SectionHeader title="Publicar en redes te cuesta tiempo, dinero y foco." />
+          <SectionHeader
+            title="El costo de no comunicar."
+            sub="Tus clientes revisan tus redes antes de escribirte. Si no publicás, la decisión se toma sin vos."
+          />
           <div className="mt-10 divide-y divide-zinc-900">
-            {barriers.map((barrier, i) => (
-              <Reveal key={barrier.title} delay={i * 0.06}>
+            {pains.map((pain, i) => (
+              <Reveal key={pain.title} delay={i * 0.06}>
                 <div className="py-6">
                   <h3 className="text-base font-medium text-zinc-100">
-                    {barrier.title}
+                    {pain.title}
                   </h3>
                   <p className="mt-2 max-w-[55ch] text-sm leading-relaxed text-zinc-400">
-                    {barrier.body}
+                    {pain.body}
                   </p>
                 </div>
               </Reveal>

@@ -8,22 +8,25 @@ import { contactHref } from "@/lib/site";
 const plans = [
   {
     name: "Essential",
-    tagline: "Para comercios locales",
+    tagline: "Para comercios y emprendimientos que empiezan a ordenar su comunicación",
     features: [
-      "Hasta 12 posts por mes, con imagen y copy",
-      "Publicación automática en Instagram",
-      "Reporte básico mensual de alcance",
-      "Mantenimiento del contexto de negocio",
+      "Contexto de marca de tu negocio",
+      "Hasta 12 piezas por mes, con imagen y texto",
+      "Revisión y aprobación antes de publicar",
+      "Publicación en un canal",
+      "Calendario básico y reporte mensual",
     ],
     featured: false,
   },
   {
     name: "Growth",
-    tagline: "Para PyMEs en expansión",
+    tagline: "Para PyMEs que ya comunican y quieren crecer",
     features: [
-      "Hasta 30 posts por mes",
-      "Publicación en Instagram, Facebook y LinkedIn",
-      "Motor de recomendaciones estratégicas activo",
+      "Todo lo de Essential",
+      "Hasta 30 piezas por mes",
+      "Instagram, Facebook y LinkedIn",
+      "Recomendaciones según rendimiento",
+      "Reportes ampliados y acompañamiento",
     ],
     featured: true,
   },
@@ -34,8 +37,9 @@ export function Pricing() {
     <section id="planes" className="py-24 md:py-32">
       <Container>
         <SectionHeader
-          title="Planes para cada etapa."
-          sub="Desde comercios locales hasta PyMEs en expansión. Precios según el volumen de tu negocio."
+          title="Un plan para cada etapa."
+          sub="Suscripción mensual, sin equipo que contratar. El precio depende del volumen de tu negocio y te lo contamos en la demo."
+          align="center"
         />
 
         <div className="mx-auto mt-12 grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
@@ -49,13 +53,15 @@ export function Pricing() {
                 }`}
               >
                 {plan.featured ? (
-                  <span className="absolute -top-3 left-8 rounded-full bg-zinc-50 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.14em] text-zinc-950">
+                  <span className="absolute -top-3 left-8 rounded-full bg-zinc-50 px-3 py-1 text-xs font-medium text-zinc-950">
                     Recomendado
                   </span>
                 ) : null}
 
                 <h3 className="text-xl font-medium text-zinc-50">{plan.name}</h3>
-                <p className="mt-1 text-sm text-zinc-500">{plan.tagline}</p>
+                <p className="mt-1 text-sm leading-relaxed text-zinc-500">
+                  {plan.tagline}
+                </p>
 
                 <ul className="mt-8 flex flex-1 flex-col gap-4">
                   {plan.features.map((feature) => (
