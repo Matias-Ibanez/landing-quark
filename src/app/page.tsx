@@ -1,14 +1,13 @@
 import { Nav } from "@/components/nav";
 import { Hero } from "@/components/hero";
-import { Integrations } from "@/components/integrations";
+import { Audience } from "@/components/audience";
 import { Problem } from "@/components/problem";
 import { HowItWorks } from "@/components/how-it-works";
-import { Solution } from "@/components/solution";
 import { WhyQuark } from "@/components/why-quark";
-import { About } from "@/components/about";
-import { Audience } from "@/components/audience";
 import { Pricing } from "@/components/pricing";
+import { Integrations } from "@/components/integrations";
 import { Faq } from "@/components/faq";
+import { About } from "@/components/about";
 import { FinalCta } from "@/components/final-cta";
 import { Footer } from "@/components/footer";
 
@@ -18,15 +17,14 @@ export default function Home() {
       <Nav />
       <main>
         <Hero />
-        <Integrations />
+        <Audience />
         <Problem />
         <HowItWorks />
-        <Solution />
         <WhyQuark />
-        <About />
-        <Audience />
         <Pricing />
+        <Integrations />
         <Faq />
+        <About />
         <FinalCta />
       </main>
       <Footer />

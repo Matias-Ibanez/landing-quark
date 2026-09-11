@@ -24,7 +24,7 @@ export function Nav() {
     <header className="sticky top-0 z-50 border-b border-zinc-900 bg-zinc-950/80 backdrop-blur">
       <Container className="flex h-16 items-center justify-between">
         <Link
-          href="#"
+          href="/"
           className="flex items-center gap-2.5 text-zinc-50"
           onClick={() => setOpen(false)}
         >

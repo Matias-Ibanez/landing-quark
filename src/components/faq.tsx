@@ -28,18 +28,22 @@ const faqs = [
     a: "No. Ninguna plataforma puede garantizar ventas solo por publicar. QUARK mejora la constancia, la claridad y la lectura de resultados de tu comunicación; el resultado comercial también depende de tu oferta, tu precio y tu atención.",
   },
   {
-    q: "¿Sirve si recién empiezo en redes?",
-    a: "Sí. El plan inicial está pensado para construir la base: identidad, calendario y las primeras publicaciones.",
+    q: "¿Qué pasa si la inteligencia artificial se equivoca?",
+    a: "Puede pasar. Por eso QUARK mantiene la revisión humana antes de publicar y señala los datos comerciales que conviene validar, como precios, stock, fechas y promociones.",
   },
   {
-    q: "¿Y si ya trabajo con un community manager?",
-    a: "También. QUARK puede complementar el trabajo humano automatizando lo repetitivo, proponiendo primeras ideas o centralizando métricas.",
+    q: "¿Qué datos necesita de mi negocio?",
+    a: "Solo el contexto necesario para comunicar: oferta, público, zona, tono y objetivos. Antes de conectar una cuenta se detallan los permisos requeridos por cada plataforma.",
+  },
+  {
+    q: "¿Qué cambia entre los planes?",
+    a: "Cambian la capacidad diaria de contenido y el alcance de publicación: creación solamente, una red social o múltiples redes. El volumen y el precio se definen en la demo.",
   },
 ];
 
 export function Faq() {
   return (
-    <section id="faq" className="py-24 md:py-32">
+    <section id="faq" className="scroll-mt-20 py-20 md:py-24">
       <Container className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-4">
           <SectionHeader

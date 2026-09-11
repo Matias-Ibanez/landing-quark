@@ -1,73 +1,79 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { ArrowRight } from "@phosphor-icons/react";
+import { useReducedMotion } from "motion/react";
 import { Cta } from "@/components/ui/cta";
 import { Eyebrow } from "@/components/ui/eyebrow";
-import { ParticleField } from "@/components/particle-field";
-import { Container } from "@/components/ui/container";
+import {
+  HeroDitheringContent,
+  HeroDitheringContainer,
+  HeroDitheringRoot,
+  HeroDitheringVisual,
+} from "@/components/ui/hero-dithering";
 import { contactHref } from "@/lib/site";
-import { EASE } from "@/lib/motion";
 
 export function Hero() {
   const reduce = useReducedMotion();
-  const initial = reduce ? false : { opacity: 0, y: 24 };
-  const animate = reduce ? false : { opacity: 1, y: 0 };
 
   return (
-    <section className="relative min-h-[100dvh] overflow-hidden">
-      <Container className="grid min-h-[100dvh] grid-cols-1 items-center gap-12 pb-16 pt-24 lg:grid-cols-12 lg:gap-8">
-        <div className="lg:col-span-7">
-          <motion.div
-            initial={initial}
-            animate={animate}
-            transition={{ duration: 0.6, delay: 0.05, ease: EASE }}
-          >
-            <Eyebrow>Automatización de marketing con IA</Eyebrow>
-          </motion.div>
+    <HeroDitheringRoot
+      srTitle=""
+      className="border-b border-zinc-900"
+      desktopShaderProps={{
+        colorBack: "#09090b",
+        colorFront: "#fafafa",
+        shape: "swirl",
+        type: "4x4",
+        size: 1.25,
+        speed: reduce === false ? 0.22 : 0,
+        scale: 0.72,
+      }}
+    >
+      <HeroDitheringContainer className="mx-auto min-h-[calc(100svh-4rem)] w-full max-w-7xl grid-cols-1 items-center gap-8 px-6 py-16 md:grid-cols-12 md:gap-10 md:px-8 md:py-20 lg:gap-12 lg:pb-24 xl:grid-cols-12">
+        <HeroDitheringContent className="order-2 items-start gap-0 p-0 text-left md:order-none md:col-span-7 md:p-0 lg:pr-4">
+          <Eyebrow>Marketing para comercios y PyMEs</Eyebrow>
 
-          <motion.h1
-            initial={initial}
-            animate={animate}
-            transition={{ duration: 0.6, delay: 0.15, ease: EASE }}
-            className="mt-6 max-w-[16ch] text-balance text-5xl font-medium leading-[1.05] tracking-tight text-zinc-50 md:text-6xl lg:text-7xl"
+          <h1
+            className="mt-6 max-w-[14ch] text-balance text-5xl font-medium leading-[1.02] tracking-[-0.045em] text-zinc-50 md:text-6xl lg:text-7xl"
           >
-            Tu marketing, en piloto automático.
-          </motion.h1>
+            Contenido para tu negocio, listo para publicar.
+          </h1>
 
-          <motion.p
-            initial={initial}
-            animate={animate}
-            transition={{ duration: 0.6, delay: 0.25, ease: EASE }}
-            className="mt-6 max-w-[52ch] text-lg leading-relaxed text-zinc-400"
+          <p
+            className="mt-6 max-w-[52ch] text-base leading-relaxed text-zinc-400 md:text-lg"
           >
-            QUARK genera, publica y optimiza el contenido de tus redes con IA,
-            sin agencia ni community manager.
-          </motion.p>
+            QUARK ayuda a crear, revisar y publicar en redes sin empezar de
+            cero cada día. La IA propone y vos decidís qué representa a tu
+            marca.
+          </p>
 
-          <motion.div
-            initial={initial}
-            animate={animate}
-            transition={{ duration: 0.6, delay: 0.35, ease: EASE }}
+          <div
             className="mt-10 flex flex-col gap-3 sm:flex-row"
           >
             <Cta href={contactHref} external>
               Pedir demo
+              <ArrowRight size={16} aria-hidden="true" />
             </Cta>
             <Cta href="#como-funciona" variant="secondary">
               Ver cómo funciona
             </Cta>
-          </motion.div>
-        </div>
+          </div>
 
-        <motion.div
-          initial={reduce ? false : { opacity: 0, scale: 0.96 }}
-          animate={reduce ? false : { opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
-          className="lg:col-span-5"
-        >
-          <ParticleField className="mx-auto aspect-square w-full max-w-md" />
-        </motion.div>
-      </Container>
-    </section>
+          <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.16em] text-zinc-600">
+            Contexto de marca · Aprobación humana · Publicación asistida
+          </p>
+        </HeroDitheringContent>
+
+        <HeroDitheringVisual
+          className="order-1 block h-[15rem] w-full sm:h-[18rem] md:order-none md:col-span-5 md:h-[22rem] lg:h-[26rem]"
+          desktopClassName="rounded-[2rem] border border-zinc-800 bg-zinc-950 [&>div]:size-full [&_canvas]:!size-full"
+          desktopShaderProps={{
+            width: 720,
+            height: 720,
+            style: { width: "100%", height: "100%" },
+          }}
+        />
+      </HeroDitheringContainer>
+    </HeroDitheringRoot>
   );
 }

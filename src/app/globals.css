@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "dither-plugin";
 
 @theme inline {
   --font-sans: var(--font-geist-sans);
@@ -35,6 +36,14 @@
 
 :root {
   color-scheme: dark;
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #18181b;
+  --card-foreground: #fafafa;
+  --primary: #fafafa;
+  --primary-foreground: #09090b;
+  --border: #27272a;
+  --ring: #a1a1aa;
 }
 
 html {

@@ -20,7 +20,7 @@ export function Footer() {
         <div className="flex flex-col justify-between gap-12 md:flex-row">
           <div className="max-w-sm">
             <Link
-              href="#"
+              href="/"
               className="flex items-center gap-2.5 text-zinc-50"
             >
               <Mark />

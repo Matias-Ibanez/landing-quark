@@ -6,10 +6,10 @@ export const site = {
   // TODO: reemplazar con el número real de WhatsApp (formato internacional, sin signo +).
   whatsapp: "5490000000000",
   nav: [
-    { label: "Producto", href: "#solucion" },
     { label: "Cómo funciona", href: "#como-funciona" },
-    { label: "Quiénes somos", href: "#quienes-somos" },
     { label: "Planes", href: "#planes" },
+    { label: "Preguntas", href: "#faq" },
+    { label: "Quiénes somos", href: "#quienes-somos" },
   ],
 } as const;
 

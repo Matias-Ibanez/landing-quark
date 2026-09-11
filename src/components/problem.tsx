@@ -1,64 +1,107 @@
-import Image from "next/image";
+import {
+  ClockCountdown,
+  PaintBrushBroad,
+  Repeat,
+} from "@phosphor-icons/react/ssr";
 import { Container } from "@/components/ui/container";
+import {
+  DitherImage,
+  DitherImageCaption,
+  DitherImageContent,
+  DitherImageFrame,
+  DitherImageOverlay,
+  DitherImageReveal,
+} from "@/components/ui/dither-image";
 import { SectionHeader } from "@/components/ui/section-header";
-import { Reveal } from "@/components/ui/reveal";
 
 const pains = [
   {
-    title: "Económico",
-    body: "Diseño, redacción, planificación y análisis por separado son un costo fijo que una microempresa no sostiene. Hacerlo vos también cuesta: horas.",
+    icon: ClockCountdown,
+    title: "Falta tiempo",
+    body: "Lo urgente gana y la comunicación se posterga una semana más.",
   },
   {
-    title: "Operativo",
-    body: "La comunicación se posterga cuando aparece lo urgente. Publicás unos días, abandonás, volvés para una promo y nunca construís presencia.",
+    icon: Repeat,
+    title: "Falta constancia",
+    body: "Publicar solo cuando hay una promoción no construye presencia.",
   },
   {
-    title: "De calidad",
-    body: "Piezas sin identidad visual, textos poco claros y llamados a la acción débiles. La marca se ve menos profesional de lo que es.",
-  },
-  {
-    title: "Estratégico",
-    body: "Publicar no es comunicar. Sin objetivos ni métricas, no sabés qué repetir, qué cambiar ni qué contenido trae consultas.",
+    icon: PaintBrushBroad,
+    title: "Cuesta sostener calidad",
+    body: "Cada pieza vuelve a empezar sin una voz ni una identidad compartida.",
   },
 ];
 
+const commerceImage =
+  "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1200&h=900&q=85";
+
 export function Problem() {
   return (
-    <section id="problema" className="py-24 md:py-32">
-      <Container className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
-        <div>
-          <SectionHeader
-            title="El costo de no comunicar."
-            sub="Tus clientes revisan tus redes antes de escribirte. Si no publicás, la decisión se toma sin vos."
-          />
-          <div className="mt-10 divide-y divide-zinc-900">
-            {pains.map((pain, i) => (
-              <Reveal key={pain.title} delay={i * 0.06}>
-                <div className="py-6">
-                  <h3 className="text-base font-medium text-zinc-100">
-                    {pain.title}
-                  </h3>
-                  <p className="mt-2 max-w-[55ch] text-sm leading-relaxed text-zinc-400">
-                    {pain.body}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
+    <section id="problema" className="py-20 md:py-24">
+      <Container>
+        <SectionHeader
+          eyebrow="El problema"
+          title="Tu negocio tiene algo para contar. El día no siempre deja tiempo."
+          sub="QUARK concentra tres tareas que hoy compiten con atender, vender y gestionar."
+        />
 
-        <Reveal delay={0.1} className="lg:pt-20">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
-            <Image
-              src="https://picsum.photos/seed/quark-pyme-taller/1000/1250"
-              alt="Interior de un comercio local atendiendo a clientes"
-              fill
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              className="object-cover grayscale contrast-125"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/60 to-transparent" />
+        <div className="mt-12 grid gap-8 lg:grid-cols-[1.05fr_0.9fr] lg:items-center">
+          <div className="border-t border-zinc-800">
+            {pains.map((pain) => {
+              const Icon = pain.icon;
+              return (
+                <div
+                  key={pain.title}
+                  className="grid grid-cols-[2.5rem_1fr] gap-4 border-b border-zinc-800 py-6"
+                >
+                  <Icon
+                    size={22}
+                    className="mt-0.5 text-zinc-500"
+                    aria-hidden="true"
+                  />
+                  <div>
+                    <h3 className="font-medium text-zinc-100">{pain.title}</h3>
+                    <p className="mt-2 max-w-[46ch] text-sm leading-relaxed text-zinc-400">
+                      {pain.body}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-        </Reveal>
+
+          <DitherImage className="mx-auto w-full max-w-md lg:mx-0 lg:ml-auto lg:max-w-sm">
+            <DitherImageReveal className="aspect-[4/3] w-full rounded-2xl border border-zinc-800">
+              <DitherImageFrame
+                aspectRatio="4 / 3"
+                size="sm"
+                contrast={14}
+                brightness={0.95}
+                opacity={0.62}
+                className="h-full overflow-hidden"
+              >
+                <DitherImageContent
+                  src={commerceImage}
+                  alt="Atención al cliente en un comercio local"
+                  fill
+                  sizes="(min-width: 1024px) 24rem, (min-width: 768px) 28rem, 100vw"
+                />
+              </DitherImageFrame>
+              <DitherImageOverlay
+                src={commerceImage}
+                alt=""
+                fill
+                sizes="(min-width: 1024px) 24rem, (min-width: 768px) 28rem, 100vw"
+                direction="r"
+                from={0}
+                to={72}
+              />
+            </DitherImageReveal>
+            <DitherImageCaption className="font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-600">
+              Tecnología pensada para negocios reales
+            </DitherImageCaption>
+          </DitherImage>
+        </div>
       </Container>
     </section>
   );

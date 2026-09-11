@@ -1,62 +1,64 @@
-import { Container } from "@/components/ui/container";
-import { SectionHeader } from "@/components/ui/section-header";
-import { Reveal } from "@/components/ui/reveal";
 import {
-  MinimalCard,
-  MinimalCardDescription,
-  MinimalCardImage,
-  MinimalCardTitle,
-} from "@/components/ui/minimal-card";
+  ForkKnife,
+  Scissors,
+  Storefront,
+  Stethoscope,
+} from "@phosphor-icons/react/ssr";
+import { Container } from "@/components/ui/container";
 
 const segments = [
   {
-    title: "Comercios locales",
-    body: "Indumentaria, gastronomía, belleza, decoración. Negocios que necesitan mostrar productos y promociones seguido.",
-    seed: "quark-comercio-local",
-    alt: "Vidriera de un comercio local",
+    title: "Comercios",
+    detail: "Productos y promociones",
+    icon: Storefront,
   },
   {
-    title: "Servicios profesionales",
-    body: "Estudios, consultorios, institutos e independientes que necesitan construir autoridad y recibir consultas.",
-    seed: "quark-profesional",
-    alt: "Profesional trabajando en su estudio",
+    title: "Gastronomía",
+    detail: "Menús, novedades y fechas",
+    icon: ForkKnife,
   },
   {
-    title: "PyMEs en crecimiento",
-    body: "Empresas con una oferta validada que quieren ordenar su comunicación sin sumar estructura de inmediato.",
-    seed: "quark-pyme",
-    alt: "Equipo de una PyME en su oficina",
+    title: "Belleza",
+    detail: "Servicios y turnos",
+    icon: Scissors,
   },
   {
-    title: "Emprendimientos",
-    body: "Marcas que venden por redes, tienda online o WhatsApp y dependen de una comunicación sostenida para generar demanda.",
-    seed: "quark-emprendimiento",
-    alt: "Emprendedora preparando pedidos",
+    title: "Profesionales",
+    detail: "Autoridad y consultas",
+    icon: Stethoscope,
   },
 ];
 
 export function Audience() {
   return (
-    <section id="para-quien" className="py-24 md:py-32">
+    <section
+      id="para-quien"
+      className="scroll-mt-20 border-b border-zinc-900 py-10"
+    >
       <Container>
-        <SectionHeader
-          title="Para quién es QUARK."
-          sub="Negocios que ya saben qué ofrecen y a quién, pero no tienen tiempo ni equipo para contarlo todos los días."
-        />
+        <p className="max-w-3xl text-balance text-xl font-medium tracking-tight text-zinc-100 md:text-2xl">
+          Para negocios que conocen su oferta, pero no tienen tiempo para
+          comunicarla todos los días.
+        </p>
 
-        <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {segments.map((segment, i) => (
-            <Reveal key={segment.title} delay={i * 0.06}>
-              <MinimalCard className="h-full">
-                <MinimalCardImage
-                  src={`https://picsum.photos/seed/${segment.seed}/800/600`}
-                  alt={segment.alt}
-                />
-                <MinimalCardTitle>{segment.title}</MinimalCardTitle>
-                <MinimalCardDescription>{segment.body}</MinimalCardDescription>
-              </MinimalCard>
-            </Reveal>
-          ))}
+        <div className="mt-8 grid grid-cols-2 border-l border-t border-zinc-800 lg:grid-cols-4">
+          {segments.map((segment) => {
+            const Icon = segment.icon;
+            return (
+              <div
+                key={segment.title}
+                className="border-b border-r border-zinc-800 p-4 md:p-5"
+              >
+                <Icon size={20} className="text-zinc-500" aria-hidden="true" />
+                <p className="mt-5 text-sm font-medium text-zinc-100">
+                  {segment.title}
+                </p>
+                <p className="mt-1 text-xs leading-relaxed text-zinc-500">
+                  {segment.detail}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </Container>
     </section>
