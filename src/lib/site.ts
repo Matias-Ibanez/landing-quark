@@ -16,3 +16,5 @@ export const site = {
 export const contactHref = `https://wa.me/${
   site.whatsapp
 }?text=${encodeURIComponent("Hola, quiero una demo de QUARK.")}`;
+
+export const chatHref = "/chat" as const;

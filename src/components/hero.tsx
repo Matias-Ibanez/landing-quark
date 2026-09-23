@@ -10,7 +10,7 @@ import {
   HeroDitheringRoot,
   HeroDitheringVisual,
 } from "@/components/ui/hero-dithering";
-import { contactHref } from "@/lib/site";
+import { chatHref } from "@/lib/site";
 
 export function Hero() {
   const reduce = useReducedMotion();
@@ -50,8 +50,8 @@ export function Hero() {
           <div
             className="mt-10 flex flex-col gap-3 sm:flex-row"
           >
-            <Cta href={contactHref} external>
-              Pedir demo
+            <Cta href={chatHref}>
+              Probar Gratis
               <ArrowRight size={16} aria-hidden="true" />
             </Cta>
             <Cta href="#como-funciona" variant="secondary">

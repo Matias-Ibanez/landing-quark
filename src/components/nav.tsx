@@ -5,17 +5,10 @@ import Link from "next/link";
 import { List, X } from "@phosphor-icons/react/ssr";
 import { Cta } from "@/components/ui/cta";
 import { Container } from "@/components/ui/container";
-import { site, contactHref } from "@/lib/site";
+import { Mark } from "@/components/ui/mark";
+import { site, chatHref } from "@/lib/site";
 
-function Mark() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-      <circle cx="10" cy="4.5" r="2.5" fill="currentColor" />
-      <circle cx="4.5" cy="15" r="2.5" fill="currentColor" opacity="0.7" />
-      <circle cx="15.5" cy="15" r="2.5" fill="currentColor" opacity="0.4" />
-    </svg>
-  );
-}
+
 
 export function Nav() {
   const [open, setOpen] = useState(false);
@@ -47,8 +40,8 @@ export function Nav() {
         </nav>
 
         <div className="hidden md:block">
-          <Cta href={contactHref} external>
-            Pedir demo
+          <Cta href={chatHref}>
+            Probar Gratis
           </Cta>
         </div>
 
@@ -77,8 +70,8 @@ export function Nav() {
               </Link>
             ))}
             <div className="mt-3">
-              <Cta href={contactHref} external className="w-full">
-                Pedir demo
+              <Cta href={chatHref} className="w-full">
+                Probar Gratis
               </Cta>
             </div>
           </Container>

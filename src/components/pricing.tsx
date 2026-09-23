@@ -9,7 +9,7 @@ import { Container } from "@/components/ui/container";
 import { SectionHeader } from "@/components/ui/section-header";
 import { Cta } from "@/components/ui/cta";
 import { Reveal } from "@/components/ui/reveal";
-import { contactHref } from "@/lib/site";
+import { chatHref } from "@/lib/site";
 
 const plans: Array<{
   name: string;
@@ -143,12 +143,11 @@ export function Pricing() {
 
                   <div className="mt-8">
                     <Cta
-                      href={contactHref}
-                      external
+                      href={chatHref}
                       variant={plan.featured ? "primary" : "secondary"}
                       className="w-full"
                     >
-                      Pedir demo
+                      Probar Gratis
                     </Cta>
                   </div>
                 </div>

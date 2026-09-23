@@ -2,7 +2,7 @@ import Image from "next/image";
 import { ArrowRight } from "@phosphor-icons/react/ssr";
 import { Container } from "@/components/ui/container";
 import { Cta } from "@/components/ui/cta";
-import { contactHref } from "@/lib/site";
+import { chatHref } from "@/lib/site";
 
 export function FinalCta() {
   return (
@@ -26,8 +26,8 @@ export function FinalCta() {
             sostiene tu presencia, con tu criterio al frente.
           </p>
           <div className="mt-10 flex justify-center">
-            <Cta href={contactHref} external>
-              Pedir demo
+            <Cta href={chatHref}>
+              Probar Gratis
               <ArrowRight size={16} aria-hidden="true" />
             </Cta>
           </div>
