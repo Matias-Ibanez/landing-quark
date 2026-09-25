@@ -34,4 +34,3 @@ export function ChatHeader({ onToggleSidebar, title = "QUARK Chat" }: ChatHeader
     </header>
   );
 }
-

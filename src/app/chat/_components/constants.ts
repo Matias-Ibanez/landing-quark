@@ -45,6 +45,7 @@ export interface ChatMessage {
   readonly id: string;
   readonly role: MessageRole;
   readonly content: string;
+  readonly media?: readonly string[];
 }
 
 /** The static welcome message shown when the chat is empty. */
@@ -61,5 +62,5 @@ export const DEFAULT_MODEL_ID = AI_MODELS[0].id;
 /** Default function selection. */
 export const DEFAULT_FUNCTION_ID = CHAT_FUNCTIONS[0].id;
 
-/** The three navigable views inside /chat. */
-export type ActiveView = "chat" | "gallery" | "calendar";
+/** The navigable views inside /chat. */
+export type ActiveView = "chat" | "gallery" | "calendar" | "instagram";

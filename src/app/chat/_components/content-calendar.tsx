@@ -1,241 +1,74 @@
 "use client";
-
-import {
-  CalendarBlank,
-  InstagramLogo,
-  TwitterLogo,
-  VideoCamera,
-  PencilSimpleLine,
-} from "@phosphor-icons/react";
-
-// ---------------------------------------------------------------------------
-// ContentCalendar — monthly grid view of scheduled marketing content.
-// Dynamically calculates current month layout. Shows a list view on mobile.
-// ---------------------------------------------------------------------------
-
-interface CalendarEvent {
-  readonly day: number;
-  readonly type: "Instagram Reel" | "Instagram Post" | "Twitter Thread" | "Blog Post" | "Video";
-  readonly title: string;
-  readonly status: "Programado" | "Borrador" | "Publicado";
+import { useState } from "react";
+import { CaretLeft, CaretRight } from "@phosphor-icons/react";
+import { api, type CalendarEvent, stateLabel } from "./api";
+function Reschedule({ event, disabled, onApply, onError }: { event: CalendarEvent; disabled: boolean; onApply: (date: string) => void; onError: (error: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const local = new Date(event.scheduled_at);
+  const [date, setDate] = useState(`${String(local.getDate()).padStart(2, "0")}/${String(local.getMonth() + 1).padStart(2, "0")}/${local.getFullYear()}`);
+  const [time, setTime] = useState(`${String(local.getHours()).padStart(2, "0")}:${String(local.getMinutes()).padStart(2, "0")}`);
+  if (!open) return <button onClick={() => setOpen(true)} className="text-zinc-400">Cambiar fecha</button>;
+  return <form className="flex flex-wrap items-center gap-2" onSubmit={e => {
+    e.preventDefault();
+    const [day, month, year] = date.split("/");
+    const parsed = new Date(`${year}-${month}-${day}T${time}:00`);
+    if (!Number.isFinite(parsed.getTime()) || parsed.getDate() !== Number(day) || parsed.getMonth() + 1 !== Number(month)) { onError("Revisá la fecha y hora elegidas."); return; }
+    onApply(parsed.toISOString()); setOpen(false);
+  }}>
+    <input aria-label={`Día de ${event.title}`} required pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}" value={date} onChange={e => setDate(e.target.value)} className="w-28 rounded bg-zinc-800 p-2" />
+    <input aria-label={`Hora de ${event.title}`} required pattern="[0-9]{2}:[0-9]{2}" value={time} onChange={e => setTime(e.target.value)} className="w-20 rounded bg-zinc-800 p-2" />
+    <button disabled={disabled} className="text-violet-300">Guardar fecha</button>
+  </form>;
 }
-
-const MOCK_EVENTS: readonly CalendarEvent[] = [
-  { day: 3, type: "Instagram Post", title: "Tip de la semana", status: "Publicado" },
-  { day: 7, type: "Twitter Thread", title: "Hilo sobre branding", status: "Publicado" },
-  { day: 10, type: "Instagram Reel", title: "Detrás de escena", status: "Publicado" },
-  { day: 15, type: "Blog Post", title: "Guía de marketing Q4", status: "Programado" },
-  { day: 18, type: "Video", title: "Tutorial QUARK", status: "Borrador" },
-  { day: 22, type: "Instagram Reel", title: "Promo 2×1 fin de semana", status: "Programado" },
-  { day: 25, type: "Twitter Thread", title: "Case study cliente", status: "Borrador" },
-  { day: 28, type: "Instagram Post", title: "Recap del mes", status: "Programado" },
-] as const;
-
-const DAY_NAMES = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"] as const;
-
-const STATUS_COLORS: Record<CalendarEvent["status"], string> = {
-  Publicado: "bg-emerald-500",
-  Programado: "bg-violet-500",
-  Borrador: "bg-amber-500",
-};
-
-const TYPE_ICONS: Record<CalendarEvent["type"], typeof InstagramLogo> = {
-  "Instagram Reel": VideoCamera,
-  "Instagram Post": InstagramLogo,
-  "Twitter Thread": TwitterLogo,
-  Blog: PencilSimpleLine,
-  "Blog Post": PencilSimpleLine,
-  Video: VideoCamera,
-} as unknown as Record<CalendarEvent["type"], typeof InstagramLogo>;
-
-function getMonthData() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
-  const monthName = now.toLocaleDateString("es-AR", { month: "long" });
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  // getDay() returns 0=Sun, we need 0=Mon
-  const firstWeekday = (new Date(year, month, 1).getDay() + 6) % 7;
-  return { year, monthName, daysInMonth, firstWeekday };
-}
-
-function getEventsForDay(day: number): readonly CalendarEvent[] {
-  return MOCK_EVENTS.filter((e) => e.day === day);
-}
-
-// ── Desktop grid ──
-function CalendarGrid() {
-  const { monthName, year, daysInMonth, firstWeekday } = getMonthData();
-  const totalCells = firstWeekday + daysInMonth;
-  const rows = Math.ceil(totalCells / 7);
-
-  return (
-    <div>
-      {/* month title */}
-      <p className="mb-4 text-center font-mono text-sm font-semibold uppercase tracking-widest text-zinc-400">
-        {monthName} {year}
-      </p>
-
-      {/* day-name headers */}
-      <div className="grid grid-cols-7 border-b border-zinc-800">
-        {DAY_NAMES.map((d) => (
-          <div
-            key={d}
-            className="py-2 text-center font-mono text-[11px] uppercase tracking-[0.16em] text-zinc-600"
-          >
-            {d}
-          </div>
-        ))}
-      </div>
-
-      {/* cells */}
-      <div className="grid grid-cols-7">
-        {Array.from({ length: rows * 7 }, (_, i) => {
-          const day = i - firstWeekday + 1;
-          const isValid = day >= 1 && day <= daysInMonth;
-          const events = isValid ? getEventsForDay(day) : [];
-          const isToday = isValid && day === new Date().getDate();
-
-          return (
-            <div
-              key={i}
-              className={`min-h-[120px] border-b border-r border-zinc-800/60 p-2 transition-colors ${
-                isValid ? "hover:bg-zinc-900/50" : "bg-zinc-950/30"
-              } ${i % 7 === 0 ? "border-l border-zinc-800/60" : ""}`}
-            >
-              {isValid && (
-                <>
-                  <span
-                    className={`inline-flex size-7 items-center justify-center rounded-full text-xs font-medium ${
-                      isToday
-                        ? "bg-violet-600 text-white"
-                        : "text-zinc-500"
-                    }`}
-                  >
-                    {day}
-                  </span>
-
-                  <div className="mt-1 flex flex-col gap-1">
-                    {events.map((ev) => {
-                      const Icon = TYPE_ICONS[ev.type] ?? CalendarBlank;
-                      return (
-                        <div
-                          key={ev.title}
-                          className="group/card flex items-start gap-1.5 rounded-md bg-zinc-800/80 p-1.5 transition-colors hover:bg-zinc-800"
-                        >
-                          <span
-                            className={`mt-0.5 inline-block size-1.5 shrink-0 rounded-full ${STATUS_COLORS[ev.status]}`}
-                          />
-                          <div className="min-w-0 flex-1">
-                            <p className="truncate text-[11px] font-medium text-zinc-300">
-                              {ev.title}
-                            </p>
-                            <p className="flex items-center gap-1 text-[10px] text-zinc-600">
-                              <Icon size={10} aria-hidden="true" />
-                              {ev.type}
-                            </p>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </>
-              )}
-            </div>
-          );
-        })}
-      </div>
+export function ContentCalendar({ events, onRefresh, onOpen, onNew, onError }: {
+  events: CalendarEvent[]; onRefresh: () => void; onOpen: (id: string) => void;
+  onNew: () => void; onError: (text: string) => void;
+}) {
+  const [month, setMonth] = useState(() => new Date(new Date().getFullYear(), new Date().getMonth(), 1));
+  const [busy, setBusy] = useState<string | null>(null);
+  const days = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
+  const offset = (month.getDay() + 6) % 7;
+  const filtered = events.filter(e => {
+    const d = new Date(e.scheduled_at);
+    return d.getFullYear() === month.getFullYear() && d.getMonth() === month.getMonth();
+  });
+  async function change(event: CalendarEvent, action: string, scheduled_at?: string) {
+    setBusy(event.id);
+    try { await api(`/calendar/${event.id}`, "PATCH", { action, scheduled_at }); onRefresh(); }
+    catch (e) { onError((e as Error).message); }
+    finally { setBusy(null); }
+  }
+  return <section className="flex-1 overflow-auto p-5 md:p-8">
+    <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+      <div><h1 className="text-2xl font-medium">Tu calendario de contenido</h1><p className="mt-2 text-sm text-zinc-400">Organizá ideas y aprobá las piezas antes de publicarlas.</p></div>
+      <button onClick={onNew} className="rounded-lg border border-zinc-700 px-4 py-2 text-sm">Agregar idea</button>
     </div>
-  );
-}
-
-// ── Mobile list ──
-function CalendarList() {
-  const { monthName, year } = getMonthData();
-  const eventsWithDay = MOCK_EVENTS.map((ev) => ({ ...ev }));
-
-  return (
-    <div>
-      <p className="mb-4 text-center font-mono text-sm font-semibold uppercase tracking-widest text-zinc-400">
-        {monthName} {year}
-      </p>
-
-      <div className="space-y-2">
-        {eventsWithDay.map((ev) => {
-          const Icon = TYPE_ICONS[ev.type] ?? CalendarBlank;
-          return (
-            <div
-              key={`${ev.day}-${ev.title}`}
-              className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900/60 p-3 transition-colors hover:bg-zinc-900"
-            >
-              {/* day badge */}
-              <div className="flex size-10 shrink-0 flex-col items-center justify-center rounded-lg bg-zinc-800 text-zinc-300">
-                <span className="text-sm font-bold leading-none">{ev.day}</span>
-                <span className="text-[9px] uppercase text-zinc-500">
-                  {monthName.slice(0, 3)}
-                </span>
-              </div>
-
-              {/* info */}
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-zinc-200">{ev.title}</p>
-                <p className="flex items-center gap-1.5 text-xs text-zinc-500">
-                  <Icon size={12} aria-hidden="true" />
-                  {ev.type}
-                </p>
-              </div>
-
-              {/* status */}
-              <div className="flex items-center gap-1.5">
-                <span
-                  className={`inline-block size-2 rounded-full ${STATUS_COLORS[ev.status]}`}
-                />
-                <span className="text-[11px] text-zinc-500">{ev.status}</span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+    <div className="mb-4 flex items-center gap-4">
+      <button aria-label="Mes anterior" onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))} className="p-2"><CaretLeft /></button>
+      <h2 className="min-w-44 text-center capitalize">{month.toLocaleDateString("es-AR", { month: "long", year: "numeric" })}</h2>
+      <button aria-label="Mes siguiente" onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))} className="p-2"><CaretRight /></button>
     </div>
-  );
-}
-
-// ── Exported wrapper ──
-export function ContentCalendar() {
-  return (
-    <div className="flex-1 overflow-y-auto px-4 py-6 md:px-8">
-      <div className="mx-auto max-w-6xl">
-        {/* legend */}
-        <div className="mb-6 flex flex-wrap items-center gap-4">
-          <div className="flex size-10 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/80">
-            <CalendarBlank size={20} weight="duotone" className="text-violet-400" />
-          </div>
-          <div className="flex-1">
-            <h2 className="text-lg font-medium text-zinc-50">Planificador de Contenidos</h2>
-            <p className="text-sm text-zinc-500">Calendario editorial del mes</p>
-          </div>
-
-          {/* status legend */}
-          <div className="flex items-center gap-4 text-[11px]">
-            {(Object.entries(STATUS_COLORS) as [CalendarEvent["status"], string][]).map(
-              ([label, color]) => (
-                <span key={label} className="flex items-center gap-1.5 text-zinc-500">
-                  <span className={`inline-block size-2 rounded-full ${color}`} />
-                  {label}
-                </span>
-              )
-            )}
-          </div>
-        </div>
-
-        {/* desktop: grid  ·  mobile: list */}
-        <div className="hidden md:block">
-          <CalendarGrid />
-        </div>
-        <div className="md:hidden">
-          <CalendarList />
-        </div>
-      </div>
+    <p className="mb-4 text-xs text-zinc-500">Horarios en {Intl.DateTimeFormat().resolvedOptions().timeZone}</p>
+    <div className="hidden grid-cols-7 overflow-hidden rounded-xl border border-zinc-800 md:grid">
+      {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map(d => <div key={d} className="bg-zinc-900 p-3 text-xs text-zinc-500">{d}</div>)}
+      {Array.from({ length: offset + days }, (_, i) => <div key={i} className="min-h-24 border-t border-r border-zinc-800 p-2">
+        {i >= offset && <><span className="text-xs text-zinc-500">{i - offset + 1}</span>{filtered.filter(e => new Date(e.scheduled_at).getDate() === i - offset + 1).map(e => <a href={`#event-${e.id}`} key={e.id} className="mt-1 block truncate rounded bg-violet-500/10 px-2 py-1 text-xs text-violet-300">{e.title}</a>)}</>}
+      </div>)}
     </div>
-  );
+    {!filtered.length && <p className="py-10 text-center text-zinc-500">Todavía no hay contenido para este mes.</p>}
+    <div className="mt-5 grid gap-3 lg:grid-cols-2">{filtered.map(event => <article id={`event-${event.id}`} key={event.id} className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
+      <div className="flex justify-between gap-3"><h3>{event.title}</h3><span className="shrink-0 text-xs text-violet-300">{stateLabel[event.status]}</span></div>
+      <p className="mt-2 text-sm text-zinc-400">{new Date(event.scheduled_at).toLocaleString("es-AR", { dateStyle: "medium", timeStyle: "short" })}</p>
+      {event.error && <p className="mt-2 text-sm text-rose-300">{event.error}</p>}
+      <div className="mt-4 flex flex-wrap items-center gap-4 text-xs">
+        <button onClick={() => onOpen(event.project_id)} className="text-zinc-300">Abrir conversación</button>
+        {event.status === "draft" && event.job_id && <button disabled={busy === event.id} onClick={() => void change(event, "approve")} className="text-violet-300">Aprobar pieza</button>}
+        {event.status === "approved" && <button disabled={busy === event.id} onClick={() => { if (window.confirm("Se publicará esta pieza automáticamente en Instagram en la fecha indicada. ¿Programar publicación?")) void change(event, "schedule"); }} className="text-violet-300">Programar en Instagram</button>}
+        {["draft", "approved", "scheduled"].includes(event.status) && <>
+          <Reschedule event={event} disabled={busy === event.id} onApply={date => void change(event, "reschedule", date)} onError={onError} />
+          <button disabled={busy === event.id} onClick={() => void change(event, "cancel")} className="text-zinc-500">Cancelar</button>
+        </>}
+      </div>
+    </article>)}</div>
+  </section>;
 }

@@ -9,10 +9,11 @@ import {
   Chats,
   Image,
   CalendarBlank,
+  InstagramLogo,
 } from "@phosphor-icons/react";
 import { Mark } from "@/components/ui/mark";
 import { site } from "@/lib/site";
-import { MOCK_HISTORY, type ActiveView } from "./constants";
+import { type ActiveView } from "./constants";
 
 // ---------------------------------------------------------------------------
 // ChatSidebar — brand logo, view navigation, new-chat button, mock
@@ -21,6 +22,11 @@ import { MOCK_HISTORY, type ActiveView } from "./constants";
 
 interface ChatSidebarProps {
   /** Whether the drawer is open (only relevant on mobile). */
+  projects: { id: string; name: string }[];
+  selectedId: string | null;
+  onSelect: (id: string) => void;
+  onNew: () => void;
+  onSettings: () => void;
   isOpen: boolean;
   /** Whether the sidebar is collapsed to a thin strip (desktop only). */
   isCollapsed: boolean;
@@ -36,16 +42,17 @@ interface ChatSidebarProps {
 
 /** Mock user data — replace with real auth data later. */
 const MOCK_USER = {
-  name: "Octavio Haurigot Posse",
-  initials: "O",
-  plan: "Pro",
+  name: "Mi espacio local",
+  initials: "Q",
+  plan: "Prototipo",
 } as const;
 
 /** Navigation items rendered in the sidebar. */
 const NAV_ITEMS: readonly { id: ActiveView; label: string; icon: typeof Chats }[] = [
   { id: "chat", label: "Chat", icon: Chats },
-  { id: "gallery", label: "Imágenes", icon: Image },
+  { id: "gallery", label: "Galería", icon: Image },
   { id: "calendar", label: "Calendario", icon: CalendarBlank },
+  { id: "instagram", label: "Instagram", icon: InstagramLogo },
 ] as const;
 
 export function ChatSidebar({
@@ -54,7 +61,7 @@ export function ChatSidebar({
   onClose,
   onToggleCollapse,
   activeView,
-  onViewChange,
+  onViewChange, projects, selectedId, onSelect, onNew, onSettings,
 }: ChatSidebarProps) {
   return (
     <>
@@ -122,7 +129,7 @@ export function ChatSidebar({
                 <button
                   key={id}
                   type="button"
-                  onClick={() => onViewChange(id)}
+                  onClick={() => { onViewChange(id); onClose(); }}
                   className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 ${
                     isActive
                       ? "bg-zinc-800 text-zinc-50"
@@ -144,14 +151,14 @@ export function ChatSidebar({
             <button
               type="button"
               className="mx-auto flex size-10 items-center justify-center rounded-lg border border-zinc-800 text-zinc-300 transition-colors hover:border-zinc-600 hover:bg-zinc-900 hover:text-zinc-50"
-              aria-label="Nuevo chat"
+              aria-label="Nuevo chat" onClick={onNew}
             >
               <Plus size={18} aria-hidden="true" />
             </button>
           ) : (
             <button
               type="button"
-              className="flex w-full items-center gap-2 rounded-lg border border-zinc-800 px-3 py-2.5 text-sm text-zinc-300 transition-colors hover:border-zinc-600 hover:bg-zinc-900 hover:text-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500"
+              onClick={onNew} className="flex w-full items-center gap-2 rounded-lg border border-zinc-800 px-3 py-2.5 text-sm text-zinc-300 transition-colors hover:border-zinc-600 hover:bg-zinc-900 hover:text-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500"
             >
               <Plus size={16} aria-hidden="true" />
               Nuevo chat
@@ -169,13 +176,13 @@ export function ChatSidebar({
               Recientes
             </p>
             <ul className="space-y-0.5">
-              {MOCK_HISTORY.map((title) => (
-                <li key={title}>
+              {projects.map((project) => (
+                <li key={project.id}>
                   <button
                     type="button"
-                    className="w-full truncate rounded-lg px-2 py-2 text-left text-sm text-zinc-400 transition-colors hover:bg-zinc-900 hover:text-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500"
+                    onClick={() => { onSelect(project.id); onClose(); }} aria-current={selectedId === project.id ? "page" : undefined} className="w-full truncate rounded-lg px-2 py-2 text-left text-sm text-zinc-400 transition-colors hover:bg-zinc-900 hover:text-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500"
                   >
-                    {title}
+                    {project.name}
                   </button>
                 </li>
               ))}
@@ -193,7 +200,7 @@ export function ChatSidebar({
             <button
               type="button"
               className="mx-auto flex size-9 items-center justify-center rounded-full bg-violet-600 text-sm font-bold text-white"
-              aria-label={MOCK_USER.name}
+              aria-label="Configuraciones" onClick={onSettings}
             >
               {MOCK_USER.initials}
             </button>
@@ -217,7 +224,7 @@ export function ChatSidebar({
               <button
                 type="button"
                 className="flex size-8 shrink-0 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300"
-                aria-label="Configuraciones"
+                aria-label="Configuraciones" onClick={onSettings}
               >
                 <GearSix size={18} />
               </button>
@@ -228,5 +235,3 @@ export function ChatSidebar({
     </>
   );
 }
-
-
