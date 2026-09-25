@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# QUARK · frontend
 
-## Getting Started
+Interfaz y chat de QUARK. La API, Hermes y los datos viven en [backend_Quark](https://github.com/Matias-Ibanez/backend_Quark).
 
-First, run the development server:
+## Desarrollo local
+
+Primero iniciá el backend según su README; la API queda en `http://127.0.0.1:8011`. Después:
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrí `http://localhost:3000/chat`. Next.js envía `/api`, `/media`, `/fonts` y `/webhooks` al backend mediante `QUARK_API_URL`, que por defecto apunta a `http://127.0.0.1:8011`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Docker Compose en el mismo equipo
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Iniciá primero `docker compose up -d --build` desde `backend_Quark`. Ese stack crea la red `quark-shared` y ejecuta `studio` y `hermes`. Luego, desde este repositorio:
 
-## Learn More
+```bash
+docker compose up -d --build
+docker compose ps
+```
 
-To learn more about Next.js, take a look at the following resources:
+Abrí `http://localhost:8010/chat`. El contenedor Next.js usa la red compartida para acceder a `studio:8000`; la API queda accesible solo en `127.0.0.1:8011` en el host. Si cambiás el puerto del frontend, definí `FRONTEND_PORT` con el mismo valor en ambos despliegues y reconstruí el backend.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Para un servidor con TLS, el proxy público debe apuntar al puerto local del frontend y proteger el acceso al prototipo. Las instrucciones completas están en [DESPLIEGUE.md del backend](https://github.com/Matias-Ibanez/backend_Quark/blob/main/DESPLIEGUE.md).
