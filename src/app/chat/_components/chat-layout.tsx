@@ -5,6 +5,7 @@ import { ChatSidebar } from "./chat-sidebar";
 import { ChatHeader } from "./chat-header";
 import { MessageList } from "./message-list";
 import { ChatInputForm } from "./chat-input-form";
+import { MusicEditor } from "./music-editor";
 import { ImageGallery } from "./image-gallery";
 import { ContentCalendar } from "./content-calendar";
 import { InstagramInbox } from "./instagram-inbox";
@@ -98,6 +99,7 @@ export function ChatLayout() {
             </div>
             <MessageList messages={messages} />
             {assets.length > 0 && <div className="mx-auto mb-4 flex w-full max-w-3xl flex-wrap gap-2 px-4">{assets.map(a => <a key={a.id} href={`/media/assets/${a.filename}`} target="_blank" rel="noreferrer" className="max-w-36 truncate rounded-lg border border-zinc-800 p-2 text-xs text-zinc-400" title={a.name}>{a.kind === "image" && <img src={`/media/assets/${a.filename}`} alt={a.name} className="mb-1 h-16 w-full object-contain" />}{a.name}</a>)}</div>}
+            {selectedId && <MusicEditor key={selectedId} projectId={selectedId} assets={assets} onChange={() => { void refresh(); void refreshChat(selectedId); }} />}
             {working && <p role="status" className="mx-auto w-full max-w-3xl animate-pulse px-4 pb-5 text-sm text-violet-300">QUARK está trabajando en tu pedido…</p>}
             {run?.status === "failed" && <p role="alert" className="mx-auto w-full max-w-3xl px-4 pb-5 text-sm text-rose-300">{run.error}</p>}
             {projectJobs.filter(j => j.kind !== "render" && j.status !== "done").map(j => <p key={j.id} className="mx-auto w-full max-w-3xl px-4 py-2 text-sm text-zinc-400">Recorte de fondo: {j.status === "failed" ? j.error : "procesando…"}</p>)}
