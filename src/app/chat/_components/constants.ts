@@ -26,6 +26,7 @@ export const CHAT_FUNCTIONS: readonly ChatFunction[] = [
   { id: "strategy", label: "Estrategia de Marketing" },
   { id: "calendar", label: "Calendario Mensual" },
   { id: "promo", label: "Redacción de Promociones" },
+  { id: "shorts", label: "Short automático · solo tema" },
 ] as const;
 
 /** Mock sidebar conversation history. */

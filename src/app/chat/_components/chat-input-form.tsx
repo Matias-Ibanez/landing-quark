@@ -46,7 +46,7 @@ export function ChatInputForm({ onSendMessage, variant = "docked", disabled }: I
       </span>)}</div>}
       <textarea value={text} onChange={e => setText(e.target.value)} onKeyDown={e => {
         if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); void send(); }
-      }} aria-label="Escribe tu mensaje" placeholder="Contale a QUARK qué querés crear…" maxLength={6000} rows={2}
+      }} aria-label="Escribe tu mensaje" placeholder={fn === "shorts" ? "Escribí el tema del short…" : "Contale a QUARK qué querés crear…"} maxLength={6000} rows={2}
         className="w-full resize-none bg-transparent px-4 pt-4 text-sm leading-relaxed outline-none placeholder:text-zinc-500" />
       <div className="flex flex-wrap items-center justify-between gap-2 border-t border-zinc-800 px-3 py-2">
         <select aria-label="Función de marketing" value={fn} onChange={e => setFn(e.target.value)} className="max-w-[65%] rounded bg-zinc-900 py-1 text-xs text-zinc-300">
