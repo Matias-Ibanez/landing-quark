@@ -18,13 +18,13 @@ export function ImageGallery({ jobs, projects, onResume, onPlan, compact = false
         </div>
         <div className="p-4">
           <p className="truncate text-sm font-medium">{projects.find(p => p.id === job.project_id)?.name || "Conversación"}</p>
-          <p className="mt-1 text-xs text-zinc-500">Versión {job.payload.revision} · {job.payload.kind.toUpperCase()} · {job.payload.quality === "final" ? "Final" : "Vista previa"}</p>
+          <p className="mt-1 text-xs text-zinc-500">Versión {job.payload.revision} · {job.result?.vectorUrl ? "SVG" : job.payload.kind.toUpperCase()} · {job.payload.quality === "final" ? "Final" : "Vista previa"}</p>
           {job.error && <p role="alert" className="mt-2 max-h-24 overflow-auto break-words text-xs text-rose-300">{job.error}</p>}
           {job.payload.document.caption && <p className="mt-3 line-clamp-3 whitespace-pre-wrap text-xs text-zinc-400">{job.payload.document.caption}</p>}
           {job.status === "done" && <div className="mt-4 flex flex-wrap gap-3 text-xs">
             <button onClick={() => onResume(job)} className="text-violet-300 hover:text-violet-200">Seguir en el chat</button>
             <button onClick={() => onPlan(job)} className="text-zinc-300 hover:text-white">Al calendario</button>
-            <a href={job.result?.url} download className="text-zinc-400 hover:text-white">Descargar</a>
+            <a href={job.result?.vectorUrl || job.result?.url} download className="text-zinc-400 hover:text-white">{job.result?.vectorUrl ? "Descargar SVG" : "Descargar"}</a>
           </div>}
         </div>
       </article>)}

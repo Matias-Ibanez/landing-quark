@@ -59,9 +59,9 @@ export function MessageList({ messages }: MessageListProps) {
                   ? "Puedo ayudarte a crear y mejorar contenido para tu marca. Contame qué necesitás."
                   : visible || "Tu pieza está lista.";
               })() : msg.content}
-              {msg.role === "assistant" && (msg.media ?? []).filter(url => /^\/media\/exports\/hermes-[a-f0-9-]+\.(mp4|png)$/.test(url)).map(url => url.endsWith(".mp4")
+              {msg.role === "assistant" && (msg.media ?? []).filter(url => /^\/media\/exports\/hermes-[a-f0-9-]+\.(mp4|png|svg)$/.test(url)).map(url => url.endsWith(".mp4")
                 ? <video key={url} src={url} controls preload="metadata" className="mt-3 max-h-[65vh] w-full rounded-lg bg-black" />
-                : <img key={url} src={url} alt="Pieza creada para tu marca" className="mt-3 max-h-[65vh] w-full rounded-lg object-contain" />)}
+                : <div key={url} className="mt-3"><img src={url} alt="Pieza creada para tu marca" className="max-h-[65vh] w-full rounded-lg object-contain" />{url.endsWith(".svg") && <a href={url} download className="mt-2 inline-block text-xs text-violet-300 hover:text-violet-200">Descargar SVG vectorial</a>}</div>)}
             </div>
           </div>
         ))}

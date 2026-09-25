@@ -5,7 +5,7 @@ export interface Job {
   id: string; project_id: string; kind: string; status: string; error: string | null;
   created_at: string;
   payload: { revision: number; kind: "png" | "mp4"; quality: string; hermes?: boolean; document: { caption: string; engine: string } };
-  result: { url?: string; assetId?: string } | null;
+  result: { url?: string; vectorUrl?: string; assetId?: string } | null;
 }
 export interface CalendarEvent {
   id: string; project_id: string; job_id: string | null; title: string;
