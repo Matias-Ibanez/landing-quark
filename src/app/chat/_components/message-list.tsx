@@ -12,9 +12,10 @@ import type { ChatMessage } from "./constants";
 interface MessageListProps {
   /** The full list of messages to render. */
   messages: readonly ChatMessage[];
+  onQuickReply?: (answer: string) => void;
 }
 
-export function MessageList({ messages }: MessageListProps) {
+export function MessageList({ messages, onQuickReply }: MessageListProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -28,7 +29,7 @@ export function MessageList({ messages }: MessageListProps) {
       aria-label="Historial de mensajes"
     >
       <div className="mx-auto flex max-w-3xl flex-col gap-6">
-        {messages.map((msg) => (
+        {messages.map((msg, index) => (
           <div
             key={msg.id}
             className={`flex gap-3 ${
@@ -59,9 +60,11 @@ export function MessageList({ messages }: MessageListProps) {
                   ? "Puedo ayudarte a crear y mejorar contenido para tu marca. Contame qué necesitás."
                   : visible || "Tu pieza está lista.";
               })() : msg.content}
-              {msg.role === "assistant" && (msg.media ?? []).filter(url => /^\/media\/exports\/hermes-[a-f0-9-]+\.(mp4|png|svg)$/.test(url)).map(url => url.endsWith(".mp4")
+              {msg.role === "assistant" && (msg.media ?? []).filter(url => /^\/media\/exports\/(?:hermes|short|music)-[a-f0-9-]+\.(mp4|png|svg)$/.test(url)).map(url => url.endsWith(".mp4")
                 ? <video key={url} src={url} controls preload="metadata" className="mt-3 max-h-[65vh] w-full rounded-lg bg-black" />
                 : <div key={url} className="mt-3"><img src={url} alt="Pieza creada para tu marca" className="max-h-[65vh] w-full rounded-lg object-contain" />{url.endsWith(".svg") && <a href={url} download className="mt-2 inline-block text-xs text-violet-300 hover:text-violet-200">Descargar SVG vectorial</a>}</div>)}
+              {msg.role === "assistant" && index === messages.length - 1 && msg.content.endsWith("¿Querés agregarle música de fondo?") && onQuickReply &&
+                <div className="mt-3 flex gap-2"><button type="button" onClick={() => onQuickReply("Sí")} className="rounded-lg bg-violet-700 px-3 py-1 text-white">Sí, agregar música</button><button type="button" onClick={() => onQuickReply("No gracias")} className="rounded-lg bg-zinc-800 px-3 py-1">No, gracias</button></div>}
             </div>
           </div>
         ))}

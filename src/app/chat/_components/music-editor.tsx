@@ -51,7 +51,8 @@ export function MusicEditor({ projectId, assets, onChange }: Props) {
     finally { setBusy(false); }
   }
   return <section aria-label="Música de fondo" className="mx-auto mb-4 w-full max-w-3xl rounded-xl border border-zinc-800 bg-zinc-900/70 p-4 text-sm">
-    <div className="flex flex-wrap items-center justify-between gap-2"><h2 className="font-medium">Música de fondo</h2><button type="button" onClick={() => upload.current?.click()} disabled={busy} className="text-violet-300">Subir canción con derechos de uso</button></div>
+    <div className="flex flex-wrap items-center justify-between gap-2"><h2 className="font-medium">Elegí la música para tu video</h2><button type="button" onClick={() => upload.current?.click()} disabled={busy} className="rounded-lg bg-violet-700 px-3 py-2 text-white disabled:opacity-50">Adjuntar canción</button></div>
+    <p className="mt-2 text-xs text-zinc-400">Usá una canción propia o una para la que tengas permiso de uso en publicaciones.</p>
     <input ref={upload} type="file" accept="audio/mpeg,audio/wav,audio/ogg,.m4a" hidden onChange={e => void uploadTrack(e.target.files?.[0])} />
     {tracks.length > 0 && <div className="mt-3 grid gap-3">
       <select aria-label="Canción" className="w-full rounded bg-zinc-800 p-2" value={selection?.assetId || ""} onChange={e => { setDuration(0); setSelection({ assetId: e.target.value, sourceStart: 0, sourceEnd: 10, videoStart: 0, volume: 0.2 }); }}>
