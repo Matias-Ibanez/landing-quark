@@ -25,3 +25,9 @@ docker compose ps
 Abrí `http://localhost:8010/chat`. El contenedor Next.js usa la red compartida para acceder a `studio:8000`; la API queda accesible solo en `127.0.0.1:8011` en el host. Si cambiás el puerto del frontend, definí `FRONTEND_PORT` con el mismo valor en ambos despliegues y reconstruí el backend.
 
 Para un servidor con TLS, el proxy público debe apuntar al puerto local del frontend y proteger el acceso al prototipo. Las instrucciones completas están en [DESPLIEGUE.md del backend](https://github.com/Matias-Ibanez/backend_Quark/blob/main/DESPLIEGUE.md).
+
+## Brief adaptativo
+
+El backend decide si necesita aclaraciones y devuelve únicamente los campos pendientes. El editor omite los grupos vacíos y revisa solo esas respuestas; un pedido completo empieza a producir sin formulario. La edición manual de una pieza conserva todas las opciones.
+
+Verificado con TypeScript, ESLint del editor y build Docker. En el chat, un reel sobre café sin duración mostró solo esa pregunta y su revisión. Para revertir la presentación, revertir el cambio del editor; no es necesario borrar datos ni conversaciones.

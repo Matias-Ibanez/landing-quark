@@ -24,8 +24,9 @@ export function CreativeBriefEditor({ projectId, state, onChange }: {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const relevant = state.fields.filter(f => !f.when || answers[f.when[0]] === f.when[1]);
-  const visible = relevant.filter(f => f.group === step);
-  const reviewing = step === state.groups.length;
+  const groupIds = [...new Set(relevant.map(f => f.group))].sort();
+  const visible = relevant.filter(f => f.group === groupIds[step]);
+  const reviewing = step >= groupIds.length;
 
   async function save(action: "save" | "confirm" | "cancel") {
     setError(""); setBusy(true);
@@ -37,7 +38,7 @@ export function CreativeBriefEditor({ projectId, state, onChange }: {
         id: initial.id, version, action, answers: action === "cancel" ? initial.answers : answers,
       });
       setVersion(result.brief.version);
-      if (action === "save") setStep(s => Math.min(s + 1, state.groups.length));
+      if (action === "save") setStep(s => Math.min(s + 1, groupIds.length));
       await onChange(result.run);
     } catch (e) { setError((e as Error).message); }
     finally { setBusy(false); }
@@ -46,11 +47,11 @@ export function CreativeBriefEditor({ projectId, state, onChange }: {
   return <section aria-label="Brief creativo" className="mx-auto mb-6 w-[calc(100%_-_2rem)] max-w-3xl rounded-2xl border border-zinc-700 bg-zinc-900 p-5 sm:p-7">
     <div className="mb-5 flex items-start justify-between gap-3">
       <div><p className="text-xs uppercase tracking-widest text-violet-300">Antes de crear</p>
-        <h2 className="mt-1 text-xl font-medium">{reviewing ? "Revisá tu brief" : state.groups[step]}</h2>
-        <p className="mt-2 text-sm text-zinc-400">{reviewing ? "Confirmá estas decisiones. La producción empieza recién cuando elijas Crear." : "Las opciones sugeridas se pueden cambiar. Elegir por mí también es una decisión válida."}</p>
-      </div><span className="shrink-0 text-xs text-zinc-500">{step + 1} / {state.groups.length + 1}</span>
+        <h2 className="mt-1 text-xl font-medium">{reviewing ? "Revisá tus respuestas" : state.groups[groupIds[step]]}</h2>
+        <p className="mt-2 text-sm text-zinc-400">{reviewing ? "El resto se conserva de tu pedido. Confirmá para empezar a crear." : "Solo necesitamos aclarar estas decisiones para continuar."}</p>
+      </div><span className="shrink-0 text-xs text-zinc-500">{step + 1} / {groupIds.length + 1}</span>
     </div>
-    <div className="mb-6 flex gap-1" aria-hidden="true">{Array.from({ length: state.groups.length + 1 }, (_, i) => <div key={i} className={`h-1 flex-1 rounded ${i <= step ? "bg-violet-500" : "bg-zinc-700"}`} />)}</div>
+    <div className="mb-6 flex gap-1" aria-hidden="true">{Array.from({ length: groupIds.length + 1 }, (_, i) => <div key={i} className={`h-1 flex-1 rounded ${i <= step ? "bg-violet-500" : "bg-zinc-700"}`} />)}</div>
     {initial.status === "failed" && <p className="mb-4 text-sm text-amber-300">El intento anterior no se completó. Tus elecciones siguen guardadas; podés revisarlas y reintentar.</p>}
     <form onSubmit={e => { e.preventDefault(); void save(reviewing ? "confirm" : "save"); }}>
       <fieldset disabled={busy} className="space-y-6">
