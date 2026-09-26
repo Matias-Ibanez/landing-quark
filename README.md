@@ -26,7 +26,7 @@ Abrí `http://localhost:8010/chat`. El contenedor Next.js usa la red compartida 
 
 Para un servidor con TLS, el proxy público debe apuntar al puerto local del frontend y proteger el acceso al prototipo. Las instrucciones completas están en [DESPLIEGUE.md del backend](https://github.com/Matias-Ibanez/backend_Quark/blob/main/DESPLIEGUE.md).
 
-## Brief adaptativo
+## Detalles de la pieza
 
 El backend decide si necesita aclaraciones y devuelve únicamente los campos pendientes. El editor omite los grupos vacíos y revisa solo esas respuestas; un pedido completo empieza a producir sin formulario. La edición manual de una pieza conserva todas las opciones.
 

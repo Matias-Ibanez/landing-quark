@@ -15,3 +15,11 @@
 - El formulario no vuelve a enviar un pedido aceptado si después falla el refresco. Los datos de un chat ya abandonado no reemplazan el chat seleccionado. El historial no fuerza el desplazamiento cuando la persona está leyendo mensajes anteriores.
 - Capturas de prueba guardadas fuera del repositorio frontend, en la carpeta temporal ignorada del backend. No se suben recursos del usuario ni imágenes generadas a Git.
 - Reversión: revertir ChatInputForm, los cambios de estado de ChatLayout y sus pruebas/documentación. La sesión puede conservar la clave quark:last-chat sin efecto, y los mensajes con adjuntos permanecen en el backend.
+
+## Detalles de la pieza — 2026-09-26
+
+- `npm test`: 19 pruebas aprobadas; seis nuevas cubren inputs sin opciones, aparición de texto exacto, conservación al cambiar de modo, guardado parcial, actualización de versiones, pasos que desaparecen y recarga tras conflictos.
+- `npx tsc --noEmit`, ESLint del editor/pruebas y `docker compose build web`: aprobados. Contenedor web actualizado localmente.
+- Navegador real: se completaron tema, formato, colores y texto exacto, con un área de texto visible y editable. El resumen mostró texto y colores guardados; no se confirmó producción. Captura fuera del repositorio: `.tmp/detalles-texto-editable.png` en el backend.
+- Las actualizaciones periódicas conservan el texto sin guardar. Una versión guardada más nueva se carga; ante un conflicto, Recargar opciones guardadas consulta al servidor. Las etapas usan la identidad de su grupo para evitar saltos cuando cambia el conjunto de preguntas.
+- Reversión: revertir CreativeBriefEditor y sus pruebas/documentación. El contrato HTTP se conserva y no se eliminan datos del backend.
