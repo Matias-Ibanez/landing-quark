@@ -37,3 +37,5 @@ Verificado con TypeScript, ESLint del editor y build Docker. En el chat, un reel
 El chat interpreta Markdown (negritas, cursivas, listas, títulos, enlaces y tablas) sin ejecutar HTML ni cargar imágenes remotas incrustadas en el texto. Los medios se muestran desde las referencias verificadas que devuelve el backend. Las publicaciones vectoriales conservan descarga SVG y vista/descarga PNG, con recuperación de errores de vista previa.
 
 Pruebas: `npm test`. El detalle de los escenarios corregidos está en [VERIFICATION.md](VERIFICATION.md).
+
+Los adjuntos se pueden enviar sin texto: después de cargarlos, pulsá Enviar. Aparecen dentro de tu mensaje y dejan de figurar en el cuadro de escritura. También podés escribir indicaciones antes de enviarlos. Si el envío se rechaza, se conserva el borrador con los archivos; si una carga falla, se siguen procesando los demás archivos válidos. La última conversación seleccionada se recupera al recargar en esa pestaña.

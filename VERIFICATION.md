@@ -6,3 +6,12 @@
 - TypeScript y build Docker de Next.js aprobados. ESLint de los componentes modificados: sin errores; advertencia de img nativo en el visor de medios, que conserva las URLs y el comportamiento de PNG/SVG.
 - Navegador real: la respuesta de capacidades mostró cinco etiquetas strong y cinco elementos de lista, sin asteriscos literales. Una imagen PNG enviada quedó visible dentro del mensaje del usuario y conservó sus dimensiones de 1080 × 1080.
 - Reversión: revertir MarkdownMessage, MediaImage, MessageList, integración en galería y atributo del contenedor de scroll, junto con dependencias y pruebas. Los archivos y mensajes del backend no se borran.
+
+## Envío de adjuntos y estado del chat — 2026-09-26
+
+- `npm test`: 13 pruebas aprobadas. Incluye envío de una imagen sin texto, conservación del borrador al rechazar el pedido, cargas parciales, límite de tamaño, prevención de doble envío, restauración del chat, respuestas tardías de otro chat y fallo de refresco después de una aceptación válida.
+- TypeScript y build Docker aprobados; desplegado junto con backend 5043cc2, que persiste los adjuntos en su turno.
+- Navegador real: se cargó brief-slide-01.png y se envió sin texto. La imagen pasó al historial y el compositor quedó limpio. El agente describió correctamente la portada de café y propuso continuar el contenido. Al recargar, el chat seleccionado y la imagen siguieron visibles. Recursos anteriores quedan accesibles en un desplegable.
+- El formulario no vuelve a enviar un pedido aceptado si después falla el refresco. Los datos de un chat ya abandonado no reemplazan el chat seleccionado. El historial no fuerza el desplazamiento cuando la persona está leyendo mensajes anteriores.
+- Capturas de prueba guardadas fuera del repositorio frontend, en la carpeta temporal ignorada del backend. No se suben recursos del usuario ni imágenes generadas a Git.
+- Reversión: revertir ChatInputForm, los cambios de estado de ChatLayout y sus pruebas/documentación. La sesión puede conservar la clave quark:last-chat sin efecto, y los mensajes con adjuntos permanecen en el backend.

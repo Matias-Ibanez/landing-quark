@@ -5,6 +5,7 @@ import { ChatSidebar } from "./chat-sidebar";
 import { ChatHeader } from "./chat-header";
 import { MessageList } from "./message-list";
 import { ChatInputForm } from "./chat-input-form";
+import { MediaImage } from "./media-image";
 import { MusicEditor } from "./music-editor";
 import { CreativeBriefEditor, type BriefState } from "./creative-brief";
 import { ImageGallery } from "./image-gallery";
@@ -13,6 +14,11 @@ import { InstagramInbox } from "./instagram-inbox";
 import { SettingsDialog, PlanDialog } from "./workspace-dialogs";
 import { api, type Project, type Job, type Settings, type Run, type CalendarEvent, type Asset } from "./api";
 import type { ActiveView, ChatMessage } from "./constants";
+
+function rememberChat(id: string | null) {
+  try { if (id) sessionStorage.setItem("quark:last-chat", id); else sessionStorage.removeItem("quark:last-chat"); }
+  catch { /* Storage can be unavailable; the chat still works for this page. */ }
+}
 
 export function ChatLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -32,6 +38,9 @@ export function ChatLayout() {
   const [plan, setPlan] = useState<{ job: Job | null } | null>(null);
   const [ready, setReady] = useState(false);
   const currentId = useRef<string | null>(null);
+  const selectionEpoch = useRef(0);
+  const chatFetch = useRef(0);
+  const restored = useRef(false);
   const selected = projects.find(p => p.id === selectedId);
   const working = run?.status === "running";
   const projectJobs = jobs.filter(j => j.project_id === selectedId);
@@ -40,11 +49,25 @@ export function ChatLayout() {
   const refresh = useCallback(async () => {
     const [p, j, c, s] = await Promise.all([api<Project[]>("/projects"), api<Job[]>("/jobs"), api<CalendarEvent[]>("/calendar"), api<Settings>("/settings")]);
     setProjects(p); setJobs(j); setEvents(c); setSettings(s); setReady(true);
+    if (!restored.current) {
+      restored.current = true;
+      try {
+        const last = sessionStorage.getItem("quark:last-chat");
+        if (last && p.some(project => project.id === last)) { currentId.current = last; setSelectedId(last); }
+      } catch { /* Restore is optional when browser storage is blocked. */ }
+    }
   }, []);
   const refreshChat = useCallback(async (id: string) => {
+    const request = ++chatFetch.current;
     const [m, r, a, b] = await Promise.all([api<ChatMessage[]>(`/projects/${id}/messages`), api<Run[]>(`/projects/${id}/runs`), api<Asset[]>(`/projects/${id}/assets`), api<BriefState>(`/projects/${id}/brief`)]);
-    if (currentId.current !== id) return;
-    setMessages(prev => JSON.stringify(prev) === JSON.stringify(m) ? prev : m);
+    if (currentId.current !== id || request !== chatFetch.current) return;
+    setMessages(prev => {
+      const pending = prev.find(x => x.id.startsWith("pending-"));
+      const serverUsers = m.filter(x => x.role === "user").length;
+      const previousUsers = prev.filter(x => x.role === "user" && !x.id.startsWith("pending-")).length;
+      const next = pending && r[0]?.status === "running" && serverUsers <= previousUsers ? [...m, pending] : m;
+      return JSON.stringify(prev) === JSON.stringify(next) ? prev : next;
+    });
     setRun(r[0] || null); setAssets(a); setBrief(b);
   }, []);
   useEffect(() => {
@@ -59,22 +82,29 @@ export function ChatLayout() {
     return () => { alive = false; clearTimeout(timer); };
   }, [refresh, refreshChat]);
   function select(id: string | null) {
+    restored.current = true; rememberChat(id);
+    selectionEpoch.current++; chatFetch.current++;
     currentId.current = id; setSelectedId(id); setMessages([]); setRun(null); setAssets([]); setBrief(null);
     setActiveView("chat"); setSidebarOpen(false); setError("");
     if (id) void refreshChat(id).catch(e => setError(e.message));
   }
-  async function send(text: string, fn = "content", assetIds: string[] = []) {
+  async function send(text: string, fn = "content", assetIds: string[] = [], attachments: Asset[] = []) {
+    const epoch = selectionEpoch.current;
+    const originId = currentId.current;
     setError("");
     try {
-      if (settings && !settings.hasDeepSeekKey) throw new Error("El agente no está disponible en este momento.");
-      const project = selectedId ? { id: selectedId } : await api<Project>("/projects", "POST", { name: text.slice(0, 70) });
+      const project = originId ? { id: originId } : await api<Project>("/projects", "POST", { name: text.slice(0, 70) });
       const result = await api<Run>(`/projects/${project.id}/runs`, "POST", { message: text, function: fn, assetIds });
-      if (!selectedId) { currentId.current = project.id; setSelectedId(project.id); }
-      setRun(result);
-      setMessages(prev => [...prev, { id: `pending-${result.id}`, role: "user", content: text }]);
-      await refresh();
+      if (selectionEpoch.current === epoch) {
+        if (!originId) { currentId.current = project.id; setSelectedId(project.id); }
+        rememberChat(project.id);
+        setRun(result);
+        setMessages(prev => [...prev, { id: `pending-${result.id}`, role: "user", content: text, media: attachments.map(a => `/media/assets/${a.filename}`) }]);
+      }
+      // Acceptance is final even if a later refresh fails; retaining the draft would submit it twice.
+      void refresh().catch(e => { if (selectionEpoch.current === epoch) setError(e.message); });
       return true;
-    } catch (e) { setError((e as Error).message); return false; }
+    } catch (e) { if (selectionEpoch.current === epoch) setError((e as Error).message); return false; }
   }
   async function resume(job: Job) {
     setError("");
@@ -106,7 +136,7 @@ export function ChatLayout() {
               try { setBrief(await api<BriefState>(`/projects/${selectedId}/brief/reopen`, "POST")); }
               catch (e) { setError((e as Error).message); }
             }} className="mx-auto mb-5 text-sm text-violet-300 hover:underline">Modificar formato o estilo de esta pieza</button>}
-            {assets.length > 0 && <div className="mx-auto mb-4 flex w-full max-w-3xl flex-wrap gap-2 px-4">{assets.map(a => <a key={a.id} href={`/media/assets/${a.filename}`} target="_blank" rel="noreferrer" className="max-w-36 truncate rounded-lg border border-zinc-800 p-2 text-xs text-zinc-400" title={a.name}>{a.kind === "image" && <img src={`/media/assets/${a.filename}`} alt={a.name} className="mb-1 h-16 w-full object-contain" />}{a.name}</a>)}</div>}
+            {assets.length > 0 && <details className="mx-auto mb-4 w-full max-w-3xl px-4"><summary className="cursor-pointer text-xs text-zinc-400">Recursos de esta conversación ({assets.length})</summary><div className="mt-3 flex flex-wrap gap-2">{assets.map(a => <div key={a.id} className="max-w-36 rounded-lg border border-zinc-800 p-2 text-xs text-zinc-400">{a.kind === "image" && <MediaImage key={a.id} src={`/media/assets/${a.filename}`} alt={a.name} className="mb-1 h-16 w-full object-contain" />}<a href={`/media/assets/${a.filename}`} target="_blank" rel="noreferrer" className="block truncate" title={a.name}>{a.name}</a></div>)}</div></details>}
             {selectedId && messages.at(-1)?.role === "assistant" && messages.at(-1)?.content.startsWith("¡Dale! Buscá la canción") &&
               <MusicEditor key={selectedId} projectId={selectedId} assets={assets} onChange={() => { void refresh(); void refreshChat(selectedId); }} />}
             {working && <p role="status" className="mx-auto w-full max-w-3xl animate-pulse px-4 pb-5 text-sm text-violet-300">QUARK está trabajando en tu pedido…</p>}
