@@ -6,6 +6,7 @@ import { ChatHeader } from "./chat-header";
 import { MessageList } from "./message-list";
 import { ChatInputForm } from "./chat-input-form";
 import { MusicEditor } from "./music-editor";
+import { CreativeBriefEditor, type BriefState } from "./creative-brief";
 import { ImageGallery } from "./image-gallery";
 import { ContentCalendar } from "./content-calendar";
 import { InstagramInbox } from "./instagram-inbox";
@@ -25,6 +26,7 @@ export function ChatLayout() {
   const [settings, setSettings] = useState<Settings | null>(null);
   const [run, setRun] = useState<Run | null>(null);
   const [assets, setAssets] = useState<Asset[]>([]);
+  const [brief, setBrief] = useState<BriefState | null>(null);
   const [error, setError] = useState("");
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [plan, setPlan] = useState<{ job: Job | null } | null>(null);
@@ -40,10 +42,10 @@ export function ChatLayout() {
     setProjects(p); setJobs(j); setEvents(c); setSettings(s); setReady(true);
   }, []);
   const refreshChat = useCallback(async (id: string) => {
-    const [m, r, a] = await Promise.all([api<ChatMessage[]>(`/projects/${id}/messages`), api<Run[]>(`/projects/${id}/runs`), api<Asset[]>(`/projects/${id}/assets`)]);
+    const [m, r, a, b] = await Promise.all([api<ChatMessage[]>(`/projects/${id}/messages`), api<Run[]>(`/projects/${id}/runs`), api<Asset[]>(`/projects/${id}/assets`), api<BriefState>(`/projects/${id}/brief`)]);
     if (currentId.current !== id) return;
     setMessages(prev => JSON.stringify(prev) === JSON.stringify(m) ? prev : m);
-    setRun(r[0] || null); setAssets(a);
+    setRun(r[0] || null); setAssets(a); setBrief(b);
   }, []);
   useEffect(() => {
     let alive = true;
@@ -57,7 +59,7 @@ export function ChatLayout() {
     return () => { alive = false; clearTimeout(timer); };
   }, [refresh, refreshChat]);
   function select(id: string | null) {
-    currentId.current = id; setSelectedId(id); setMessages([]); setRun(null); setAssets([]);
+    currentId.current = id; setSelectedId(id); setMessages([]); setRun(null); setAssets([]); setBrief(null);
     setActiveView("chat"); setSidebarOpen(false); setError("");
     if (id) void refreshChat(id).catch(e => setError(e.message));
   }
@@ -98,6 +100,12 @@ export function ChatLayout() {
             <div className="mx-auto flex w-full max-w-3xl flex-wrap items-center justify-between gap-3 px-4 pt-5 text-xs text-zinc-500"><span className="truncate">{selected?.name || "Conversación"}{selected && ` · v${selected.revision}`}</span>
             </div>
             <MessageList messages={messages} onQuickReply={answer => void send(answer)} />
+            {selectedId && brief?.brief && ["draft", "failed"].includes(brief.brief.status) && !working &&
+              <CreativeBriefEditor key={brief.brief.id} projectId={selectedId} state={brief} onChange={async nextRun => { if (nextRun) setRun(nextRun); await refreshChat(selectedId); }} />}
+            {selectedId && brief?.brief?.status === "done" && !working && <button type="button" onClick={async () => {
+              try { setBrief(await api<BriefState>(`/projects/${selectedId}/brief/reopen`, "POST")); }
+              catch (e) { setError((e as Error).message); }
+            }} className="mx-auto mb-5 text-sm text-violet-300 hover:underline">Modificar formato o estilo de esta pieza</button>}
             {assets.length > 0 && <div className="mx-auto mb-4 flex w-full max-w-3xl flex-wrap gap-2 px-4">{assets.map(a => <a key={a.id} href={`/media/assets/${a.filename}`} target="_blank" rel="noreferrer" className="max-w-36 truncate rounded-lg border border-zinc-800 p-2 text-xs text-zinc-400" title={a.name}>{a.kind === "image" && <img src={`/media/assets/${a.filename}`} alt={a.name} className="mb-1 h-16 w-full object-contain" />}{a.name}</a>)}</div>}
             {selectedId && messages.at(-1)?.role === "assistant" && messages.at(-1)?.content.startsWith("¡Dale! Buscá la canción") &&
               <MusicEditor key={selectedId} projectId={selectedId} assets={assets} onChange={() => { void refresh(); void refreshChat(selectedId); }} />}

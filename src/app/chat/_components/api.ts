@@ -29,7 +29,7 @@ export async function api<T>(path: string, method = "GET", body?: unknown): Prom
     body: body === undefined ? undefined : body instanceof FormData ? body : JSON.stringify(body),
   });
   const value = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(typeof value.detail === "string" ? value.detail : `No se pudo completar la operación (${response.status})`);
+  if (!response.ok) throw new Error(typeof value.detail === "string" ? value.detail : Array.isArray(value.detail) ? value.detail.map((error: { msg?: string }) => (error.msg || "Revisá los datos ingresados").replace(/^Value error, /, "")).join(" · ") : `No se pudo completar la operación (${response.status})`);
   return value as T;
 }
 export const stateLabel: Record<string, string> = {
