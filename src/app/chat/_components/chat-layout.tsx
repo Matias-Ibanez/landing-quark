@@ -91,7 +91,7 @@ export function ChatLayout() {
       {error && <div role="alert" className="flex items-center justify-between gap-4 border-b border-rose-900/50 bg-rose-950/20 px-5 py-3 text-sm text-rose-300"><span>{error}</span><button onClick={() => setError("")} aria-label="Cerrar aviso">✕</button></div>}
       {settings && !settings.hasDeepSeekKey && <div className="flex flex-wrap justify-between gap-2 border-b border-zinc-800 px-5 py-3 text-xs text-zinc-400"><span>El agente no está disponible en este momento.</span><button onClick={() => setSettingsOpen(true)} className="text-violet-300">Ver estado →</button></div>}
       {!ready ? <p className="m-auto text-zinc-500">Conectando con tu espacio…</p> : activeView === "chat" ? <>
-        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+        <div data-chat-scroll className="flex min-h-0 flex-1 flex-col overflow-y-auto">
           {!selectedId && !messages.length ? <div className="relative flex flex-1 flex-col items-center justify-center gap-5 px-6 py-12 text-center">
             <div className="flex size-14 items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900"><Sparkle size={28} weight="duotone" className="text-violet-400" /></div>
             <h1 className="text-balance text-3xl font-medium tracking-tight sm:text-4xl md:text-5xl">¿Qué vamos a comunicar hoy?</h1>

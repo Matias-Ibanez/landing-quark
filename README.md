@@ -31,3 +31,9 @@ Para un servidor con TLS, el proxy público debe apuntar al puerto local del fro
 El backend decide si necesita aclaraciones y devuelve únicamente los campos pendientes. El editor omite los grupos vacíos y revisa solo esas respuestas; un pedido completo empieza a producir sin formulario. La edición manual de una pieza conserva todas las opciones.
 
 Verificado con TypeScript, ESLint del editor y build Docker. En el chat, un reel sobre café sin duración mostró solo esa pregunta y su revisión. Para revertir la presentación, revertir el cambio del editor; no es necesario borrar datos ni conversaciones.
+
+## Lectura de mensajes e imágenes
+
+El chat interpreta Markdown (negritas, cursivas, listas, títulos, enlaces y tablas) sin ejecutar HTML ni cargar imágenes remotas incrustadas en el texto. Los medios se muestran desde las referencias verificadas que devuelve el backend. Las publicaciones vectoriales conservan descarga SVG y vista/descarga PNG, con recuperación de errores de vista previa.
+
+Pruebas: `npm test`. El detalle de los escenarios corregidos está en [VERIFICATION.md](VERIFICATION.md).

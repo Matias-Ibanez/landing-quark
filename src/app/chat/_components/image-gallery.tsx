@@ -1,6 +1,7 @@
 "use client";
 import { FilmStrip, ImageSquare } from "@phosphor-icons/react";
 import { type Job, type Project, stateLabel } from "./api";
+import { MediaImage } from "./media-image";
 export function ImageGallery({ jobs, projects, onResume, onPlan, compact = false }: {
   jobs: Job[]; projects: Project[]; onResume: (job: Job) => void; onPlan: (job: Job) => void; compact?: boolean;
 }) {
@@ -13,7 +14,7 @@ export function ImageGallery({ jobs, projects, onResume, onPlan, compact = false
         <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-black/30">
           {job.status === "done" && job.result?.url ? job.payload.kind === "mp4"
             ? <video src={job.result.url} controls preload="metadata" className="h-full w-full object-contain" />
-            : <img src={job.result.url} alt={projects.find(p => p.id === job.project_id)?.name || "Pieza creada"} className="h-full w-full object-contain" />
+            : <MediaImage key={job.result.url} src={job.result.url} previewVector alt={projects.find(p => p.id === job.project_id)?.name || "Pieza creada"} containerClassName="h-full w-full" className="h-full w-full object-contain" />
             : <div className="p-5 text-center text-sm text-zinc-400"><FilmStrip size={28} className="mx-auto mb-3" />{stateLabel[job.status] || job.status}</div>}
         </div>
         <div className="p-4">
@@ -25,6 +26,7 @@ export function ImageGallery({ jobs, projects, onResume, onPlan, compact = false
             <button onClick={() => onResume(job)} className="text-violet-300 hover:text-violet-200">Seguir en el chat</button>
             <button onClick={() => onPlan(job)} className="text-zinc-300 hover:text-white">Al calendario</button>
             <a href={job.result?.vectorUrl || job.result?.url} download className="text-zinc-400 hover:text-white">{job.result?.vectorUrl ? "Descargar SVG" : "Descargar"}</a>
+            {job.result?.vectorUrl && <a href={job.result.url} download className="text-zinc-400 hover:text-white">Descargar PNG</a>}
           </div>}
         </div>
       </article>)}
