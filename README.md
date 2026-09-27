@@ -28,9 +28,9 @@ Para un servidor con TLS, el proxy público debe apuntar al puerto local del fro
 
 ## Detalles de la pieza
 
-El backend decide si necesita aclaraciones y devuelve únicamente los campos pendientes. El editor omite los grupos vacíos y revisa solo esas respuestas; un pedido completo empieza a producir sin formulario. La edición manual de una pieza conserva todas las opciones.
+El backend decide si necesita aclaraciones. Se muestra una pregunta por vez dentro del chat: elegí una opción o escribí la respuesta en el cuadro de mensajes. Cada respuesta queda guardada. Al terminar podés revisar y editar respuestas individuales antes de pulsar **Crear mi pieza**; un pedido completo produce directamente. No hay selector de función: pedí una publicación, una campaña o un short en lenguaje natural.
 
-Verificado con TypeScript, ESLint del editor y build Docker. En el chat, un reel sobre café sin duración mostró solo esa pregunta y su revisión. Para revertir la presentación, revertir el cambio del editor; no es necesario borrar datos ni conversaciones.
+Las elecciones de formato muestran proporciones; las paletas muestran colores. El texto sin enviar se conserva durante las actualizaciones periódicas. Los cambios guardados en otra pestaña se recuperan por versión.
 
 ## Lectura de mensajes e imágenes
 
@@ -38,4 +38,8 @@ El chat interpreta Markdown (negritas, cursivas, listas, títulos, enlaces y tab
 
 Pruebas: `npm test`. El detalle de los escenarios corregidos está en [VERIFICATION.md](VERIFICATION.md).
 
-Los adjuntos se pueden enviar sin texto: después de cargarlos, pulsá Enviar. Aparecen dentro de tu mensaje y dejan de figurar en el cuadro de escritura. También podés escribir indicaciones antes de enviarlos. Si el envío se rechaza, se conserva el borrador con los archivos; si una carga falla, se siguen procesando los demás archivos válidos. La última conversación seleccionada se recupera al recargar en esa pestaña.
+Adjuntá fotos, PDF o audio con **+**, pegá imágenes desde el portapapeles o arrastrá archivos al chat. Se admiten cinco archivos de hasta 30 MB por mensaje. Podés enviarlos sin texto o acompañarlos con instrucciones. Aparecen dentro de tu mensaje y dejan de figurar en el cuadro de escritura. Si el envío se rechaza, se conserva el borrador con los archivos; si una carga falla, se siguen procesando los demás archivos válidos. La última conversación seleccionada se recupera al recargar en esa pestaña.
+
+Un clic sobre una tarjeta abre una vista previa con descargas; los videos se cargan allí, sin fijarse encima del chat. **Archivos** reúne adjuntos y resultados de la conversación. **Biblioteca** permite buscar piezas y filtrar imágenes o videos, retomar su chat o llevarlas al calendario. Los PDF muestran la primera página y un enlace al original; el backend lee texto y páginas escaneadas con límites documentados en su README.
+
+Los diálogos animados vienen del registro oficial de Animate UI. Las opciones visuales toman como referencia Bencho; véase [THIRD_PARTY.md](THIRD_PARTY.md). Se respetan las preferencias de reducir movimiento, Escape y navegación por teclado. El panel móvil se cierra al elegir un chat y bloquea la interacción con el fondo.

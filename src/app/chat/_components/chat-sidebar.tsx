@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState, useEffect, useRef } from "react";
 import {
   Plus,
   X,
@@ -42,15 +43,15 @@ interface ChatSidebarProps {
 
 /** Mock user data — replace with real auth data later. */
 const MOCK_USER = {
-  name: "Mi espacio local",
+  name: "Tu espacio de trabajo",
   initials: "Q",
-  plan: "Prototipo",
+  plan: "Preferencias y marca",
 } as const;
 
 /** Navigation items rendered in the sidebar. */
 const NAV_ITEMS: readonly { id: ActiveView; label: string; icon: typeof Chats }[] = [
   { id: "chat", label: "Chat", icon: Chats },
-  { id: "gallery", label: "Galería", icon: Image },
+  { id: "gallery", label: "Biblioteca", icon: Image },
   { id: "calendar", label: "Calendario", icon: CalendarBlank },
   { id: "instagram", label: "Instagram", icon: InstagramLogo },
 ] as const;
@@ -63,6 +64,27 @@ export function ChatSidebar({
   activeView,
   onViewChange, projects, selectedId, onSelect, onNew, onSettings,
 }: ChatSidebarProps) {
+  const [search, setSearch] = useState("");
+  const sidebar = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)");
+    if (!isOpen || !media.matches) return;
+    const resize = () => { if (!media.matches) onClose(); };
+    media.addEventListener("change", resize);
+    const previous = document.activeElement as HTMLElement;
+    sidebar.current?.querySelector<HTMLElement>("button, a")?.focus();
+    function keyboard(event: KeyboardEvent) {
+      if (event.key === "Escape") { event.preventDefault(); onClose(); }
+      if (event.key === "Tab") {
+        const focusable = [...sidebar.current?.querySelectorAll<HTMLElement>("button, a, input") || []].filter(el => el.offsetParent !== null);
+        const first = focusable[0], last = focusable.at(-1);
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+      }
+    }
+    document.addEventListener("keydown", keyboard);
+    return () => { document.removeEventListener("keydown", keyboard); media.removeEventListener("change", resize); previous?.focus(); };
+  }, [isOpen, onClose]);
   return (
     <>
       {/* ---- backdrop (mobile only) ---- */}
@@ -76,21 +98,21 @@ export function ChatSidebar({
 
       {/* ---- sidebar panel ---- */}
       <aside
+        ref={sidebar}
         className={`
-          fixed inset-y-0 left-0 z-50 flex flex-col border-r border-zinc-800
-          bg-zinc-950 transition-all duration-300 ease-in-out
-          md:static md:translate-x-0
-          ${isOpen ? "translate-x-0" : "-translate-x-full"}
-          ${isCollapsed ? "md:w-[68px]" : "w-72"}
+          fixed inset-y-0 left-0 z-50 w-72 flex-col bg-[#18181c]
+          transition-[width] duration-200 motion-reduce:transition-none md:static md:flex
+          ${isOpen ? "flex" : "hidden"}
+          ${isCollapsed ? "md:w-[68px]" : "md:w-64"}
         `}
         aria-label="Panel lateral de chats"
       >
         {/* — brand + collapse toggle — */}
         <div className="flex h-14 shrink-0 items-center justify-between border-b border-zinc-800 px-3">
-          {!isCollapsed && (
+          {(
             <Link
               href="/"
-              className="flex items-center gap-2.5 text-zinc-50 transition-colors hover:text-white"
+              className={`flex items-center gap-2.5 text-zinc-50 transition-colors hover:text-white ${isCollapsed ? "md:hidden" : ""}`}
             >
               <Mark />
               <span className="font-mono text-sm font-semibold uppercase tracking-[0.2em]">
@@ -122,7 +144,7 @@ export function ChatSidebar({
 
         {/* — primary navigation — */}
         <nav className="px-3 pt-4" aria-label="Navegación principal">
-          <div className={`flex ${isCollapsed ? "flex-col items-center" : "flex-col"} gap-1`}>
+          <div className={`flex flex-col ${isCollapsed ? "md:items-center" : ""} gap-1`}>
             {NAV_ITEMS.map(({ id, label, icon: Icon }) => {
               const isActive = activeView === id;
               return (
@@ -134,11 +156,12 @@ export function ChatSidebar({
                     isActive
                       ? "bg-zinc-800 text-zinc-50"
                       : "text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200"
-                  } ${isCollapsed ? "justify-center px-0 size-10" : ""}`}
+                  } ${isCollapsed ? "md:justify-center md:px-0 md:size-10" : ""}`}
                   aria-current={isActive ? "page" : undefined}
+                  aria-label={label} title={label}
                 >
                   <Icon size={18} weight={isActive ? "fill" : "regular"} aria-hidden="true" />
-                  {!isCollapsed && label}
+                  <span className={isCollapsed ? "md:sr-only" : ""}>{label}</span>
                 </button>
               );
             })}
@@ -167,20 +190,21 @@ export function ChatSidebar({
         </div>
 
         {/* — history (only visible in chat view) — */}
-        {!isCollapsed && activeView === "chat" && (
+        {activeView === "chat" && (
           <nav
-            className="mt-4 flex-1 overflow-y-auto px-3"
+            className={`mt-5 min-h-0 flex-1 overflow-y-auto px-3 ${isCollapsed ? "md:hidden" : ""}`}
             aria-label="Historial de chats"
           >
             <p className="mb-2 px-2 font-mono text-[11px] uppercase tracking-[0.16em] text-zinc-600">
               Recientes
             </p>
+            <input type="search" aria-label="Buscar conversaciones" value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar un chat…" className="mb-3 w-full rounded-lg bg-white/5 px-3 py-2 text-sm text-zinc-300 outline-none placeholder:text-zinc-600 focus:ring-1 focus:ring-zinc-500" />
             <ul className="space-y-0.5">
-              {projects.map((project) => (
+              {projects.filter(project => project.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())).map((project) => (
                 <li key={project.id}>
                   <button
                     type="button"
-                    onClick={() => { onSelect(project.id); onClose(); }} aria-current={selectedId === project.id ? "page" : undefined} className="w-full truncate rounded-lg px-2 py-2 text-left text-sm text-zinc-400 transition-colors hover:bg-zinc-900 hover:text-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500"
+                    onClick={() => { onSelect(project.id); onClose(); }} title={project.name} aria-current={selectedId === project.id ? "page" : undefined} className={`w-full truncate rounded-lg px-2 py-2.5 text-left text-sm transition-colors hover:bg-white/5 hover:text-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 ${selectedId === project.id ? "bg-white/10 text-zinc-100" : "text-zinc-400"}`}
                   >
                     {project.name}
                   </button>
@@ -191,7 +215,7 @@ export function ChatSidebar({
         )}
 
         {/* spacer when collapsed or non-chat view (push user profile to bottom) */}
-        {(isCollapsed || activeView !== "chat") && <div className="flex-1" />}
+        {(isCollapsed || activeView !== "chat") && <div className={activeView === "chat" ? "hidden md:block md:flex-1" : "flex-1"} />}
 
         {/* — user profile footer — */}
         <div className="shrink-0 border-t border-zinc-800 p-3">

@@ -1,106 +1,66 @@
 "use client";
-
 import { useState } from "react";
+import { ArrowRight, Check, PencilSimple } from "@phosphor-icons/react";
+import { motion } from "motion/react";
 import { api, type Run } from "./api";
 
 type Answers = Record<string, string | number>;
-export interface CreativeBrief {
-  id: string; version: number; status: string; request: string; answers: Answers;
-}
-interface BriefField {
-  key: string; title: string; group: number; choices?: [string, string][] | null;
-  when?: [string, string]; type?: string; required?: boolean;
-  min?: number; max?: number; maxLength?: number;
-}
-export interface BriefState { brief: CreativeBrief | null; fields: BriefField[]; groups: string[] }
+export interface CreativeBrief { id: string; version: number; status: string; request: string; answers: Answers }
+export interface BriefField { key: string; title: string; group: number; choices?: [string, string][] | null; when?: [string, string]; type?: string; required?: boolean; min?: number; max?: number; maxLength?: number }
+export interface BriefState { brief: CreativeBrief | null; fields: BriefField[]; groups: string[]; question?: string | null; answered?: string[] }
 
-export function CreativeBriefEditor({ projectId, state, onChange }: {
-  projectId: string; state: BriefState; onChange: (run: Run | null) => Promise<void>;
-}) {
+// The current question is server-owned, so reloads and different tabs resume the same conversation.
+export function CreativeBriefEditor({ projectId, state, onChange }: { projectId: string; state: BriefState; onChange: (run: Run | null) => Promise<void> }) {
   const initial = state.brief!;
-  const [answers, setAnswers] = useState<Answers>(initial.answers);
-  const [version, setVersion] = useState(initial.version);
-  const [remoteVersion, setRemoteVersion] = useState(initial.version);
-  const [activeGroup, setActiveGroup] = useState<number | null>(() => state.fields.filter(f => !f.when || initial.answers[f.when[0]] === f.when[1]).map(f => f.group).sort((a, b) => a - b)[0] ?? null);
+  const [editKey, setEditKey] = useState<string | null>(null);
+  const relevant = state.fields.filter(f => !f.when || initial.answers[f.when[0]] === f.when[1]);
+  const question = relevant.find(f => f.key === (editKey || state.question)) || (state.question === undefined ? relevant[0] : undefined);
+  const [value, setValue] = useState<string | number>(question ? initial.answers[question.key] ?? "" : "");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  // Polling must preserve unsaved typing, but a new saved version from another tab must be loaded.
-  if (initial.version !== remoteVersion) {
-    setRemoteVersion(initial.version);
-    if (initial.version > version) {
-      setAnswers(initial.answers); setVersion(initial.version); setError("");
-      setActiveGroup(state.fields.filter(f => !f.when || initial.answers[f.when[0]] === f.when[1]).map(f => f.group).sort((a, b) => a - b)[0] ?? null);
-    }
+  const [snapshot, setSnapshot] = useState(`${initial.version}:${question?.key}`);
+  if (snapshot !== `${initial.version}:${question?.key}`) {
+    setSnapshot(`${initial.version}:${question?.key}`);
+    setValue(question ? initial.answers[question.key] ?? "" : ""); setError("");
   }
-  const relevant = state.fields.filter(f => !f.when || answers[f.when[0]] === f.when[1]);
-  const groupIds = [...new Set(relevant.map(f => f.group))].sort((a, b) => a - b);
-  const currentGroup = activeGroup === null ? null : groupIds.find(g => g >= activeGroup) ?? null;
-  const step = currentGroup === null ? groupIds.length : groupIds.indexOf(currentGroup);
-  const visible = relevant.filter(f => f.group === currentGroup);
-  const reviewing = currentGroup === null;
-
-  async function save(action: "save" | "confirm" | "cancel") {
-    setError(""); setBusy(true);
+  async function submit(action: "save" | "confirm" | "cancel", selected = value) {
+    if (busy) return;
+    setBusy(true); setError("");
     try {
-      if (action === "confirm" && (!String(answers.subject ?? "").trim() || !String(answers.audience ?? "").trim())) {
-        throw new Error("Completá el tema y el público para continuar.");
-      }
       const result = await api<{ brief: CreativeBrief; run: Run | null }>(`/projects/${projectId}/brief`, "PUT", {
-        id: initial.id, version, action, answers: action === "cancel" ? initial.answers : answers,
+        id: initial.id, version: initial.version, action,
+        answers: action === "save" && question ? { ...initial.answers, [question.key]: selected } : initial.answers,
+        field: action === "save" ? question?.key : undefined,
       });
-      setVersion(result.brief.version);
-      if (action === "save") setActiveGroup(groupIds[step + 1] ?? null);
-      await onChange(result.run);
+      setEditKey(null); await onChange(result.run);
     } catch (e) { setError((e as Error).message); }
     finally { setBusy(false); }
   }
-
-  async function reload() {
-    setBusy(true);
-    try {
-      const saved = await api<BriefState>(`/projects/${projectId}/brief`);
-      if (!saved.brief) throw new Error("No se encontraron los detalles de esta pieza.");
-      setAnswers(saved.brief.answers); setVersion(saved.brief.version); setRemoteVersion(saved.brief.version); setError("");
-      setActiveGroup(saved.fields.filter(f => !f.when || saved.brief!.answers[f.when[0]] === f.when[1]).map(f => f.group).sort((a, b) => a - b)[0] ?? null);
-      await onChange(null);
-    } catch (e) { setError((e as Error).message); }
-    finally { setBusy(false); }
-  }
-
-  return <section aria-label="Detalles de la pieza" className="mx-auto mb-6 w-[calc(100%_-_2rem)] max-w-3xl rounded-2xl border border-zinc-700 bg-zinc-900 p-5 sm:p-7">
-    <div className="mb-5 flex items-start justify-between gap-3">
-      <div><p className="text-xs uppercase tracking-widest text-violet-300">Antes de crear</p>
-        <h2 className="mt-1 text-xl font-medium">{reviewing ? "Revisá tus respuestas" : state.groups[groupIds[step]] || "Detalles de la pieza"}</h2>
-        <p className="mt-2 text-sm text-zinc-400">{reviewing ? "El resto se conserva de tu pedido. Confirmá para empezar a crear." : "Solo necesitamos aclarar estas decisiones para continuar."}</p>
-      </div><span className="shrink-0 text-xs text-zinc-500">{step + 1} / {groupIds.length + 1}</span>
+  const aspectSizes: Record<string, string> = { square: "h-6 w-6", portrait: "h-7 w-5", story: "h-8 w-4", landscape: "h-4 w-8" };
+  const paletteColors: Record<string, string[]> = { neutral: ["#e4e4e7", "#71717a", "#27272a"], warm: ["#e9b080", "#b66a45", "#623a35"], cool: ["#9cc9d7", "#558799", "#344d6c"], contrast: ["#fafafa", "#bda4ed", "#18181b"] };
+  return <motion.section initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.18 }} aria-label="Pregunta de QUARK" className="w-full pb-2">
+    <div className="pl-0 sm:pl-11">
+      {initial.status === "failed" && <p className="mb-4 text-sm text-amber-300">El intento anterior no se completó. Podemos ajustar los detalles y volver a intentarlo.</p>}
+      {question ? <>
+        <h2 className="text-base font-medium leading-relaxed text-zinc-100">{question.title}</h2>
+        {question.choices?.length ? <div role="group" aria-label={question.title} className="mt-4 flex flex-wrap gap-2">{question.choices.map(([key, label]) => <button key={key} type="button" disabled={busy} onClick={() => void submit("save", key)} className="flex min-h-11 items-center gap-2.5 rounded-xl border border-zinc-700/80 bg-zinc-900/60 px-4 py-3 text-left text-sm text-zinc-300 transition-colors hover:border-violet-400/70 hover:bg-violet-400/10 hover:text-white focus-visible:outline-2 focus-visible:outline-violet-400 disabled:opacity-50">
+          {question.key === "aspect" && <span aria-hidden="true" className={`rounded-sm border border-current ${aspectSizes[key] || "size-5"}`} />}
+          {question.key === "palette" && paletteColors[key] && <span aria-hidden="true" className="flex -space-x-1">{paletteColors[key].map(color => <span key={color} className="size-3.5 rounded-full border border-zinc-900" style={{ backgroundColor: color }} />)}</span>}
+          {label}
+        </button>)}</div> : <form className="mt-4 max-w-xl" onSubmit={e => { e.preventDefault(); void submit("save"); }}>
+          <label className="sr-only" htmlFor={`answer-${question.key}`}>{question.title}</label>
+          {question.type === "number" ? <div className="flex items-center gap-3"><input id={`answer-${question.key}`} type="number" min={question.min} max={question.max} required value={value} disabled={busy} onChange={e => setValue(e.target.value === "" ? "" : Number(e.target.value))} className="w-28 rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm outline-none focus:border-violet-400" /><span className="text-xs text-zinc-500">Entre {question.min} y {question.max}{question.key === "seconds" ? " segundos" : ""}</span></div>
+            : <textarea id={`answer-${question.key}`} value={value} disabled={busy} onChange={e => setValue(e.target.value)} maxLength={question.maxLength} required={question.required || ["copy_text", "colors"].includes(question.key)} rows={question.key === "copy_text" ? 3 : 2} placeholder={question.key === "subject" ? "Por ejemplo, una promoción de café de especialidad" : question.key === "colors" ? "#112233, #FFAA00" : "Escribí tu respuesta…"} className="min-h-24 w-full resize-y rounded-xl border border-zinc-700 bg-zinc-900/70 p-4 text-sm text-zinc-100 outline-none placeholder:text-zinc-600 focus:border-violet-400" />}
+          <button type="submit" disabled={busy} className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-full bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-950 hover:bg-white disabled:opacity-50">{busy ? "Guardando…" : "Responder"}<ArrowRight size={15} /></button>
+        </form>}
+        <p className="mt-3 text-xs text-zinc-500">También podés responder en el mensaje de abajo.</p>
+      </> : <>
+        <h2 className="text-base font-medium text-zinc-100">Ya tengo lo necesario para crear tu pieza.</h2>
+        <details className="mt-4 rounded-xl border border-zinc-800 px-4 py-3"><summary className="cursor-pointer text-sm text-zinc-400">Revisar mis respuestas</summary><dl className="mt-4 space-y-4">{relevant.map(f => <div key={f.key} className="flex items-start gap-3"><div className="min-w-0 flex-1"><dt className="text-xs text-zinc-500">{f.title}</dt><dd className="mt-1 whitespace-pre-wrap break-words text-sm text-zinc-200">{f.choices?.find(([key]) => key === initial.answers[f.key])?.[1] || String(initial.answers[f.key] || "A criterio de QUARK")}</dd></div><button type="button" aria-label={`Editar ${f.title}`} disabled={busy} onClick={() => setEditKey(f.key)} className="p-2 text-zinc-500 hover:text-zinc-200"><PencilSimple size={16} /></button></div>)}</dl></details>
+        <button type="button" disabled={busy} onClick={() => void submit("confirm")} className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-zinc-100 px-5 py-2 text-sm font-medium text-zinc-950 hover:bg-white disabled:opacity-50"><Check size={17} />{busy ? "Empezando…" : "Crear mi pieza"}</button>
+      </>}
+      {error && <p role="alert" className="mt-4 text-sm text-rose-300">{error}<button type="button" onClick={() => void onChange(null)} className="ml-2 underline">Actualizar conversación</button></p>}
+      <button type="button" disabled={busy} onClick={() => void submit("cancel")} className="mt-4 block text-xs text-zinc-500 hover:text-zinc-300">Cancelar este pedido</button>
     </div>
-    <div className="mb-6 flex gap-1" aria-hidden="true">{Array.from({ length: groupIds.length + 1 }, (_, i) => <div key={i} className={`h-1 flex-1 rounded ${i <= step ? "bg-violet-500" : "bg-zinc-700"}`} />)}</div>
-    {initial.status === "failed" && <p className="mb-4 text-sm text-amber-300">El intento anterior no se completó. Tus elecciones siguen guardadas; podés revisarlas y reintentar.</p>}
-    <form onSubmit={e => { e.preventDefault(); void save(reviewing ? "confirm" : "save"); }}>
-      <fieldset disabled={busy} className="space-y-6">
-        {reviewing ? <dl className="space-y-4">{relevant.map(f => <div key={f.key} className="border-b border-zinc-800 pb-3">
-          <dt className="text-xs text-zinc-400">{f.title}</dt><dd className="mt-1 whitespace-pre-wrap break-words text-sm text-zinc-100">
-            {f.choices?.find(c => c[0] === answers[f.key])?.[1] || String(answers[f.key] || "No indicado; no se inventará")}
-          </dd></div>)}<div className="text-sm text-zinc-400">Las imágenes usarán texto, gráficos y tus recursos adjuntos. No se generarán fotografías nuevas.</div></dl>
-          : visible.map(f => f.choices?.length ? <fieldset key={f.key}>
-            <legend className="mb-3 text-sm font-medium">{f.title}</legend>
-            <div className="grid gap-2 sm:grid-cols-2">{f.choices.map(([value, label]) => <label key={value} className={`cursor-pointer rounded-xl border px-4 py-3 text-sm transition-colors has-focus-visible:ring-2 has-focus-visible:ring-violet-400 ${answers[f.key] === value ? "border-violet-400 bg-violet-500/10 text-violet-100" : "border-zinc-700 text-zinc-300 hover:border-zinc-500"}`}>
-              <input className="sr-only" type="radio" name={f.key} checked={answers[f.key] === value} onChange={() => setAnswers(a => ({ ...a, [f.key]: value }))} />{label}
-            </label>)}</div>
-            {f.key === "copy_mode" && answers.copy_mode !== "exact" && <p className="mt-2 text-xs text-zinc-400">Para escribir tu propio texto, elegí «Usá exactamente mi texto».</p>}
-          </fieldset> : <div key={f.key}>
-            <label htmlFor={`details-${f.key}`} className="mb-2 block text-sm font-medium">{f.title}</label>
-            {f.type === "number" ? <input id={`details-${f.key}`} type="number" min={f.min} max={f.max} step={1} required value={answers[f.key] ?? ""} onChange={e => setAnswers(a => ({ ...a, [f.key]: e.target.value === "" ? "" : Number(e.target.value) }))} className="w-36 rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400" />
-              : <textarea id={`details-${f.key}`} rows={f.key === "subject" || f.key === "copy_text" ? 3 : 2} maxLength={f.maxLength} required={f.required || f.key === "copy_text" || f.key === "colors"} value={answers[f.key] ?? ""} onChange={e => setAnswers(a => ({ ...a, [f.key]: e.target.value }))} className="min-h-24 w-full resize-y rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-400" />}
-          </div>)}
-      </fieldset>
-      {error && <div role="alert" className="mt-5 text-sm text-rose-300">{error}<button type="button" disabled={busy} onClick={() => void reload()} className="ml-3 underline">Recargar opciones guardadas</button></div>}
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
-        <button type="button" disabled={busy} onClick={() => void save("cancel")} className="text-sm text-zinc-400 hover:text-zinc-200">Cancelar pedido</button>
-        <div className="flex gap-3">{step > 0 && <button type="button" disabled={busy} onClick={() => setActiveGroup(groupIds[step - 1] ?? null)} className="rounded-xl border border-zinc-700 px-4 py-3 text-sm">Atrás</button>}
-          <button type="submit" disabled={busy} className="rounded-xl bg-violet-600 px-5 py-3 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50">{busy ? "Guardando…" : reviewing ? "Confirmar y crear" : "Guardar y continuar"}</button>
-        </div>
-      </div>
-    </form>
-  </section>;
+  </motion.section>;
 }

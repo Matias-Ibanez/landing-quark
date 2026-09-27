@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MarkdownMessage } from "../src/app/chat/_components/markdown-message";
 import { MessageList } from "../src/app/chat/_components/message-list";
@@ -20,16 +20,18 @@ describe("message rendering", () => {
     expect(container.querySelector('a[href^="javascript:"]')).toBeNull();
   });
   it("keeps the user's uploaded image on its message", () => {
-    render(<MessageList messages={[{ id: "1", role: "user", content: "Mi producto", media: ["/media/assets/producto.png"] }]} />);
-    expect(screen.getByRole("img").getAttribute("src")).toBe("/media/assets/producto.png");
-    expect(screen.getByRole("link", { name: "Abrir adjunto" })).toBeTruthy();
+    const open = vi.fn();
+    const { container } = render(<MessageList onPreview={open} messages={[{ id: "1", role: "user", content: "Mi producto", media: ["/media/assets/producto.png"] }]} />);
+    expect(container.querySelector("img")?.getAttribute("src")).toBe("/media/assets/producto.png");
+    fireEvent.click(screen.getByRole("button", { name: "Previsualizar Archivo adjunto" }));
+    expect(open).toHaveBeenCalledWith(expect.objectContaining({ url: "/media/assets/producto.png" }));
   });
-  it("shows older valid export names and preserves PNG and SVG downloads without duplicating images", () => {
-    render(<MessageList messages={[{ id: "1", role: "assistant", content: "**Lista**", media: ["/media/exports/design-final.svg", "/media/exports/design-final.svg"] }]} />);
-    expect(screen.getAllByRole("img")).toHaveLength(1);
-    expect(screen.getByRole("img").getAttribute("src")).toBe("/media/exports/design-final.png");
-    expect(screen.getByRole("link", { name: "Descargar SVG vectorial" }).getAttribute("href")).toMatch(/\.svg$/);
-    expect(screen.getByRole("link", { name: "Descargar PNG" }).getAttribute("href")).toMatch(/\.png$/);
+  it("shows one compact preview card per export without duplicated images or players", () => {
+    const { container } = render(<MessageList messages={[{ id: "1", role: "assistant", content: "**Lista**", media: ["/media/exports/design-final.svg", "/media/exports/design-final.svg"] }]} />);
+    expect(container.querySelectorAll("img")).toHaveLength(1);
+    expect(container.querySelector("img")?.getAttribute("src")).toBe("/media/exports/design-final.png");
+    expect(screen.getAllByRole("button", { name: /Previsualizar/ })).toHaveLength(1);
+    expect(container.querySelector("video")).toBeNull();
   });
   it("falls back to SVG and offers a retry when both previews fail", () => {
     render(<MediaImage src="/media/exports/post.svg" previewVector alt="Publicación" />);

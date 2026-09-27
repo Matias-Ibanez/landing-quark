@@ -1,11 +1,10 @@
 import { beforeEach, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ChatInputForm } from "../src/app/chat/_components/chat-input-form";
 import { api } from "../src/app/chat/_components/api";
 
 vi.mock("../src/app/chat/_components/api", () => ({ api: vi.fn() }));
-vi.mock("@phosphor-icons/react", () => ({ Paperclip: () => null, PaperPlaneRight: () => null, X: () => null }));
 const asset = { id: "photo", name: "remera.png", filename: "photo.png", kind: "image" };
 beforeEach(() => vi.mocked(api).mockReset());
 
@@ -54,4 +53,19 @@ it("checks size before uploading oversized files", async () => {
   await user.upload(screen.getByLabelText("Archivos para adjuntar"), file);
   expect(api).not.toHaveBeenCalled();
   expect(screen.getByRole("alert").textContent).toContain("30 MB");
+});
+
+it("pastes images and drops PDFs without a marketing function selector", async () => {
+  const doc = { id: "pdf", filename: "pdf.pdf", name: "campaña.pdf", kind: "document", document: { pages: 2, textStatus: "ready", textTruncated: false, previewUrl: "/media/assets/pdf-preview.png" } };
+  vi.mocked(api).mockResolvedValueOnce(asset).mockResolvedValueOnce(doc);
+  const send = vi.fn().mockResolvedValue(true);
+  const { container } = render(<ChatInputForm onSendMessage={send} />);
+  fireEvent.paste(screen.getByRole("textbox"), { clipboardData: { files: [new File(["img"], "foto.png", { type: "image/png" })] } });
+  await screen.findByText("remera.png");
+  await waitFor(() => expect(screen.queryByText("Preparando adjuntos…")).toBeNull());
+  fireEvent.drop(container.querySelector("form")!, { dataTransfer: { files: [new File(["%PDF"], "campaña.pdf", { type: "application/pdf" })], types: ["Files"] } });
+  await screen.findByText("campaña.pdf");
+  expect(screen.queryByRole("combobox")).toBeNull();
+  await userEvent.click(screen.getByRole("button", { name: "Enviar mensaje" }));
+  expect(send).toHaveBeenCalledWith(expect.any(String), "content", ["photo", "pdf"], [asset, doc]);
 });

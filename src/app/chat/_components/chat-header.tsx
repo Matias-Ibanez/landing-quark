@@ -1,10 +1,9 @@
 "use client";
 
-import { List } from "@phosphor-icons/react";
+import { List, FolderSimple } from "@phosphor-icons/react";
 
 // ---------------------------------------------------------------------------
-// ChatHeader — hamburger toggle for mobile sidebar + dynamic title.
-// Model selector has been moved into the input bar.
+// ChatHeader — mobile navigation, current section and conversation files.
 // ---------------------------------------------------------------------------
 
 interface ChatHeaderProps {
@@ -12,11 +11,13 @@ interface ChatHeaderProps {
   onToggleSidebar: () => void;
   /** Title displayed in the header bar. */
   title?: string;
+  onFiles?: () => void;
+  fileCount?: number;
 }
 
-export function ChatHeader({ onToggleSidebar, title = "QUARK Chat" }: ChatHeaderProps) {
+export function ChatHeader({ onToggleSidebar, title = "QUARK", onFiles, fileCount = 0 }: ChatHeaderProps) {
   return (
-    <header className="flex h-14 shrink-0 items-center gap-3 border-b border-zinc-800 bg-zinc-950 px-4">
+    <header className="flex h-16 shrink-0 items-center gap-3 px-4 sm:px-6">
       {/* hamburger — mobile only */}
       <button
         type="button"
@@ -28,9 +29,10 @@ export function ChatHeader({ onToggleSidebar, title = "QUARK Chat" }: ChatHeader
       </button>
 
       {/* brand / title */}
-      <span className="font-mono text-sm font-semibold uppercase tracking-widest text-zinc-400">
+      <span className="min-w-0 flex-1 truncate text-base font-medium text-zinc-300">
         {title}
       </span>
+      {onFiles && <button type="button" onClick={onFiles} className="flex min-h-10 shrink-0 items-center gap-2 rounded-full border border-zinc-700/60 px-3 text-xs text-zinc-300 hover:bg-white/5"><FolderSimple size={17} />Archivos{fileCount > 0 && <span className="rounded-full bg-zinc-700/60 px-1.5 py-0.5 text-[10px]">{fileCount}</span>}</button>}
     </header>
   );
 }

@@ -14,7 +14,7 @@ export function ResourceCard({ item, onOpen, compact = false }: { item: PreviewI
     <span className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white/5">
       {type === "Imagen" ? <MediaImage key={item.url} src={item.url} previewVector retry={false} alt="" containerClassName="size-full" className="size-full object-cover" /> : <Icon size={23} weight="duotone" className="text-zinc-400" />}
     </span>
-    <span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium text-zinc-200">{item.title}</span><span className="mt-1 block text-xs text-zinc-500">{type}{item.document ? `, ${item.document.pages} páginas` : ""} <span className="text-zinc-400">· Ver</span></span></span>
+    <span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium text-zinc-200">{item.title}</span><span className="mt-1 block text-xs text-zinc-500">{type}{item.document ? `, ${item.document.pages} ${item.document.pages === 1 ? "página" : "páginas"}` : ""} <span className="text-zinc-400">· Ver</span></span></span>
     <ArrowUpRight size={16} className="shrink-0 text-zinc-600 transition-colors group-hover:text-zinc-300" />
   </button>;
 }
@@ -30,7 +30,7 @@ export function ResourcePreview({ item, onClose, onResume, onPlan }: { item: Pre
         <div className="min-h-0 overflow-auto rounded-xl bg-zinc-950 p-2">
           {item.url.endsWith(".mp4") ? <video src={item.url} controls preload="metadata" className="mx-auto max-h-[62dvh] max-w-full" />
             : /\.(mp3|wav|ogg|m4a)$/.test(item.url) ? <audio src={item.url} controls className="mx-auto my-12 max-w-full" />
-            : item.url.endsWith(".pdf") ? <div className="text-center">{item.document?.previewUrl && <MediaImage key={item.document.previewUrl} src={item.document.previewUrl} alt="Primera página del PDF" className="mx-auto max-h-[58dvh] max-w-full object-contain" />}<p className="py-3 text-xs text-zinc-400">Primera página. El documento tiene {item.document?.pages || "varias"} páginas.</p><a href={item.url} target="_blank" rel="noopener noreferrer" className="text-sm text-violet-300 underline">Abrir PDF completo</a></div>
+            : item.url.endsWith(".pdf") ? <div className="text-center">{item.document?.previewUrl && <MediaImage key={item.document.previewUrl} src={item.document.previewUrl} alt="Primera página del PDF" className="mx-auto max-h-[58dvh] max-w-full object-contain" />}<p className="py-3 text-xs text-zinc-400">Primera página. El documento tiene {item.document?.pages || "varias"} {item.document?.pages === 1 ? "página" : "páginas"}.</p><a href={item.url} target="_blank" rel="noopener noreferrer" className="text-sm text-violet-300 underline">Abrir PDF completo</a></div>
             : <MediaImage key={item.url} src={item.url} previewVector alt={item.title} className="mx-auto max-h-[62dvh] max-w-full object-contain" />}
         </div>
         {item.caption && <p className="mt-4 max-h-24 overflow-auto whitespace-pre-wrap text-sm leading-relaxed text-zinc-400">{item.caption}</p>}

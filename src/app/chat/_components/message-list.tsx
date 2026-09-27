@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { Mark } from "@/components/ui/mark";
 import type { ChatMessage } from "./constants";
 import { MarkdownMessage } from "./markdown-message";
-import { MediaImage, isPublicMedia } from "./media-image";
+import { isPublicMedia } from "./media-image";
+import { ResourceCard, type PreviewItem } from "./resource-preview";
+import type { Asset } from "./api";
 
 // ---------------------------------------------------------------------------
 // MessageList — scrollable area showing the conversation history.
@@ -15,9 +17,13 @@ interface MessageListProps {
   /** The full list of messages to render. */
   messages: readonly ChatMessage[];
   onQuickReply?: (answer: string) => void;
+  onPreview?: (item: PreviewItem) => void;
+  assets?: Asset[];
+  children?: ReactNode;
+  activityKey?: string;
 }
 
-export function MessageList({ messages, onQuickReply }: MessageListProps) {
+export function MessageList({ messages, onQuickReply, onPreview, assets = [], children, activityKey }: MessageListProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
   const followRef = useRef(true);
 
@@ -31,15 +37,15 @@ export function MessageList({ messages, onQuickReply }: MessageListProps) {
 
   useEffect(() => {
     if (followRef.current) bottomRef.current?.scrollIntoView({ behavior: "instant", block: "end" });
-  }, [messages]);
+  }, [messages, activityKey]);
 
   return (
     <div
-      className="shrink-0 px-4 py-6 md:px-8"
+      className="shrink-0 px-4 pb-6 pt-8 sm:px-6"
       role="log"
       aria-label="Historial de mensajes"
     >
-      <div className="mx-auto flex max-w-3xl flex-col gap-6">
+      <div className="mx-auto flex max-w-3xl flex-col gap-8">
         {messages.map((msg, index) => (
           <div
             key={msg.id}
@@ -49,17 +55,17 @@ export function MessageList({ messages, onQuickReply }: MessageListProps) {
           >
             {/* assistant avatar */}
             {msg.role === "assistant" && (
-              <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-zinc-700 bg-zinc-900 text-zinc-50">
+              <div className="hidden size-8 shrink-0 items-center justify-center rounded-full text-zinc-200 sm:flex">
                 <Mark />
               </div>
             )}
 
             {/* bubble */}
             <div
-              className={`min-w-0 max-w-[85%] break-words rounded-2xl px-4 py-3 text-sm leading-relaxed md:max-w-[75%] ${
+              className={`min-w-0 break-words text-[15px] leading-7 ${
                 msg.role === "user"
-                  ? "bg-zinc-800 text-zinc-50"
-                  : "bg-zinc-900 text-zinc-300"
+                  ? "max-w-[90%] rounded-3xl bg-[#303035] px-5 py-3 text-zinc-100 sm:max-w-[80%]"
+                  : "flex-1 pt-0.5 text-zinc-300"
               }`}
             >
               {msg.role === "assistant" ? (() => {
@@ -73,18 +79,15 @@ export function MessageList({ messages, onQuickReply }: MessageListProps) {
                 return <MarkdownMessage content={content} />;
               })() : <div className="whitespace-pre-wrap">{msg.content}</div>}
               {msg.role === "user" && [...new Set(msg.media ?? [])].filter(url => isPublicMedia(url) && url.startsWith("/media/assets/")).map(url => <div key={url} className="mt-3">
-                {/\.(mp3|wav|ogg|m4a)$/.test(url) ? <audio src={url} controls preload="metadata" className="max-w-full" />
-                  : <MediaImage key={url} src={url} alt="Imagen adjunta a tu mensaje" className="max-h-[45vh] w-full rounded-lg object-contain" />}
-                <a href={url} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-xs text-violet-300">Abrir adjunto</a>
+                <ResourceCard compact item={{ url, title: assets.find(a => url.endsWith(`/${a.filename}`))?.name || (url.endsWith(".pdf") ? "Documento adjunto" : "Archivo adjunto"), document: assets.find(a => url.endsWith(`/${a.filename}`))?.document }} onOpen={item => onPreview?.(item)} />
               </div>)}
-              {msg.role === "assistant" && [...new Set(msg.media ?? [])].filter(url => isPublicMedia(url) && url.startsWith("/media/exports/") && /\.(mp4|png|svg)$/.test(url)).map(url => url.endsWith(".mp4")
-                ? <video key={url} src={url} controls preload="metadata" className="mt-3 max-h-[65vh] w-full rounded-lg bg-black" />
-                : <div key={url} className="mt-3"><MediaImage key={url} src={url} previewVector alt="Pieza creada para tu marca" className="max-h-[65vh] w-full rounded-lg object-contain" /><div className="mt-2 flex flex-wrap gap-3 text-xs text-violet-300">{url.endsWith(".svg") && <a href={url} download>Descargar SVG vectorial</a>}<a href={url.replace(/\.svg$/, ".png")} download>Descargar PNG</a></div></div>)}
+              {msg.role === "assistant" && [...new Set(msg.media ?? [])].filter(url => isPublicMedia(url) && url.startsWith("/media/exports/") && /\.(mp4|png|svg)$/.test(url)).map((url, i) => <div key={url} className="mt-4"><ResourceCard compact item={{ url, title: url.endsWith(".mp4") ? "Tu video" : `Tu imagen${(msg.media?.length || 0) > 1 ? ` ${i + 1}` : ""}` }} onOpen={item => onPreview?.(item)} /></div>)}
               {msg.role === "assistant" && index === messages.length - 1 && msg.content.endsWith("¿Querés agregarle música de fondo?") && onQuickReply &&
                 <div className="mt-3 flex gap-2"><button type="button" onClick={() => onQuickReply("Sí")} className="rounded-lg bg-violet-700 px-3 py-1 text-white">Sí, agregar música</button><button type="button" onClick={() => onQuickReply("No gracias")} className="rounded-lg bg-zinc-800 px-3 py-1">No, gracias</button></div>}
             </div>
           </div>
         ))}
+        {children}
         <div ref={bottomRef} />
       </div>
     </div>

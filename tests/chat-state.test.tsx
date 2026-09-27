@@ -6,7 +6,6 @@ import { ChatLayout } from "../src/app/chat/_components/chat-layout";
 const mockApi = vi.hoisted(() => vi.fn());
 let accepted: boolean | undefined;
 vi.mock("../src/app/chat/_components/api", () => ({ api: mockApi }));
-vi.mock("@phosphor-icons/react", () => ({ Sparkle: () => null }));
 vi.mock("../src/app/chat/_components/chat-sidebar", () => ({ ChatSidebar: ({ onSelect }: { onSelect: (id: string) => void }) => <><button onClick={() => onSelect("a")}>Abrir A</button><button onClick={() => onSelect("b")}>Abrir B</button></> }));
 vi.mock("../src/app/chat/_components/chat-header", () => ({ ChatHeader: () => null }));
 vi.mock("../src/app/chat/_components/message-list", () => ({ MessageList: ({ messages }: { messages: unknown }) => <div data-testid="messages">{JSON.stringify(messages)}</div> }));
@@ -64,4 +63,19 @@ it("ignores a late response from a previously selected chat", async () => {
   await waitFor(() => expect(screen.getByTestId("messages").textContent).toContain("Mensaje B"));
   await act(async () => finishA(response("/projects/a/messages")));
   expect(screen.getByTestId("messages").textContent).not.toContain("Mensaje A");
+});
+
+it("routes a reply to a pending question without starting another generation", async () => {
+  sessionStorage.setItem("quark:last-chat", "a");
+  mockApi.mockImplementation(async (path, method) => {
+    if (path === "/projects/a/brief") return { brief: { id: "piece", version: 4, status: "draft", answers: {} }, fields: [], question: "notes" };
+    if (path === "/projects/a/brief/reply" && method === "POST") return { run: null };
+    return response(path);
+  });
+  render(<ChatLayout />);
+  await waitFor(() => expect(screen.getByTestId("messages").textContent).toContain("Mensaje A"));
+  await userEvent.click(screen.getByRole("button", { name: "Enviar prueba" }));
+  await waitFor(() => expect(accepted).toBe(true));
+  expect(mockApi).toHaveBeenCalledWith("/projects/a/brief/reply", "POST", { id: "piece", version: 4, message: "Mi pedido" });
+  expect(mockApi.mock.calls.filter(([path, method]) => path.endsWith("/runs") && method === "POST")).toHaveLength(0);
 });
