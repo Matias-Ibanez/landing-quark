@@ -71,3 +71,13 @@ body {
     animation: none;
   }
 }
+
+/* QUARK workspace: quiet surfaces, clear focus and safe mobile insets. */
+.quark-chat button, .quark-chat a, .quark-chat summary { -webkit-tap-highlight-color: transparent; }
+.quark-chat button:not(:disabled), .quark-chat summary { cursor: pointer; }
+.quark-chat :where(button, a, summary):focus-visible { outline: 2px solid #c4b5fd; outline-offset: 3px; }
+.quark-chat [data-chat-scroll] { scrollbar-gutter: stable; overscroll-behavior: contain; }
+.chat-composer { padding-bottom: max(.75rem, env(safe-area-inset-bottom)); }
+.resource-action { display: inline-flex; align-items: center; gap: .5rem; min-height: 2.5rem; border: 1px solid #3f3f46; border-radius: 999px; padding: .5rem 1rem; color: #d4d4d8; }
+.resource-action:hover { background: #ffffff0d; color: #fafafa; }
+@media (prefers-reduced-motion: reduce) { .quark-chat *, [data-slot="dialog-content"], [data-slot="dialog-overlay"] { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }

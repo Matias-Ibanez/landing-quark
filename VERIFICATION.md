@@ -23,3 +23,10 @@
 - Navegador real: se completaron tema, formato, colores y texto exacto, con un área de texto visible y editable. El resumen mostró texto y colores guardados; no se confirmó producción. Captura fuera del repositorio: `.tmp/detalles-texto-editable.png` en el backend.
 - Las actualizaciones periódicas conservan el texto sin guardar. Una versión guardada más nueva se carga; ante un conflicto, Recargar opciones guardadas consulta al servidor. Las etapas usan la identidad de su grupo para evitar saltos cuando cambia el conjunto de preguntas.
 - Reversión: revertir CreativeBriefEditor y sus pruebas/documentación. El contrato HTTP se conserva y no se eliminan datos del backend.
+
+## 2026-09-26 — Vistas previas accesibles de archivos
+
+- `npm test -- tests/resource-preview.test.tsx`: **3 pruebas aprobadas**. Verifican diálogo cerrado sin reproductores, vista SVG con ambas descargas, PDF con portada/enlace original, cierre con Escape y miniatura fallida sin botones anidados.
+- TypeScript y ESLint de componentes nuevos aprobados. El build Docker de Next.js incluye el primitive oficial Radix Dialog de Animate UI; su licencia MIT + Commons Clause y copyright están preservados en licenses/animate-ui.LICENSE.txt.
+- Runtime integrado: navegador abrió PDF desde su tarjeta; la vista conserva portada y descarga. Desde Biblioteca se abrió Prueba SVG editorial y se verificaron enlaces SVG y PNG. En 390×844, la vista de imagen midió 366 px y quedó entre x=12 y x=378, sin salir del viewport.
+- Reversión: retirar ResourcePreview, ConversationFiles, primitives/context/hook locales y sus pruebas/atribución, con los cambios de integración que los importen. MediaImage mantiene retry por defecto; no requiere eliminar archivos o datos del backend.

@@ -1,5 +1,5 @@
 export interface Project { id: string; name: string; revision: number; updated_at: string }
-export interface Asset { id: string; name: string; filename: string; kind: "image" | "audio" }
+export interface Asset { id: string; name: string; filename: string; kind: "image" | "audio" | "document"; document?: { pages: number; textStatus: "ready" | "ocr" | "partial" | "empty"; textTruncated: boolean; previewUrl: string } }
 export interface Run { id: string; status: string; error: string | null }
 export interface Job {
   id: string; project_id: string; kind: string; status: string; error: string | null;
