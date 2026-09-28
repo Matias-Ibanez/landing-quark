@@ -4,31 +4,24 @@ import {
   Repeat,
 } from "@phosphor-icons/react/ssr";
 import { Container } from "@/components/ui/container";
-import {
-  DitherImage,
-  DitherImageCaption,
-  DitherImageContent,
-  DitherImageFrame,
-  DitherImageOverlay,
-  DitherImageReveal,
-} from "@/components/ui/dither-image";
+import Image from "next/image";
 import { SectionHeader } from "@/components/ui/section-header";
 
 const pains = [
   {
     icon: ClockCountdown,
     title: "Falta tiempo",
-    body: "Lo urgente gana y la comunicación se posterga una semana más.",
+    body: "Entre atender clientes y llevar el negocio, las redes quedan para después.",
   },
   {
     icon: Repeat,
     title: "Falta constancia",
-    body: "Publicar solo cuando hay una promoción no construye presencia.",
+    body: "Querés estar presente, pero no siempre sabés qué publicar.",
   },
   {
     icon: PaintBrushBroad,
-    title: "Cuesta sostener calidad",
-    body: "Cada pieza vuelve a empezar sin una voz ni una identidad compartida.",
+    title: "Querés que se vea bien",
+    body: "Tus productos son buenos. Tus publicaciones también deberían serlo.",
   },
 ];
 
@@ -40,9 +33,8 @@ export function Problem() {
     <section id="problema" className="py-20 md:py-24">
       <Container>
         <SectionHeader
-          eyebrow="El problema"
-          title="Tu negocio tiene algo para contar. El día no siempre deja tiempo."
-          sub="QUARK concentra tres tareas que hoy compiten con atender, vender y gestionar."
+          title="Atender, vender, publicar... El día no alcanza."
+          sub="Te ayudamos con tus redes para que puedas ocuparte de todo lo demás."
         />
 
         <div className="mt-12 grid gap-8 lg:grid-cols-[1.05fr_0.9fr] lg:items-center">
@@ -70,37 +62,14 @@ export function Problem() {
             })}
           </div>
 
-          <DitherImage className="mx-auto w-full max-w-md lg:mx-0 lg:ml-auto lg:max-w-sm">
-            <DitherImageReveal className="aspect-[4/3] w-full rounded-2xl border border-zinc-800">
-              <DitherImageFrame
-                aspectRatio="4 / 3"
-                size="sm"
-                contrast={14}
-                brightness={0.95}
-                opacity={0.62}
-                className="h-full overflow-hidden"
-              >
-                <DitherImageContent
-                  src={commerceImage}
-                  alt="Atención al cliente en un comercio local"
-                  fill
-                  sizes="(min-width: 1024px) 24rem, (min-width: 768px) 28rem, 100vw"
-                />
-              </DitherImageFrame>
-              <DitherImageOverlay
-                src={commerceImage}
-                alt=""
-                fill
-                sizes="(min-width: 1024px) 24rem, (min-width: 768px) 28rem, 100vw"
-                direction="r"
-                from={0}
-                to={72}
-              />
-            </DitherImageReveal>
-            <DitherImageCaption className="font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-600">
-              Tecnología pensada para negocios reales
-            </DitherImageCaption>
-          </DitherImage>
+          <figure className="mx-auto w-full max-w-lg lg:ml-auto">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+              <Image src={commerceImage} alt="Atención al cliente en un comercio local" fill sizes="(min-width: 1024px) 32rem, (min-width: 768px) 28rem, 100vw" className="object-cover" />
+            </div>
+            <figcaption className="mt-4 text-sm text-zinc-400">
+              Más tiempo para tus clientes
+            </figcaption>
+          </figure>
         </div>
       </Container>
     </section>

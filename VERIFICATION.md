@@ -1,4 +1,12 @@
-# Verificación del chat
+# Verificación del frontend
+
+## Landing comercial, revisión local — 2026-09-28
+
+- Portada con fotos de comercios que se organizan al entrar y cambian de posición al desplazar la página. Adaptación del componente aportado, con `motion/react` ya instalado: sin dependencias nuevas, aleatoriedad al renderizar ni bloqueo del scroll. Se conservan navegación, rutas y tipografía; el texto y los botones quedan visibles durante la animación.
+- Textos más cercanos a comerciantes y emprendedores; la explicación se organiza en tres pasos. Se mantienen precios sin definir y se indica que conectar/publicar en redes está previsto para más adelante. Los enlaces de contacto ficticios se reemplazan por el chat y preguntas frecuentes.
+- `tsc --noEmit`, ESLint de los 15 archivos TSX modificados y `git diff --check`: aprobados. `VERCEL=1 next build`: aprobado, incluida compilación y TypeScript; no es un despliegue en Vercel. No se modifican dependencias, configuración del backend ni autenticación. El lint global conserva la limitación preexistente documentada abajo.
+- Navegador local: revisión visual en 390×844, 768×1024 y 1440×900; sin desbordamiento horizontal. Las 12 fotos de la portada cargan, los enlaces internos tienen destino, el menú móvil abre/cierra al elegir una sección y el acordeón de preguntas funciona. Una pestaña nueva no registra errores de hidratación ni advertencias. Se contempla movimiento reducido en el componente y CSS; no se ha emulado esta preferencia del sistema en el navegador.
+- Cambios conservados en la rama local `codex/landing-commercial-local`, sin push ni publicación. Reversión: revertir esta revisión de landing; no afecta chats, adjuntos ni medios generados.
 
 ## Login sin usuario precargado y carruseles — 2026-09-28
 

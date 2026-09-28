@@ -8,18 +8,18 @@ import { Container } from "@/components/ui/container";
 const trustPoints = [
   {
     icon: ShieldCheck,
-    title: "Conexiones oficiales",
-    body: "La publicación se plantea sobre APIs y permisos de cada plataforma.",
+    title: "Tus cuentas, cuidadas",
+    body: "Cada conexión te explica qué acceso necesita y para qué.",
   },
   {
     icon: CheckCircle,
-    title: "Aprobación visible",
-    body: "El estado de cada pieza queda claro antes de salir.",
+    title: "Vos elegís qué compartir",
+    body: "Revisás tus publicaciones antes de que lleguen a tus clientes.",
   },
   {
     icon: ChatCircleDots,
-    title: "Acompañamiento humano",
-    body: "Hay soporte para configurar y ajustar el flujo.",
+    title: "Ayuda para empezar",
+    body: "Preguntas simples para acompañarte en tus primeros pasos.",
   },
 ];
 
@@ -40,10 +40,10 @@ export function Integrations() {
         <div className="grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-500">
-              Confianza desde el diseño
+              Con vos en cada paso
             </p>
             <h2 className="mt-4 max-w-[18ch] text-balance text-3xl font-medium tracking-tight text-zinc-50 md:text-4xl">
-              Automatizar no significa perder control.
+              Tu negocio sigue en tus manos.
             </h2>
           </div>
 
@@ -74,8 +74,7 @@ export function Integrations() {
 
         <div className="mt-10 flex flex-col gap-5 border-t border-zinc-800 pt-7 md:flex-row md:items-center md:justify-between">
           <p className="max-w-[58ch] text-xs leading-relaxed text-zinc-500">
-            Hoja de ruta: integraciones previstas mediante APIs oficiales,
-            sujetas a disponibilidad, permisos y revisión de cada plataforma.
+            Próximamente, podrás conectar tus redes para compartir tu contenido desde QUARK. Cada conexión requerirá tu autorización.
           </p>
           <ul className="flex flex-wrap gap-2" aria-label="Integraciones previstas">
             {plannedPlatforms.map((platform) => (

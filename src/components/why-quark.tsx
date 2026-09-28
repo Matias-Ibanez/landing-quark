@@ -10,42 +10,42 @@ import { SectionHeader } from "@/components/ui/section-header";
 const benefits = [
   {
     icon: Brain,
-    title: "Parte de tu contexto",
-    body: "Oferta, público, tono y objetivos orientan cada propuesta.",
+    title: "Entiende tu negocio",
+    body: "Lo que vendés, a quién le hablás y tu estilo se reflejan en las propuestas.",
   },
   {
     icon: Sparkle,
-    title: "Convierte estrategia en piezas",
-    body: "No entrega una idea aislada. La ubica en un plan de comunicación.",
+    title: "Te ayuda a empezar",
+    body: "Dejás de mirar una pantalla en blanco. Recibís ideas que podés usar.",
   },
   {
     icon: CursorClick,
-    title: "Mantiene revisión humana",
-    body: "Podés editar, pedir cambios y aprobar antes de publicar.",
+    title: "Vos tenés la última palabra",
+    body: "Pedí otro texto, cambiá los colores o probá un estilo diferente.",
   },
   {
     icon: FlowArrow,
-    title: "Cierra el ciclo",
-    body: "Planificación, contenido, publicación y análisis viven en un flujo.",
+    title: "Todo queda a mano",
+    body: "Conversaciones, imágenes y videos juntos, para seguir trabajando cuando quieras.",
   },
 ];
 
 const stages = [
   {
     label: "Borrador",
-    detail: "QUARK propone una pieza desde el contexto de la marca.",
+    detail: "Pedís una publicación para mostrar un producto.",
   },
   {
     label: "Revisión",
-    detail: "Ajustás el mensaje y validás precios, stock o promociones.",
+    detail: "Revisás el diseño y pedís los cambios que necesites.",
   },
   {
     label: "Aprobado",
-    detail: "La pieza queda lista para entrar al calendario.",
+    detail: "Guardás la versión que te gusta.",
   },
   {
-    label: "Publicado",
-    detail: "El resultado orienta el próximo ciclo de contenido.",
+    label: "Listo para compartir",
+    detail: "Descargás tu contenido para publicarlo en tus redes.",
   },
 ];
 
@@ -54,9 +54,8 @@ export function WhyQuark() {
     <section id="por-que-quark" className="scroll-mt-20 py-20 md:py-24">
       <Container>
         <SectionHeader
-          eyebrow="Por qué QUARK"
-          title="Más que generar texto. Un sistema para sostener tu marketing."
-          sub="La herramienta ordena el trabajo sin quitarte criterio ni control."
+          title="Tu negocio tiene su estilo. Tus redes también."
+          sub="Un compañero para tus ideas, con espacio para probar y cambiar de opinión."
         />
 
         <div className="mt-12 grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
@@ -87,12 +86,12 @@ export function WhyQuark() {
           <div className="rounded-3xl border border-zinc-800 bg-zinc-900/35 p-5 md:p-8">
             <div className="flex items-center justify-between gap-4">
               <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-zinc-500">
-                Ejemplo conceptual
+                De una idea a una publicación
               </p>
-              <p className="text-xs text-zinc-600">Flujo de aprobación</p>
+
             </div>
 
-            <ol className="mt-8 space-y-0" aria-label="Flujo de aprobación">
+            <ol className="mt-8 space-y-0" aria-label="Pasos para preparar una publicación">
               {stages.map((stage, index) => (
                 <li
                   key={stage.label}

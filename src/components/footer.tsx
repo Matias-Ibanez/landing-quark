@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { EnvelopeSimple, WhatsappLogo } from "@phosphor-icons/react/ssr";
+import { ChatCircle, Question } from "@phosphor-icons/react/ssr";
 import { Container } from "@/components/ui/container";
 import { Mark } from "@/components/ui/mark";
-import { site, contactHref } from "@/lib/site";
+import { site, chatHref } from "@/lib/site";
 
 
 
@@ -22,13 +22,11 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-zinc-500">
-              Plataforma de marketing con inteligencia artificial para
-              comercios, emprendedores y PyMEs. Convierte la información de tu
-              negocio en una presencia digital constante, coherente y medible.
+              Menos tiempo pensando qué publicar. Más tiempo para tu negocio. QUARK te ayuda a crear contenido que muestre lo que hacés.
             </p>
           </div>
 
-          <div className="flex gap-16">
+          <div className="flex gap-8 sm:gap-16">
             <div>
               <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-600">
                 Navegación
@@ -49,28 +47,26 @@ export function Footer() {
 
             <div>
               <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-600">
-                Contacto
+                Empezá con QUARK
               </p>
               <ul className="mt-4 space-y-3">
                 <li>
-                  <a
-                    href={contactHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Link
+                    href={chatHref}
                     className="inline-flex items-center gap-2 text-sm text-zinc-400 transition-colors hover:text-zinc-50"
                   >
-                    <WhatsappLogo size={16} />
-                    WhatsApp
-                  </a>
+                    <ChatCircle size={16} aria-hidden="true" />
+                    Probar QUARK
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href={`mailto:${site.contactEmail}`}
+                  <Link
+                    href="#faq"
                     className="inline-flex items-center gap-2 text-sm text-zinc-400 transition-colors hover:text-zinc-50"
                   >
-                    <EnvelopeSimple size={16} />
-                    {site.contactEmail}
-                  </a>
+                    <Question size={16} aria-hidden="true" />
+                    Resolver dudas
+                  </Link>
                 </li>
               </ul>
             </div>

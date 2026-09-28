@@ -13,7 +13,7 @@ import { Footer } from "@/components/footer";
 
 export default function Home() {
   return (
-    <>
+    <div className="quark-landing">
       <Nav />
       <main>
         <Hero />
@@ -28,6 +28,6 @@ export default function Home() {
         <FinalCta />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

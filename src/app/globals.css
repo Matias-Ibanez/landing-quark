@@ -59,6 +59,19 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+.quark-landing :where(a, button):focus-visible {
+  outline: 2px solid #fafafa;
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .quark-landing *, .quark-landing *::before, .quark-landing *::after {
+    animation: none !important;
+    transition-duration: .01ms !important;
+  }
+}
+
 ::selection {
   background-color: #fafafa;
   color: #09090b;

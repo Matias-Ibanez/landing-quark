@@ -18,21 +18,21 @@ const pillars: Pillar[] = [
   {
     title: "Misión",
     body:
-      "Acercar el marketing digital a comercios y PyMEs del NOA con herramientas que respeten su voz, su tiempo y su criterio.",
+      "Ayudar a comercios y emprendedores del NOA a mostrar lo que hacen, sin complicarles el día.",
     icon: Target,
   },
   {
     title: "Visión",
     body:
-      "Ser la plataforma de referencia en la región para que cada negocio local sostenga una presencia digital constante sin dejar de atender lo esencial.",
+      "Que cada negocio de nuestra región pueda hacerse ver, sin dejar de ocuparse de sus clientes.",
     icon: Binoculars,
   },
   {
     title: "Valores",
     items: [
-      "Cercanía: tecnología hecha desde y para negocios reales de la región.",
-      "Control: la IA propone, vos revisás y aprobás antes de publicar.",
-      "Constancia: presencia que se sostiene en el tiempo, no solo cuando hay una promo.",
+      "Cercanía: conocemos los desafíos de los negocios de nuestra región.",
+      "Confianza: vos elegís lo que representa a tu negocio.",
+      "Constancia: te ayudamos a estar presente, incluso en los días más ocupados.",
     ],
     icon: HeartStraight,
   },
@@ -42,12 +42,12 @@ const points = [
   {
     title: "Equipo del NOA",
     body:
-      "Somos un equipo de producto, tecnología y comunicación del Noroeste Argentino. Construimos QUARK para negocios que conocen su oficio y necesitan una forma más simple de contarlo.",
+      "Somos un equipo del Noroeste Argentino. Creamos QUARK para que los negocios de nuestra región tengan una manera más simple de mostrar lo que hacen.",
   },
   {
     title: "Acompañamiento real",
     body:
-      "Hay personas detrás para configurar el flujo, revisar dudas y ajustar el uso. El soporte llega por WhatsApp o correo, no solo por una bandeja automática.",
+      "Queremos que dar el primer paso sea fácil: contá tu idea, compartí una foto y pedí los cambios que necesites.",
   },
 ];
 
@@ -62,7 +62,7 @@ export function About() {
           <div className="lg:col-span-4 lg:pt-1">
             <Eyebrow>Quiénes somos</Eyebrow>
             <h2 className="mt-4 max-w-[16ch] text-balance text-3xl font-medium tracking-tight text-zinc-50 md:text-4xl">
-              Tecnología cercana para negocios reales.
+              De nuestra región, para tu negocio.
             </h2>
           </div>
 

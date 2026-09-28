@@ -24,7 +24,7 @@ const segments = [
   },
   {
     title: "Profesionales",
-    detail: "Autoridad y consultas",
+    detail: "Servicios y consultas",
     icon: Stethoscope,
   },
 ];
@@ -37,8 +37,7 @@ export function Audience() {
     >
       <Container>
         <p className="max-w-3xl text-balance text-xl font-medium tracking-tight text-zinc-100 md:text-2xl">
-          Para negocios que conocen su oferta, pero no tienen tiempo para
-          comunicarla todos los días.
+          Lo que vendés merece mostrarse. Tengas un local, un emprendimiento o un servicio.
         </p>
 
         <div className="mt-8 grid grid-cols-2 border-l border-t border-zinc-800 lg:grid-cols-4">

@@ -48,7 +48,8 @@ export function Nav() {
         <button
           type="button"
           className="flex h-10 w-10 items-center justify-center rounded-full text-zinc-300 md:hidden"
-          aria-label="Abrir menú"
+          aria-label={open ? "Cerrar menú" : "Abrir menú"}
+          aria-controls="landing-mobile-nav"
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
         >
@@ -57,7 +58,7 @@ export function Nav() {
       </Container>
 
       {open ? (
-        <div className="border-t border-zinc-900 md:hidden">
+        <div id="landing-mobile-nav" className="border-t border-zinc-900 md:hidden">
           <Container className="flex flex-col gap-1 py-4">
             {site.nav.map((item) => (
               <Link

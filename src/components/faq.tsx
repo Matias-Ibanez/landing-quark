@@ -13,31 +13,31 @@ import { cn } from "@/lib/utils";
 const faqs = [
   {
     q: "¿QUARK publica sin que yo revise?",
-    a: "No. El flujo recomendado te muestra cada pieza antes de publicarla: la editás, pedís cambios o la aprobás. La publicación automática depende del plan y de los permisos de cada plataforma.",
+    a: "Vos elegís qué compartir. Podés revisar y cambiar cada publicación. La conexión para publicar directamente desde QUARK está prevista para más adelante.",
   },
   {
     q: "¿El contenido va a sonar igual al de todos?",
-    a: "QUARK trabaja sobre el contexto de tu negocio: tu tono, tu oferta, tu público y tus objetivos. Además podés orientar y editar cada propuesta.",
+    a: "Le contás qué vendés, a quién querés llegar y qué estilo te gusta. Con eso prepara propuestas para tu negocio que podés ajustar.",
   },
   {
     q: "¿Necesito saber de marketing o de inteligencia artificial?",
-    a: "No. El alta te guía con preguntas simples sobre tu negocio y traduce tus respuestas en configuraciones útiles.",
+    a: "No. Solo contanos qué querés mostrar. Si hace falta algún detalle, QUARK te hace preguntas simples y te ayuda a elegir.",
   },
   {
     q: "¿QUARK garantiza más ventas?",
-    a: "No. Ninguna plataforma puede garantizar ventas solo por publicar. QUARK mejora la constancia, la claridad y la lectura de resultados de tu comunicación; el resultado comercial también depende de tu oferta, tu precio y tu atención.",
+    a: "No podemos garantizar ventas. Te ayudamos a mostrar mejor tu negocio y a mantener tus redes activas. Tus productos, tus precios y tu atención también cuentan.",
   },
   {
     q: "¿Qué pasa si la inteligencia artificial se equivoca?",
-    a: "Puede pasar. Por eso QUARK mantiene la revisión humana antes de publicar y señala los datos comerciales que conviene validar, como precios, stock, fechas y promociones.",
+    a: "Podés pedirle cambios. Revisá siempre datos como precios, fechas y promociones antes de compartir el contenido.",
   },
   {
     q: "¿Qué datos necesita de mi negocio?",
-    a: "Solo el contexto necesario para comunicar: oferta, público, zona, tono y objetivos. Antes de conectar una cuenta se detallan los permisos requeridos por cada plataforma.",
+    a: "Qué vendés, quiénes son tus clientes y qué querés contar. También podés compartir fotos de tus productos o materiales que quieras usar.",
   },
   {
     q: "¿Qué cambia entre los planes?",
-    a: "Cambian la capacidad diaria de contenido y el alcance de publicación: creación solamente, una red social o múltiples redes. El volumen y el precio se definen en la demo.",
+    a: "Cuánto contenido querés crear y las redes en las que querés estar. En la demostración te ayudamos a elegir lo que mejor se adapte a tu negocio.",
   },
 ];
 

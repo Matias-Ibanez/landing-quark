@@ -22,46 +22,46 @@ const plans: Array<{
 }> = [
   {
     name: "Crear",
-    tagline: "Para ordenar la producción y publicar por tu cuenta.",
+    tagline: "Para tener contenido listo y compartirlo a tu manera.",
     price: "Consultar",
-    priceNote: "mensual · solo generación de contenido",
+    priceNote: "mensual · creación de contenido",
     icon: PenNib,
     features: [
-      "Contexto de marca de tu negocio",
+      "Contenido con el estilo de tu negocio",
       "Contenido con límite diario",
-      "Textos y piezas visuales",
-      "Edición, revisión y aprobación",
+      "Textos, imágenes y videos",
+      "Cambios hasta que te guste",
       "Calendario de contenidos",
     ],
     featured: false,
   },
   {
     name: "Presencia",
-    tagline: "Para producir más y sostener un canal activo.",
+    tagline: "Para mantener tus redes al día.",
     price: "Consultar",
     priceNote: "mensual · generación + una red social",
     icon: ShareNetwork,
     features: [
       "Todo lo incluido en Crear",
-      "Mayor capacidad diaria",
+      "Más contenido cada día",
       "Publicación en una red social",
-      "Lectura de resultados",
-      "Recomendaciones para el próximo ciclo",
+      "Conocé cómo van tus publicaciones",
+      "Ideas para tus próximas publicaciones",
     ],
     featured: true,
   },
   {
     name: "Multicanal",
-    tagline: "Para coordinar una presencia activa en varias redes.",
+    tagline: "Para acompañar tu negocio en varias redes.",
     price: "Consultar",
     priceNote: "mensual · generación + múltiples redes",
     icon: TreeStructure,
     features: [
       "Todo lo incluido en Presencia",
-      "Capacidad diaria ampliada",
+      "Más espacio para crear contenido",
       "Publicación en múltiples redes",
-      "Calendario coordinado por canal",
-      "Acompañamiento para configurar el flujo",
+      "Tus publicaciones organizadas por red",
+      "Ayuda para dar tus primeros pasos",
     ],
     featured: false,
   },
@@ -72,9 +72,8 @@ export function Pricing() {
     <section id="planes" className="scroll-mt-20 py-20 md:py-24">
       <Container>
         <SectionHeader
-          eyebrow="Planes"
-          title="Elegí cuánto querés automatizar."
-          sub="Durante la demo definimos el volumen diario, los canales y el precio adecuado para tu negocio."
+          title="Una ayuda a la medida de tu negocio."
+          sub="Elegí la ayuda que necesitás. El precio se acuerda según cuánto contenido quieras y las redes que uses."
           align="center"
         />
 
@@ -157,8 +156,7 @@ export function Pricing() {
         </div>
 
         <p className="mx-auto mt-8 max-w-xl text-center text-xs leading-relaxed text-zinc-600">
-          No publicamos montos fijos sin conocer tu volumen y canales. En la demo
-          cerramos el plan y el precio mensual para tu negocio.
+          Los planes y precios se definen según las necesidades de tu negocio. La conexión y publicación en redes estarán disponibles próximamente.
         </p>
       </Container>
     </section>
