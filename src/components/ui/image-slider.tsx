@@ -52,7 +52,6 @@ export function ImageSlider() {
             </div>
             {!reduced && <button type="button" onClick={() => setPaused(value => !value)} aria-label={paused ? "Reanudar fotografías" : "Pausar fotografías"} aria-pressed={paused} className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-black/20 text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">{paused ? <Play size={18} /> : <Pause size={18} />}</button>}
           </div>
-          <p className="mt-2 text-[11px] text-white/60">Fotografías ilustrativas.</p>
         </div>
       </div>
     </div>

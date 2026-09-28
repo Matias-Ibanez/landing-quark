@@ -25,7 +25,6 @@ export function BusinessStory() {
           <div className="mb-5 rounded-2xl bg-zinc-800/70 px-5 py-4 text-sm leading-relaxed text-zinc-200 sm:ml-10">“Tengo una cafetería. Quiero mostrar nuestro café y que más gente venga a conocerla.”</div>
           <figure className="relative ml-0 overflow-hidden rounded-3xl bg-[#c64928] sm:mr-10">
             <div className="relative aspect-[5/4]"><Image src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&h=650&q=80" alt="Café presentado como ejemplo de una publicación" fill sizes="(max-width: 1023px) 90vw, 480px" className="object-cover" /><div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" /><p className="absolute bottom-7 left-7 right-7 max-w-[14ch] text-4xl font-medium leading-tight tracking-tight text-white">Tu próxima pausa.<br />Un buen café.</p></div>
-            <figcaption className="flex items-center justify-between gap-3 bg-zinc-900 px-5 py-4 text-xs text-zinc-400"><span>Ejemplo ilustrativo de publicación</span><span>Con tus fotos</span></figcaption>
           </figure>
         </div>
       </Container>

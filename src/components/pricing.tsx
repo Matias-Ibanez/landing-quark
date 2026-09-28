@@ -13,7 +13,6 @@ export function Pricing() {
             <p className="text-sm text-zinc-400">Elegí lo que querés crear</p>
             <h2 className="mt-4 max-w-[20ch] text-balance text-4xl font-medium leading-[1.1] tracking-tight text-zinc-50 md:text-5xl">Buen contenido.<br />Un precio a tu medida.</h2>
           </div>
-          <p className="max-w-[33ch] text-base leading-relaxed text-zinc-400">Primero tus imágenes y videos. Si después querés ayuda con tus redes, también hay un plan para eso.</p>
         </div>
 
         <div className="mt-12 grid gap-6 lg:grid-cols-2">
@@ -60,10 +59,6 @@ export function Pricing() {
           </div>
         </article>
 
-        <div className="mt-9 grid gap-5 border-t border-zinc-800 pt-6 md:grid-cols-2">
-          <p className="max-w-[57ch] text-sm leading-relaxed text-zinc-400">Para comparar: nuestro plan de imágenes parte de US$9. <a href="https://help.openai.com/en/articles/6950777-what-is" target="_blank" rel="noopener noreferrer" className="underline decoration-zinc-600 underline-offset-4 hover:text-white">ChatGPT Plus cuesta US$20/mes</a>. Son servicios distintos; elegí según lo que necesite tu negocio.</p>
-          <p className="max-w-[62ch] text-xs leading-relaxed text-zinc-500">Precios y cantidades propuestos para el lanzamiento, en dólares estadounidenses, antes de impuestos. Cada lámina de un carrusel cuenta como una imagen. La prueba actual no incluye cobros; la gestión de redes todavía no está disponible.</p>
-        </div>
       </Container>
     </section>
   );

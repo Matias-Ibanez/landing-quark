@@ -14,12 +14,12 @@ const images = [
 export function Hero() {
   return (
     <section aria-label="Creá contenido con QUARK" className="bg-zinc-950">
-      <ImageStreamHero images={images} className="md:min-h-[780px] lg:min-h-[max(780px,calc(100svh-4rem))]">
-        <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center gap-7 px-6 pb-8 pt-10 text-center md:min-h-[780px] lg:min-h-[max(780px,calc(100svh-4rem))] md:justify-between md:gap-64 md:pb-20 md:pt-16">
+      <ImageStreamHero images={images} className="min-h-[780px] lg:min-h-[max(780px,calc(100svh-4rem))]">
+        <div className="relative z-10 mx-auto flex min-h-[780px] max-w-5xl flex-col items-center justify-between gap-48 px-6 pb-12 pt-10 text-center lg:min-h-[max(780px,calc(100svh-4rem))] md:gap-64 md:pb-20 md:pt-16">
           <div>
             <p className="text-sm font-medium text-zinc-300">Menos tareas. Más ideas para tu negocio.</p>
             <h1 className="mx-auto mt-5 max-w-[22ch] text-balance text-[clamp(2rem,5.3vw,4.75rem)] font-medium leading-[1.08] tracking-[-0.055em] text-zinc-50">
-              Imágenes y videos<br />que muestran tu negocio.
+              <span className="block">Convertí lo que hacés</span><span className="block">en contenido que vende.</span>
             </h1>
             <p className="mx-auto mt-5 max-w-[48ch] text-base leading-relaxed text-zinc-300 md:text-lg">
               Contanos qué querés vender. QUARK lo convierte en publicaciones, carruseles y videos con tu estilo.

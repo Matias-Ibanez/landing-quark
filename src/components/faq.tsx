@@ -30,7 +30,7 @@ const faqs = [
   },
   {
     q: "¿Puedo pedir cambios?",
-    a: "Sí. Los planes propuestos incluyen dos rondas de cambios por pieza para ajustar textos, colores o detalles. Revisá precios, fechas y promociones antes de compartir el resultado.",
+    a: "Sí. Los planes incluyen dos rondas de cambios por pieza para ajustar textos, colores o detalles. Revisá precios, fechas y promociones antes de compartir el resultado.",
   },
   {
     q: "¿Cómo se cuentan las imágenes y los videos?",
@@ -38,7 +38,7 @@ const faqs = [
   },
   {
     q: "¿Qué cambia entre los planes?",
-    a: `Imágenes propone ${contentPlans[0].images} imágenes por US$${contentPlans[0].price}/mes. Imágenes + videos propone ${contentPlans[1].images} imágenes y ${contentPlans[1].videos} videos por US$${contentPlans[1].price}/mes. Contenido + redes sumará gestión de una cuenta de Instagram por US$${socialPlan.price}/mes. Son precios de lanzamiento propuestos; la prueba actual no tiene cobros.`,
+    a: `Imágenes incluye ${contentPlans[0].images} imágenes por US$${contentPlans[0].price}/mes. Imágenes + videos incluye ${contentPlans[1].images} imágenes y ${contentPlans[1].videos} videos por US$${contentPlans[1].price}/mes. Contenido + redes sumará gestión de una cuenta de Instagram por US$${socialPlan.price}/mes.`,
   },
   {
     q: "¿Tengo que conectar mis redes para crear contenido?",
