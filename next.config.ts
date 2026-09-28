@@ -6,7 +6,8 @@ const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 const backendOrigin = (process.env.QUARK_API_URL || "http://127.0.0.1:8011").replace(/\/$/, "");
 
 const nextConfig: NextConfig = {
-  output: "standalone",
+  // Vercel's adapter packages the server itself; standalone is for Docker.
+  output: process.env.VERCEL === "1" ? undefined : "standalone",
   async headers() {
     return ["/chat/:path*", "/login"].map(source => ({ source, headers: [
       { key: "Cache-Control", value: "private, no-store" },

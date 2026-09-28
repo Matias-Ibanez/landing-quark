@@ -1,5 +1,12 @@
 # Verificación del chat
 
+## Empaquetado Vercel y Docker — 2026-09-28
+
+- El error aportado ocurrió en onBuildComplete de Vercel, después de compilación/TypeScript. La configuración forzaba output:standalone; coincide con [Next.js #96646](https://github.com/vercel/next.js/issues/96646). next.config.ts usa salida estándar cuando VERCEL=1 y conserva standalone fuera de esa plataforma. No se cambiaron dependencias, rutas, autenticación ni rewrites.
+- PowerShell `$env:VERCEL='1'; npm run build`: aprobado (compilación 1,364 s, TypeScript 6,0 s). El manifiesto real `.next/required-server-files.json` se comprobó mediante Node: output no es standalone. Después, quitando VERCEL, `npm run build`: aprobado (compilación 1,378 s, TypeScript 5,9 s); el manifiesto tiene output:standalone y existe `.next/standalone/server.js`, necesario para Docker. Ambas ejecuciones generaron /chat dinámico y /login estático. `npx eslint next.config.ts`: aprobado.
+- Los builds locales no ejecutan el adaptador remoto de Vercel. Su empaquetado final debe confirmarse en un despliegue de la nueva revisión; no se presenta como un deploy remoto aprobado. README documenta variables de sistema, QUARK_API_URL, directorio de salida automático y la comprobación posterior de login/adjuntos.
+- Reversión: restaurar la propiedad output anterior de next.config.ts y retirar estas notas/guía Vercel. No cambia datos ni Dockerfile; reintroduce el conflicto reportado al empaquetar en Vercel.
+
 ## Markdown y medios — 2026-09-26
 
 - `npx vitest run tests/messages.test.tsx`: 5 pruebas aprobadas. Negritas, cursivas, listas, títulos, tablas, enlaces seguros, rechazo de HTML/URLs ejecutables e imágenes remotas, adjuntos del usuario y PNG/SVG con error y reintento.

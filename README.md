@@ -28,6 +28,14 @@ Abrí `http://localhost:8010/chat`. El contenedor Next.js usa la red compartida 
 
 Para un servidor con TLS, el proxy público apunta al puerto local del frontend. El backend valida la cuenta admin y protege también los medios; configurá su origen HTTPS para activar cookies Secure. Las instrucciones completas están en [DESPLIEGUE.md del backend](https://github.com/mibanez-devops/backend_quark/blob/main/DESPLIEGUE.md).
 
+## Vercel con backend en tu servidor
+
+Importá este repositorio como proyecto Next.js. Conservá el comando `npm run build`, Root Directory en la raíz del repo y Output Directory automático; no lo apuntes a `.next/standalone`. En Environment Variables, definí `QUARK_API_URL` con el origen HTTPS del túnel del backend, por ejemplo `https://api.quark.tudominio.com`, antes de construir. No lleva `/api` ni barra final y no usa el puerto local de tu PC.
+
+Vercel define `VERCEL=1`; mantené habilitada la exposición de variables de sistema. La configuración desactiva `output: standalone` en esa plataforma y lo conserva en Docker. Esto evita el fallo de empaquetado `ENOENT .next/next-server.js.nft.json` reportado para Next.js 16.3 con standalone y el adaptador de Vercel; véase [el reporte upstream](https://github.com/vercel/next.js/issues/96646).
+
+Después de cambiar variables o configuración, desplegá la última revisión. El backend debe configurar `PUBLIC_APP_ORIGIN` con el dominio exacto del frontend y `PUBLIC_API_ORIGIN` con el del túnel, siguiendo [DEPLOY_GITHUB.md](https://github.com/mibanez-devops/backend_quark/blob/main/DEPLOY_GITHUB.md). Comprobá login, logout, adjuntos y reproducción en el dominio real. Un build exitoso no confirma que el túnel o las cookies ya estén funcionando.
+
 ## Detalles de la pieza
 
 El backend decide si necesita aclaraciones. Se muestra una pregunta por vez dentro del chat: elegí una opción o escribí la respuesta en el cuadro de mensajes. Cada respuesta queda guardada. Al terminar podés revisar y editar respuestas individuales antes de pulsar **Crear mi pieza**; un pedido completo produce directamente. No hay selector de función: pedí una publicación, una campaña o un short en lenguaje natural.
