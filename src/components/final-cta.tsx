@@ -8,7 +8,7 @@ export function FinalCta() {
   return (
     <section className="relative overflow-hidden">
       <Image
-        src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&h=1080&q=80"
+        src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1920&h=1080&q=80"
         alt=""
         fill
         sizes="100vw"
@@ -26,7 +26,7 @@ export function FinalCta() {
           </p>
           <div className="mt-10 flex justify-center">
             <Cta href={chatHref}>
-              Probar Gratis
+              Crear mi contenido
               <ArrowRight size={16} aria-hidden="true" />
             </Cta>
           </div>

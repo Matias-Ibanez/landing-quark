@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "QUARK - Marketing en piloto automático",
+  title: "QUARK - Imágenes y videos para tu negocio",
   description:
     "QUARK te ayuda a crear publicaciones, imágenes y videos para tu negocio. Menos tareas, más tiempo para atender y vender.",
 };

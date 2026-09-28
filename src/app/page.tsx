@@ -1,9 +1,7 @@
 import { Nav } from "@/components/nav";
 import { Hero } from "@/components/hero";
-import { Audience } from "@/components/audience";
-import { Problem } from "@/components/problem";
+import { ContentShowcase } from "@/components/content-showcase";
 import { HowItWorks } from "@/components/how-it-works";
-import { WhyQuark } from "@/components/why-quark";
 import { Pricing } from "@/components/pricing";
 import { Integrations } from "@/components/integrations";
 import { Faq } from "@/components/faq";
@@ -17,10 +15,8 @@ export default function Home() {
       <Nav />
       <main>
         <Hero />
-        <Audience />
-        <Problem />
         <HowItWorks />
-        <WhyQuark />
+        <ContentShowcase />
         <Pricing />
         <Integrations />
         <Faq />

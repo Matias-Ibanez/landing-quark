@@ -68,9 +68,12 @@ body {
   outline-color: #27272a;
 }
 
+/* html already reserves space for the sticky header. */
+.quark-landing section[id] { scroll-margin-top: 0; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .quark-landing *, .quark-landing *::before, .quark-landing *::after {
+  .quark-landing *:not(.image-stream-card), .quark-landing *::before, .quark-landing *::after {
     animation: none !important;
     transition-duration: .01ms !important;
   }

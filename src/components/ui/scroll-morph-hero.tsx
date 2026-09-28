@@ -60,7 +60,7 @@ function PhotoCard({ index, size, progress, reduced }: {
   );
 }
 
-export default function ScrollMorphHero({ children }: { children: React.ReactNode }) {
+export default function ScrollMorphHero({ children, compact = false }: { children: React.ReactNode; compact?: boolean }) {
   const root = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   // Wait for the actual container size so photos start in their final circle,
@@ -82,7 +82,7 @@ export default function ScrollMorphHero({ children }: { children: React.ReactNod
   }, []);
 
   return (
-    <section ref={root} aria-label="Marketing para tu negocio" className="relative isolate flex min-h-[calc(100svh-4rem)] items-center justify-center overflow-hidden border-b border-zinc-800 bg-zinc-950 py-24 md:py-32">
+    <section ref={root} aria-label="Contenido para distintos negocios" className={`relative isolate flex items-center justify-center overflow-hidden border-y border-zinc-800 bg-zinc-900/25 py-24 ${compact ? "min-h-[620px] md:min-h-[680px]" : "min-h-[calc(100svh-4rem)] md:py-32"}`}>
       <div className="absolute inset-0" aria-hidden="true">
         {size && photos.map((photo, index) => <PhotoCard key={photo.photo} index={index} size={size} progress={progress} reduced={reduce !== false} />)}
       </div>

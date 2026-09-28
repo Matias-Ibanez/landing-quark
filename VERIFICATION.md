@@ -1,5 +1,13 @@
 # Verificación del frontend
 
+## Portada de imágenes y nueva organización — 2026-09-28
+
+- Los dos adjuntos recibidos son idénticos (SHA-256 B892CB2F…A4F1AB12). Se adapta una sola vez su image-stream-hero: fotos comerciales optimizadas, geometría CSS, distribución completa desde el inicio y botón de pausa. La animación se detiene fuera de pantalla; la preferencia de movimiento reducido la pausa en una composición ya formada. Sin dependencias nuevas ni actualizaciones React por frame.
+- Se enfoca la portada en imágenes, carruseles y videos. El círculo se mueve a una sección secundaria, compacta, sin secuencia de entrada. Se retiran de la página las secciones redundantes de problemas y beneficios, conservando sus archivos; se mantienen identidad, navegación y equipo. Los enlaces internos dejan de sumar dos veces el espacio reservado para el encabezado.
+- `VERCEL=1 next build` aprobado con compilación y TypeScript; ESLint de los 12 archivos TS/TSX modificados y `git diff --check` aprobados. La revisión posterior cambia solo el fondo ilustrativo del cierre y el espacio de los enlaces internos. No es un deploy remoto.
+- Navegador: revisión en 390×844 y 1440×900, sin desbordamiento horizontal; las 18 imágenes de los dos lados de la portada cargan, pausa efectiva verificada por animation-play-state=paused y enlaces internos válidos. Recarga final sin nuevos errores ni advertencias de consola. Movimiento reducido cubierto por CSS, sin emular la preferencia del sistema. Capturas guardadas fuera del repositorio en el directorio de revisión local.
+- Solo cambios locales en codex/landing-commercial-local; sin push ni modificaciones de producción. Reversión: restaurar Hero y Home y retirar ImageStreamHero/ContentShowcase junto con sus estilos.
+
 ## Planes centrados en contenido — 2026-09-28
 
 - Propuesta de lanzamiento: Imágenes US$9/mes (30 imágenes); Imágenes + videos US$15/mes (60 imágenes y 4 videos); Contenido + redes US$29/mes (100 imágenes y 8 videos, más una cuenta de Instagram). La gestión de redes se presenta como futura y secundaria. Precio antes de impuestos; cada lámina cuenta como una imagen, videos de hasta 60 segundos y dos rondas de cambios incluidas. Los datos compartidos alimentan tarjetas y preguntas frecuentes.
