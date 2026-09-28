@@ -9,15 +9,16 @@ import {
 import { Container } from "@/components/ui/container";
 import { SectionHeader } from "@/components/ui/section-header";
 import { cn } from "@/lib/utils";
+import { contentPlans, socialPlan } from "@/lib/landing-plans";
 
 const faqs = [
   {
-    q: "¿QUARK publica sin que yo revise?",
-    a: "Vos elegís qué compartir. Podés revisar y cambiar cada publicación. La conexión para publicar directamente desde QUARK está prevista para más adelante.",
+    q: "¿Qué puedo crear con QUARK?",
+    a: "Imágenes para promociones, publicaciones y carruseles, con tus fotos y el estilo de tu negocio. También videos con animaciones, tus imágenes o clips, y voz o música si querés.",
   },
   {
-    q: "¿El contenido va a sonar igual al de todos?",
-    a: "Le contás qué vendés, a quién querés llegar y qué estilo te gusta. Con eso prepara propuestas para tu negocio que podés ajustar.",
+    q: "¿Puedo usar mis propias fotos?",
+    a: "Sí. Podés subir fotos de tus productos, tu local o tus trabajos. QUARK las usa para preparar el diseño; no necesitás inventar fotos nuevas para mostrar lo que vendés.",
   },
   {
     q: "¿Necesito saber de marketing o de inteligencia artificial?",
@@ -28,16 +29,20 @@ const faqs = [
     a: "No podemos garantizar ventas. Te ayudamos a mostrar mejor tu negocio y a mantener tus redes activas. Tus productos, tus precios y tu atención también cuentan.",
   },
   {
-    q: "¿Qué pasa si la inteligencia artificial se equivoca?",
-    a: "Podés pedirle cambios. Revisá siempre datos como precios, fechas y promociones antes de compartir el contenido.",
+    q: "¿Puedo pedir cambios?",
+    a: "Sí. Los planes propuestos incluyen dos rondas de cambios por pieza para ajustar textos, colores o detalles. Revisá precios, fechas y promociones antes de compartir el resultado.",
   },
   {
-    q: "¿Qué datos necesita de mi negocio?",
-    a: "Qué vendés, quiénes son tus clientes y qué querés contar. También podés compartir fotos de tus productos o materiales que quieras usar.",
+    q: "¿Cómo se cuentan las imágenes y los videos?",
+    a: "Cada imagen final cuenta como una pieza. Un carrusel de cinco láminas usa cinco imágenes. Cada video puede durar hasta 60 segundos. Las dos rondas de cambios incluidas no suman piezas nuevas.",
   },
   {
     q: "¿Qué cambia entre los planes?",
-    a: "Cuánto contenido querés crear y las redes en las que querés estar. En la demostración te ayudamos a elegir lo que mejor se adapte a tu negocio.",
+    a: `Imágenes propone ${contentPlans[0].images} imágenes por US$${contentPlans[0].price}/mes. Imágenes + videos propone ${contentPlans[1].images} imágenes y ${contentPlans[1].videos} videos por US$${contentPlans[1].price}/mes. Contenido + redes sumará gestión de una cuenta de Instagram por US$${socialPlan.price}/mes. Son precios de lanzamiento propuestos; la prueba actual no tiene cobros.`,
+  },
+  {
+    q: "¿Tengo que conectar mis redes para crear contenido?",
+    a: "No. Los planes de creación funcionan con tus ideas y archivos. Descargás el resultado y lo compartís donde quieras. Conectar y programar publicaciones en Instagram será una opción del plan Contenido + redes, disponible próximamente.",
   },
 ];
 
@@ -48,7 +53,7 @@ export function Faq() {
         <div className="lg:col-span-4">
           <SectionHeader
             title="Preguntas frecuentes."
-            sub="Lo que nos preguntan antes de pedir una demo."
+            sub="Antes de crear tu primera publicación."
           />
         </div>
 

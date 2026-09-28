@@ -1,5 +1,11 @@
 # Verificación del frontend
 
+## Planes centrados en contenido — 2026-09-28
+
+- Propuesta de lanzamiento: Imágenes US$9/mes (30 imágenes); Imágenes + videos US$15/mes (60 imágenes y 4 videos); Contenido + redes US$29/mes (100 imágenes y 8 videos, más una cuenta de Instagram). La gestión de redes se presenta como futura y secundaria. Precio antes de impuestos; cada lámina cuenta como una imagen, videos de hasta 60 segundos y dos rondas de cambios incluidas. Los datos compartidos alimentan tarjetas y preguntas frecuentes.
+- Son precios y cantidades propuestos, pendientes de validar contra costos y uso real. Este cambio no implementa facturación ni cuotas en la API. La landing indica que el prototipo no cobra y no conecta/programa redes todavía. La comparación usa el precio mensual específico de ChatGPT Plus (US$20) con enlace a la fuente oficial, consultada el 28/09/2026; no afirma un promedio del mercado ni equivalencia de funciones.
+- TypeScript y ESLint de los archivos afectados aprobados en la revisión local conjunta. Navegador: se ven precios y cantidades, los tres planes conservan sus enlaces y la tarjeta clara tiene foco oscuro visible. No se modifica autenticación, chat ni backend. Reversión: retirar los nuevos datos de planes y restaurar tarjetas, FAQ y bloque de redes.
+
 ## Portada sin secuencia de entrada — 2026-09-28
 
 - Se eliminan las fases dispersa/fila y sus temporizadores. Las fotos aparecen directamente en círculo, una vez medida la sección, evitando también mostrar coordenadas de escritorio brevemente en celular. Se conserva el movimiento al desplazar la página.

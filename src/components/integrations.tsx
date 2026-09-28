@@ -1,91 +1,21 @@
-import {
-  ChatCircleDots,
-  CheckCircle,
-  ShieldCheck,
-} from "@phosphor-icons/react/ssr";
+import { CalendarDots, CheckCircle, InstagramLogo } from "@phosphor-icons/react/ssr";
 import { Container } from "@/components/ui/container";
-
-const trustPoints = [
-  {
-    icon: ShieldCheck,
-    title: "Tus cuentas, cuidadas",
-    body: "Cada conexión te explica qué acceso necesita y para qué.",
-  },
-  {
-    icon: CheckCircle,
-    title: "Vos elegís qué compartir",
-    body: "Revisás tus publicaciones antes de que lleguen a tus clientes.",
-  },
-  {
-    icon: ChatCircleDots,
-    title: "Ayuda para empezar",
-    body: "Preguntas simples para acompañarte en tus primeros pasos.",
-  },
-];
-
-const plannedPlatforms = [
-  "Instagram",
-  "Facebook",
-  "LinkedIn",
-  "WhatsApp",
-];
 
 export function Integrations() {
   return (
-    <section
-      id="confianza"
-      className="border-y border-zinc-900 bg-zinc-900/20 py-16 md:py-20"
-    >
+    <section id="gestion-redes" className="scroll-mt-20 border-y border-zinc-800 bg-zinc-900/20 py-16 md:py-20">
       <Container>
-        <div className="grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
+        <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-500">
-              Con vos en cada paso
-            </p>
-            <h2 className="mt-4 max-w-[18ch] text-balance text-3xl font-medium tracking-tight text-zinc-50 md:text-4xl">
-              Tu negocio sigue en tus manos.
-            </h2>
+            <p className="inline-flex items-center gap-2 text-sm text-zinc-400"><InstagramLogo size={18} aria-hidden="true" />Un próximo paso, cuando lo necesites</p>
+            <h2 className="mt-4 max-w-[19ch] text-balance text-3xl font-medium tracking-tight text-zinc-50 md:text-4xl">Creá primero.<br />Sumá tus redes después.</h2>
+            <p className="mt-5 max-w-[49ch] text-base leading-relaxed text-zinc-400">No necesitás conectar una cuenta para crear contenido. Si más adelante querés organizar y publicar desde el mismo lugar, el plan Contenido + redes sumará esa ayuda.</p>
           </div>
-
-          <div className="grid sm:grid-cols-3">
-            {trustPoints.map((point) => {
-              const Icon = point.icon;
-              return (
-                <div
-                  key={point.title}
-                  className="border-t border-zinc-800 py-6 sm:border-l sm:px-5 sm:first:border-l-0"
-                >
-                  <Icon
-                    size={20}
-                    className="text-zinc-500"
-                    aria-hidden="true"
-                  />
-                  <h3 className="mt-5 text-sm font-medium text-zinc-100">
-                    {point.title}
-                  </h3>
-                  <p className="mt-2 text-xs leading-relaxed text-zinc-500">
-                    {point.body}
-                  </p>
-                </div>
-              );
-            })}
+          <div className="space-y-6">
+            <div className="flex gap-4"><CalendarDots size={25} className="shrink-0 text-zinc-400" aria-hidden="true" /><div><h3 className="font-medium text-zinc-100">Prepará tu semana</h3><p className="mt-2 text-sm leading-relaxed text-zinc-400">Calendario y publicaciones programadas para una cuenta de Instagram.</p></div></div>
+            <div className="flex gap-4"><CheckCircle size={25} className="shrink-0 text-zinc-400" aria-hidden="true" /><div><h3 className="font-medium text-zinc-100">Vos tenés la última palabra</h3><p className="mt-2 text-sm leading-relaxed text-zinc-400">Revisás cada publicación y autorizás la conexión de tu cuenta.</p></div></div>
+            <p className="border-t border-zinc-800 pt-5 text-xs leading-relaxed text-zinc-500">Esta función está en preparación. Hoy podés crear, descargar y compartir tus imágenes y videos por tu cuenta.</p>
           </div>
-        </div>
-
-        <div className="mt-10 flex flex-col gap-5 border-t border-zinc-800 pt-7 md:flex-row md:items-center md:justify-between">
-          <p className="max-w-[58ch] text-xs leading-relaxed text-zinc-500">
-            Próximamente, podrás conectar tus redes para compartir tu contenido desde QUARK. Cada conexión requerirá tu autorización.
-          </p>
-          <ul className="flex flex-wrap gap-2" aria-label="Integraciones previstas">
-            {plannedPlatforms.map((platform) => (
-              <li
-                key={platform}
-                className="rounded-full border border-zinc-800 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-400"
-              >
-                {platform}
-              </li>
-            ))}
-          </ul>
         </div>
       </Container>
     </section>

@@ -64,6 +64,10 @@ body {
   outline-offset: 4px;
 }
 
+.quark-landing [data-surface="light"] :where(a, button):focus-visible {
+  outline-color: #27272a;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .quark-landing *, .quark-landing *::before, .quark-landing *::after {
