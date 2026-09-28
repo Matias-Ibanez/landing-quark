@@ -40,13 +40,13 @@ export function LoginForm() {
     } finally { lock.current = false; setBusy(false); }
   }
   const enabled = !!session?.configured && !busy;
-  const input = "mt-2 w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-base outline-none transition focus:border-violet-400 focus:ring-2 focus:ring-violet-400/20 disabled:opacity-50";
+  const input = "mt-2 min-h-12 w-full rounded-xl border border-zinc-700 bg-zinc-900/70 px-4 py-3 text-base outline-none transition focus:border-zinc-300 focus:ring-2 focus:ring-white/10 disabled:opacity-50";
   return <form onSubmit={submit} className="mt-8 space-y-5" aria-busy={busy}>
     <label className="block text-sm text-zinc-300">Usuario<input name="username" autoComplete="username" required maxLength={100} disabled={!enabled} className={input} /></label>
     <label className="block text-sm text-zinc-300">Contraseña<input name="password" type="password" autoComplete="current-password" required maxLength={128} disabled={!enabled} className={input} /></label>
     {error && <p role="alert" className="text-sm leading-5 text-rose-300">{error}</p>}
     {session?.configured === false && <p role="status" className="text-sm text-amber-200">El acceso todavía no está habilitado. Contactá al responsable del espacio.</p>}
-    <button type="submit" disabled={!enabled} className="w-full rounded-xl bg-violet-400 px-4 py-3 font-medium text-zinc-950 transition hover:bg-violet-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-300 disabled:cursor-not-allowed disabled:opacity-50">{busy ? "Ingresando…" : !session && !error ? "Conectando…" : "Ingresar"}</button>
+    <button type="submit" disabled={!enabled} className="min-h-12 w-full rounded-xl bg-zinc-100 px-4 py-3 font-medium text-zinc-950 transition hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white disabled:cursor-not-allowed disabled:opacity-50">{busy ? "Ingresando…" : !session && !error ? "Conectando…" : "Ingresar"}</button>
     {!session && error && <button type="button" onClick={() => window.location.reload()} className="w-full text-sm text-zinc-300 underline underline-offset-4">Volver a intentar</button>}
   </form>;
 }
