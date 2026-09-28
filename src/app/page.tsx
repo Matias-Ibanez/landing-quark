@@ -1,5 +1,7 @@
 import { Nav } from "@/components/nav";
 import { Hero } from "@/components/hero";
+import { BusinessStory } from "@/components/business-story";
+import { CreationFormats } from "@/components/creation-formats";
 import { ContentShowcase } from "@/components/content-showcase";
 import { HowItWorks } from "@/components/how-it-works";
 import { Pricing } from "@/components/pricing";
@@ -15,7 +17,9 @@ export default function Home() {
       <Nav />
       <main>
         <Hero />
+        <BusinessStory />
         <HowItWorks />
+        <CreationFormats />
         <ContentShowcase />
         <Pricing />
         <Integrations />

@@ -30,7 +30,7 @@ function PhotoCard({ index, size, progress, reduced }: {
   index: number; size: Size; progress: MotionValue<number>; reduced: boolean;
 }) {
   const mobile = size.width < 768;
-  const radiusX = mobile ? size.width * .62 : Math.min(size.width * .46, 620);
+  const radiusX = mobile ? size.width * .62 : Math.min(size.width * .42, 700);
   const radiusY = size.height * .42;
   const angle = index / photos.length * Math.PI * 2;
   const circleX = round(Math.cos(angle) * radiusX);
@@ -45,12 +45,12 @@ function PhotoCard({ index, size, progress, reduced }: {
 
   return (
     <motion.div
-      className="absolute left-1/2 top-1/2 h-[82px] w-[58px] -translate-x-1/2 -translate-y-1/2 md:h-[124px] md:w-[90px] lg:h-[148px] lg:w-[106px]"
+      className="absolute left-1/2 top-1/2 h-[82px] w-[58px] -translate-x-1/2 -translate-y-1/2 md:h-[160px] md:w-[116px] lg:h-[190px] lg:w-[136px]"
       style={{ transform, perspective: "1000px" }}
     >
       <motion.div className="relative size-full" style={{ transformStyle: "preserve-3d" }} whileHover={reduced ? undefined : { rotateY: 180 }} transition={{ duration: .5 }}>
         <div className="absolute inset-0 overflow-hidden rounded-xl border border-white/10 bg-zinc-900 shadow-lg" style={{ backfaceVisibility: "hidden" }}>
-          <Image src={`https://images.unsplash.com/${source.photo}?auto=format&fit=crop&w=240&h=340&q=75`} alt="" fill sizes="(min-width: 1024px) 106px, (min-width: 768px) 90px, 58px" className="object-cover" />
+          <Image src={`https://images.unsplash.com/${source.photo}?auto=format&fit=crop&w=320&h=440&q=80`} alt="" fill sizes="(min-width: 1024px) 136px, (min-width: 768px) 116px, 58px" className="object-cover" />
         </div>
         <div className="absolute inset-0 flex items-center justify-center rounded-xl border border-zinc-600 bg-zinc-800 p-2 text-center text-xs font-medium text-zinc-100" style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}>
           {source.title}
@@ -82,7 +82,7 @@ export default function ScrollMorphHero({ children, compact = false }: { childre
   }, []);
 
   return (
-    <section ref={root} aria-label="Contenido para distintos negocios" className={`relative isolate flex items-center justify-center overflow-hidden border-y border-zinc-800 bg-zinc-900/25 py-24 ${compact ? "min-h-[620px] md:min-h-[680px]" : "min-h-[calc(100svh-4rem)] md:py-32"}`}>
+    <section ref={root} aria-label="Contenido para distintos negocios" className={`relative isolate flex items-center justify-center overflow-hidden bg-zinc-950 py-24 ${compact ? "min-h-[660px] md:min-h-[860px]" : "min-h-[calc(100svh-4rem)] md:py-32"}`}>
       <div className="absolute inset-0" aria-hidden="true">
         {size && photos.map((photo, index) => <PhotoCard key={photo.photo} index={index} size={size} progress={progress} reduced={reduce !== false} />)}
       </div>

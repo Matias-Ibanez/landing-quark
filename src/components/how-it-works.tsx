@@ -23,7 +23,7 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section id="como-funciona" className="scroll-mt-20 border-y border-zinc-800 bg-zinc-900/20 py-20 md:py-28">
+    <section id="como-funciona" className="scroll-mt-20 py-14 md:py-24">
       <Container>
         <SectionHeader title="Una idea. Tres pasos. Tu próxima publicación." sub="No necesitás saber diseñar. Solo contarnos qué querés mostrar." />
         <ol className="mt-12 divide-y divide-zinc-800">

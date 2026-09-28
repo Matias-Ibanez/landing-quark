@@ -2,7 +2,6 @@ import { ArrowRight } from "@phosphor-icons/react/ssr";
 import { Cta } from "@/components/ui/cta";
 import { ImageStreamHero } from "@/components/ui/image-stream-hero";
 import { chatHref } from "@/lib/site";
-import { contentPlans } from "@/lib/landing-plans";
 
 const images = [
   "photo-1509042239860-f550ce710b93", "photo-1540189549336-e6e99c3679fe",
@@ -14,9 +13,9 @@ const images = [
 
 export function Hero() {
   return (
-    <section aria-label="Creá contenido con QUARK" className="border-b border-zinc-800 bg-zinc-950">
-      <ImageStreamHero images={images} className="min-h-[720px] md:min-h-[max(780px,calc(100svh-4rem))]">
-        <div className="relative z-10 mx-auto flex min-h-[720px] max-w-5xl flex-col items-center justify-between gap-56 px-6 pb-24 pt-12 text-center md:min-h-[max(780px,calc(100svh-4rem))] md:gap-64 md:pb-24 md:pt-16">
+    <section aria-label="Creá contenido con QUARK" className="bg-zinc-950">
+      <ImageStreamHero images={images} className="md:min-h-[780px] lg:min-h-[max(780px,calc(100svh-4rem))]">
+        <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center gap-7 px-6 pb-8 pt-10 text-center md:min-h-[780px] lg:min-h-[max(780px,calc(100svh-4rem))] md:justify-between md:gap-64 md:pb-20 md:pt-16">
           <div>
             <p className="text-sm font-medium text-zinc-300">Menos tareas. Más ideas para tu negocio.</p>
             <h1 className="mx-auto mt-5 max-w-[22ch] text-balance text-[clamp(2rem,5.3vw,4.75rem)] font-medium leading-[1.08] tracking-[-0.055em] text-zinc-50">
@@ -29,9 +28,9 @@ export function Hero() {
           <div className="relative rounded-3xl bg-zinc-950/85 px-5 py-4">
             <div className="flex flex-wrap justify-center gap-3">
               <Cta href={chatHref} className="h-12 px-7">Crear mi contenido <ArrowRight size={17} aria-hidden="true" /></Cta>
-              <Cta href="#planes" variant="secondary" className="h-12 border-zinc-600 px-7">Ver planes</Cta>
+              <Cta href="#como-funciona" variant="secondary" className="h-12 border-zinc-600 px-7">Cómo funciona</Cta>
             </div>
-            <p className="mt-4 text-sm text-zinc-400">Desde <span className="text-zinc-100">US${contentPlans[0].price}/mes</span>. Empezá con imágenes y sumá videos cuando quieras.</p>
+            <p className="mt-4 text-sm text-zinc-400">No necesitás saber diseñar ni conectar tus redes para empezar.</p>
           </div>
         </div>
       </ImageStreamHero>

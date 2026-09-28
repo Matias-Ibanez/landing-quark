@@ -42,11 +42,11 @@ export function ImageStreamHero({ images, children, className }: {
   const [paused, setPaused] = useState(false);
   const [visible, setVisible] = useState(true);
   const cards = 9;
-  const speed = 26;
-  const axis = 62;
+  const speed = 34;
+  const axis = 58;
   const css = useMemo(() => `${keyframes(1, right, PATH)}${keyframes(-1, left, PATH)}
     [data-stream-paused="true"] .${card}{animation-play-state:paused!important}
-    @media(prefers-reduced-motion:reduce){.${card}{animation-play-state:paused!important}}`, [right, left, card]);
+    @media(prefers-reduced-motion:reduce),(max-width:767px){.${card}{animation-play-state:paused!important}}`, [right, left, card]);
 
   useEffect(() => {
     if (!root.current) return;
@@ -58,7 +58,7 @@ export function ImageStreamHero({ images, children, className }: {
   return (
     <div ref={root} data-stream-paused={paused || !visible} className={cn("relative overflow-hidden", className)} style={{ containerType: "inline-size" }}>
       <style>{css}</style>
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ perspective: `${PATH.perspective}cqw`, perspectiveOrigin: `50% ${axis}%`, maskImage: "linear-gradient(to bottom, transparent 22%, black 43%, black 73%, transparent 95%)" }}>
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden md:block" style={{ perspective: `${PATH.perspective}cqw`, perspectiveOrigin: `50% ${axis}%`, maskImage: "linear-gradient(to bottom, transparent 22%, black 43%, black 73%, transparent 95%)" }}>
         <div className="absolute inset-0" style={{ transformStyle: "preserve-3d" }}>
           {images.length > 0 && [right, left].map(name => Array.from({ length: cards }, (_, i) => (
             <div key={`${name}-${i}`} className={cn(card, "image-stream-card absolute overflow-hidden bg-zinc-800")} style={{
@@ -67,13 +67,19 @@ export function ImageStreamHero({ images, children, className }: {
               borderRadius: `${PATH.cardRadius}cqw`, animation: `${name} ${speed}s linear infinite`,
               animationDelay: `${-(i * speed) / cards}s`, backfaceVisibility: "hidden",
             }}>
-              <Image src={images[i % images.length]} alt="" fill loading="eager" sizes="(max-width: 767px) 220px, 480px" className="object-cover" draggable={false} />
+              <Image src={images[i % images.length]} alt="" fill loading={i === 0 ? "eager" : "lazy"} sizes="480px" className="object-cover" draggable={false} />
             </div>
           )))}
         </div>
       </div>
       {children}
-      <button type="button" onClick={() => setPaused(value => !value)} aria-pressed={paused} className="absolute bottom-5 right-6 z-20 inline-flex min-h-11 items-center gap-2 rounded-full border border-zinc-700 bg-zinc-950/90 px-4 text-xs text-zinc-300 transition-colors hover:text-white motion-reduce:hidden">
+      <div className="relative px-6 pb-8 md:hidden">
+        <div role="region" className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" aria-label="Galería de fotos ilustrativas" tabIndex={0}>
+          {images.map((src, index) => <div key={src} className="relative h-[250px] w-[185px] shrink-0 snap-start overflow-hidden rounded-2xl"><Image src={src} alt={`Foto ilustrativa ${index + 1}`} fill sizes="185px" className="object-cover" /></div>)}
+        </div>
+        <p className="mt-2 text-xs text-zinc-400">Deslizá para ver más fotos.</p>
+      </div>
+      <button type="button" onClick={() => setPaused(value => !value)} aria-pressed={paused} className="absolute bottom-5 right-0 z-20 hidden min-h-11 items-center gap-2 rounded-full border border-zinc-700 bg-zinc-950/90 px-4 text-xs text-zinc-300 transition-colors hover:text-white md:inline-flex motion-reduce:hidden">
         {paused ? <Play size={14} aria-hidden="true" /> : <Pause size={14} aria-hidden="true" />}
         {paused ? "Mover imágenes" : "Pausar imágenes"}
       </button>
