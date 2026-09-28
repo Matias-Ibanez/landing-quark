@@ -1,6 +1,8 @@
 name: quark-frontend
 services:
   web:
+    environment:
+      QUARK_API_URL: http://studio:8000
     build:
       context: .
       args:

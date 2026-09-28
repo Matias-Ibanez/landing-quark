@@ -1,3 +1,5 @@
+import { clearAuthSession, csrfToken } from "@/lib/auth-client";
+
 export interface Project { id: string; name: string; revision: number; updated_at: string }
 export interface Asset { id: string; name: string; filename: string; kind: "image" | "audio" | "document"; document?: { pages: number; textStatus: "ready" | "ocr" | "partial" | "empty"; textTruncated: boolean; previewUrl: string } }
 export interface Run { id: string; status: string; error: string | null }
@@ -23,11 +25,17 @@ export interface CostSummary {
   rateSource: string;
 }
 export async function api<T>(path: string, method = "GET", body?: unknown): Promise<T> {
+  const headers = new Headers();
+  if (!(body instanceof FormData)) headers.set("Content-Type", "application/json");
+  if (!["GET", "HEAD", "OPTIONS"].includes(method.toUpperCase())) headers.set("X-Quark-CSRF", await csrfToken());
   const response = await fetch(`/api${path}`, {
-    method, cache: "no-store",
-    headers: body instanceof FormData ? undefined : { "Content-Type": "application/json" },
+    method, cache: "no-store", credentials: "same-origin", headers,
     body: body === undefined ? undefined : body instanceof FormData ? body : JSON.stringify(body),
   });
+  if (response.status === 401) {
+    clearAuthSession(); window.location.replace("/login");
+    throw new Error("Tu sesión terminó. Ingresá de nuevo para continuar.");
+  }
   const value = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(typeof value.detail === "string" ? value.detail : Array.isArray(value.detail) ? value.detail.map((error: { msg?: string }) => (error.msg || "Revisá los datos ingresados").replace(/^Value error, /, "")).join(" · ") : `No se pudo completar la operación (${response.status})`);
   return value as T;

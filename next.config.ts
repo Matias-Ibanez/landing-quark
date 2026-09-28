@@ -7,6 +7,14 @@ const backendOrigin = (process.env.QUARK_API_URL || "http://127.0.0.1:8011").rep
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  async headers() {
+    return ["/chat/:path*", "/login"].map(source => ({ source, headers: [
+      { key: "Cache-Control", value: "private, no-store" },
+      { key: "Content-Security-Policy", value: "frame-ancestors 'none'" },
+      { key: "X-Frame-Options", value: "DENY" },
+      { key: "Referrer-Policy", value: "no-referrer" },
+    ] }));
+  },
   async rewrites() {
     return ["api", "media", "fonts", "webhooks"].map((prefix) => ({
       source: `/${prefix}/:path*`,

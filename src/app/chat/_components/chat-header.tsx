@@ -1,6 +1,7 @@
 "use client";
 
 import { List, FolderSimple } from "@phosphor-icons/react";
+import { LogoutButton } from "./logout-button";
 
 // ---------------------------------------------------------------------------
 // ChatHeader — mobile navigation, current section and conversation files.
@@ -33,6 +34,7 @@ export function ChatHeader({ onToggleSidebar, title = "QUARK", onFiles, fileCoun
         {title}
       </span>
       {onFiles && <button type="button" onClick={onFiles} className="flex min-h-10 shrink-0 items-center gap-2 rounded-full border border-zinc-700/60 px-3 text-xs text-zinc-300 hover:bg-white/5"><FolderSimple size={17} />Archivos{fileCount > 0 && <span className="rounded-full bg-zinc-700/60 px-1.5 py-0.5 text-[10px]">{fileCount}</span>}</button>}
+      <LogoutButton />
     </header>
   );
 }
