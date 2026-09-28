@@ -1,8 +1,8 @@
 # QUARK · frontend
 
-El chat requiere ingresar con la cuenta `admin`. `/login` ofrece el formulario y **Salir** revoca la sesión actual. Configurá la contraseña desde la consola del backend según [AUTENTICACION.md](https://github.com/Matias-Ibanez/backend_Quark/blob/main/AUTENTICACION.md); no hay registro público ni credenciales predeterminadas. Las cookies se envían por el mismo origen; las operaciones que cambian datos incluyen CSRF, también al subir archivos. Las credenciales no se guardan en localStorage.
+El chat requiere ingresar con la cuenta `admin`. `/login` ofrece el formulario y **Salir** revoca la sesión actual. Configurá la contraseña desde la consola del backend según [AUTENTICACION.md](https://github.com/mibanez-devops/backend_quark/blob/main/AUTENTICACION.md); no hay registro público ni credenciales predeterminadas. Las cookies se envían por el mismo origen; las operaciones que cambian datos incluyen CSRF, también al subir archivos. Las credenciales no se guardan en localStorage.
 
-Interfaz y chat de QUARK. La API, Hermes y los datos viven en [backend_Quark](https://github.com/Matias-Ibanez/backend_Quark).
+Interfaz y chat de QUARK. La API, Hermes y los datos viven en [backend_Quark](https://github.com/mibanez-devops/backend_quark).
 
 ## Desarrollo local
 
@@ -26,7 +26,7 @@ docker compose ps
 
 Abrí `http://localhost:8010/chat`. El contenedor Next.js usa la red compartida para acceder a `studio:8000`; la API queda accesible solo en `127.0.0.1:8011` en el host. Si cambiás el puerto del frontend, definí `FRONTEND_PORT` con el mismo valor en ambos despliegues y reconstruí el backend.
 
-Para un servidor con TLS, el proxy público apunta al puerto local del frontend. El backend valida la cuenta admin y protege también los medios; configurá su origen HTTPS para activar cookies Secure. Las instrucciones completas están en [DESPLIEGUE.md del backend](https://github.com/Matias-Ibanez/backend_Quark/blob/main/DESPLIEGUE.md).
+Para un servidor con TLS, el proxy público apunta al puerto local del frontend. El backend valida la cuenta admin y protege también los medios; configurá su origen HTTPS para activar cookies Secure. Las instrucciones completas están en [DESPLIEGUE.md del backend](https://github.com/mibanez-devops/backend_quark/blob/main/DESPLIEGUE.md).
 
 ## Detalles de la pieza
 
