@@ -42,7 +42,7 @@ export function LoginForm() {
   const enabled = !!session?.configured && !busy;
   const input = "mt-2 w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-base outline-none transition focus:border-violet-400 focus:ring-2 focus:ring-violet-400/20 disabled:opacity-50";
   return <form onSubmit={submit} className="mt-8 space-y-5" aria-busy={busy}>
-    <label className="block text-sm text-zinc-300">Usuario<input name="username" autoComplete="username" defaultValue="admin" required maxLength={100} disabled={!enabled} className={input} /></label>
+    <label className="block text-sm text-zinc-300">Usuario<input name="username" autoComplete="username" required maxLength={100} disabled={!enabled} className={input} /></label>
     <label className="block text-sm text-zinc-300">Contraseña<input name="password" type="password" autoComplete="current-password" required maxLength={128} disabled={!enabled} className={input} /></label>
     {error && <p role="alert" className="text-sm leading-5 text-rose-300">{error}</p>}
     {session?.configured === false && <p role="status" className="text-sm text-amber-200">El acceso todavía no está habilitado. Contactá al responsable del espacio.</p>}

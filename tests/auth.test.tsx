@@ -31,6 +31,8 @@ it("refreshes login CSRF, sends credentials once, and clears a rejected password
   render(<LoginForm />);
   const button = await screen.findByRole("button",{name:"Ingresar"});
   await waitFor(() => expect((button as HTMLButtonElement).disabled).toBe(false));
+  expect((screen.getByLabelText("Usuario") as HTMLInputElement).value).toBe("");
+  await user.type(screen.getByLabelText("Usuario"),"admin");
   await user.type(screen.getByLabelText("Contraseña"),"only-test-password");
   await user.click(button);
   expect((await screen.findByRole("alert")).textContent).toContain("Usuario o contraseña incorrectos");
