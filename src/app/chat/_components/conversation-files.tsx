@@ -2,7 +2,7 @@
 import { X, FolderSimple } from "@phosphor-icons/react";
 import { Dialog, DialogPortal, DialogOverlay, DialogContent, DialogTitle, DialogDescription, DialogClose } from "@/components/animate-ui/primitives/radix/dialog";
 import type { Asset, Job } from "./api";
-import { ResourceCard, type PreviewItem } from "./resource-preview";
+import { ResourceCard, galleryForJob, type PreviewItem } from "./resource-preview";
 
 export function ConversationFiles({ open, onClose, assets, jobs, onPreview }: { open: boolean; onClose: () => void; assets: Asset[]; jobs: Job[]; onPreview: (item: PreviewItem) => void }) {
   const completed = jobs.filter(j => j.kind === "render" && j.status === "done" && j.result?.url);
@@ -11,7 +11,7 @@ export function ConversationFiles({ open, onClose, assets, jobs, onPreview }: { 
     <DialogDescription className="mt-2 text-sm text-zinc-500">Tus adjuntos y las piezas que creamos juntos.</DialogDescription>
     <div className="mt-6 min-h-0 flex-1 space-y-6 overflow-y-auto">
       {!assets.length && !completed.length && <div className="py-16 text-center text-zinc-500"><FolderSimple size={34} className="mx-auto mb-4" /><p className="text-sm">Todavía no hay archivos en este chat.</p></div>}
-      {!!completed.length && <section><h3 className="mb-3 text-xs font-medium text-zinc-500">Creados por QUARK</h3><div className="space-y-2">{completed.map((job, i) => <ResourceCard key={job.id} item={{ url: job.result!.url!, vectorUrl: job.result?.vectorUrl, title: `${job.payload.kind === "mp4" ? "Video" : "Imagen"} ${completed.length - i}`, caption: job.payload.document.caption, job }} onOpen={item => { onClose(); onPreview(item); }} />)}</div></section>}
+      {!!completed.length && <section><h3 className="mb-3 text-xs font-medium text-zinc-500">Creados por QUARK</h3><div className="space-y-2">{completed.map((job, i) => <ResourceCard key={job.id} item={{ url: job.result!.url!, vectorUrl: job.result?.vectorUrl, title: `${job.payload.kind === "mp4" ? "Video" : "Imagen"} ${completed.length - i}`, caption: job.payload.document.caption, job, gallery: galleryForJob(job, completed) }} onOpen={item => { onClose(); onPreview(item); }} />)}</div></section>}
       {!!assets.length && <section><h3 className="mb-3 text-xs font-medium text-zinc-500">Adjuntos</h3><div className="space-y-2">{assets.map(asset => <ResourceCard key={asset.id} item={{ url: `/media/assets/${asset.filename}`, title: asset.name, document: asset.document }} onOpen={item => { onClose(); onPreview(item); }} />)}</div></section>}
     </div>
   </DialogContent></DialogPortal></Dialog>;

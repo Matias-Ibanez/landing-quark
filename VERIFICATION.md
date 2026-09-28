@@ -1,5 +1,12 @@
 # Verificación del chat
 
+## Login sin usuario precargado y carruseles — 2026-09-28
+
+- El usuario del login empieza vacío y conserva autocomplete=username para credenciales guardadas por el navegador. La prueba de CSRF/rechazo escribe explícitamente el usuario; 8 pruebas de auth aprobadas.
+- Las imágenes de cada mensaje aparecen seguidas; abrir cualquier lámina conserva el orden del carrusel y permite botones, flechas de teclado y swipe horizontal, con límites al principio/final. Las descargas SVG/PNG cambian con la lámina activa. Se deduplican SVG y PNG de la misma imagen. Archivos y galería usan carouselId/slideIndex del backend para evitar mezclar revisiones o proyectos.
+- npm test: 36 pruebas aprobadas, 24,36 s, incluidas navegación táctil/teclado, descarga por lámina y agrupación. Build Vercel (VERCEL=1, QUARK_API_URL público) aprobado con TypeScript. ESLint de todos los archivos modificados aprobado. Lint global tiene un error preexistente react-hooks/set-state-in-effect en instagram-inbox.tsx:28 y cuatro advertencias ajenas a este cambio; no se declara aprobado.
+- Reversión: retirar gallery y metadatos de agrupación del visor, mensajes, archivos y galería, junto con sus pruebas. Los archivos SVG/PNG y chats almacenados se conservan. La revisión del login se puede revertir de forma independiente.
+
 ## Empaquetado Vercel y Docker — 2026-09-28
 
 - El error aportado ocurrió en onBuildComplete de Vercel, después de compilación/TypeScript. La configuración forzaba output:standalone; coincide con [Next.js #96646](https://github.com/vercel/next.js/issues/96646). next.config.ts usa salida estándar cuando VERCEL=1 y conserva standalone fuera de esa plataforma. No se cambiaron dependencias, rutas, autenticación ni rewrites.

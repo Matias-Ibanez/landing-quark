@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FilmStrip, ImageSquare } from "@phosphor-icons/react";
 import { type Job, type Project, stateLabel } from "./api";
 import { MediaImage } from "./media-image";
-import type { PreviewItem } from "./resource-preview";
+import { galleryForJob, type PreviewItem } from "./resource-preview";
 export function ImageGallery({ jobs, projects, onResume, onPlan, compact = false, onPreview }: {
   jobs: Job[]; projects: Project[]; onResume: (job: Job) => void; onPlan: (job: Job) => void; compact?: boolean; onPreview?: (item: PreviewItem) => void;
 }) {
@@ -17,7 +17,7 @@ export function ImageGallery({ jobs, projects, onResume, onPlan, compact = false
     {!renders.length && <div className="rounded-2xl border border-dashed border-zinc-800 p-12 text-center text-zinc-500"><ImageSquare size={32} className="mx-auto mb-4" /><p>{completed.length ? "No encontré piezas con esa búsqueda." : "Las piezas que crees en el chat aparecerán acá."}</p>{!!completed.length && <button onClick={() => { setSearch(""); setFilter("all"); }} className="mt-4 text-sm text-violet-300">Mostrar todas</button>}</div>}
     <div className={`grid gap-4 ${compact ? "grid-cols-1 sm:grid-cols-2" : "sm:grid-cols-2 xl:grid-cols-3"}`}>
       {renders.map(job => <article key={job.id} className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900">
-        <button type="button" aria-label={`Previsualizar ${projects.find(p => p.id === job.project_id)?.name || "Pieza creada"}`} onClick={() => job.result?.url && onPreview?.({ url: job.result.url, vectorUrl: job.result.vectorUrl, title: projects.find(p => p.id === job.project_id)?.name || "Pieza creada", caption: job.payload.document.caption, job })} className="flex aspect-[4/3] w-full items-center justify-center overflow-hidden bg-zinc-950 transition-colors hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-violet-400">
+        <button type="button" aria-label={`Previsualizar ${projects.find(p => p.id === job.project_id)?.name || "Pieza creada"}`} onClick={() => job.result?.url && onPreview?.({ url: job.result.url, vectorUrl: job.result.vectorUrl, title: projects.find(p => p.id === job.project_id)?.name || "Pieza creada", caption: job.payload.document.caption, job, gallery: galleryForJob(job, completed) })} className="flex aspect-[4/3] w-full items-center justify-center overflow-hidden bg-zinc-950 transition-colors hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-violet-400">
           {job.status === "done" && job.result?.url ? job.payload.kind === "mp4"
             ? <div className="text-center text-zinc-400"><FilmStrip size={42} weight="duotone" className="mx-auto mb-3" /><span className="text-sm">Reproducir video</span></div>
             : <MediaImage key={job.result.url} src={job.result.url} previewVector retry={false} alt={projects.find(p => p.id === job.project_id)?.name || "Pieza creada"} containerClassName="h-full w-full" className="h-full w-full object-contain" />

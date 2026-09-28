@@ -6,7 +6,7 @@ export interface Run { id: string; status: string; error: string | null }
 export interface Job {
   id: string; project_id: string; kind: string; status: string; error: string | null;
   created_at: string;
-  payload: { revision: number; kind: "png" | "mp4"; quality: string; hermes?: boolean; document: { caption: string; engine: string } };
+  payload: { revision: number; kind: "png" | "mp4"; quality: string; hermes?: boolean; carouselId?: string; slideIndex?: number; slideCount?: number; document: { caption: string; engine: string } };
   result: { url?: string; vectorUrl?: string; assetId?: string } | null;
 }
 export interface CalendarEvent {

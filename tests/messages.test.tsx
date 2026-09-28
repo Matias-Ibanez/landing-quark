@@ -5,6 +5,15 @@ import { MessageList } from "../src/app/chat/_components/message-list";
 import { MediaImage } from "../src/app/chat/_components/media-image";
 
 describe("message rendering", () => {
+  it("opens the message images as one ordered carousel without duplicate SVG previews", () => {
+    const preview = vi.fn();
+    render(<MessageList onPreview={preview} messages={[{ id: "carousel", role: "assistant", content: "Tu carrusel", media: ["/media/exports/one.svg", "/media/exports/one.png", "/media/exports/two.svg"] }]} />);
+    const cards = screen.getAllByRole("button", { name: /Previsualizar/ });
+    expect(cards).toHaveLength(2);
+    fireEvent.click(cards[1]);
+    expect(preview.mock.calls[0][0].gallery.map((item: { url: string }) => item.url)).toEqual(["/media/exports/one.svg", "/media/exports/two.svg"]);
+    expect(preview.mock.calls[0][0].url).toBe("/media/exports/two.svg");
+  });
   it("renders emphasis, lists, headings, links and tables", () => {
     const { container } = render(<MarkdownMessage content={'## Plan\n\n**Tu marca** y *tu público*.\n\n- Una idea\n- Otra idea\n\n[Instagram](https://instagram.com)\n\n| Día | Idea |\n| --- | --- |\n| Lunes | Producto |'} />);
     expect(container.querySelector("strong")?.textContent).toBe("Tu marca");
