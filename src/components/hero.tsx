@@ -19,7 +19,7 @@ export function Hero() {
           <div>
             <p className="text-sm font-medium text-zinc-300">Menos tareas. Más ideas para tu negocio.</p>
             <h1 className="mx-auto mt-5 max-w-[22ch] text-balance text-[clamp(2rem,5.3vw,4.75rem)] font-medium leading-[1.08] tracking-[-0.055em] text-zinc-50">
-              <span className="block">Convertí lo que hacés</span><span className="block">en contenido que vende.</span>
+              Contenido para tu negocio, listo para publicar.
             </h1>
             <p className="mx-auto mt-5 max-w-[48ch] text-base leading-relaxed text-zinc-300 md:text-lg">
               Contanos qué querés vender. QUARK lo convierte en publicaciones, carruseles y videos con tu estilo.
