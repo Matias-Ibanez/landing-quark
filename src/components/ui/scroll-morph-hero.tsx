@@ -22,13 +22,12 @@ const photos = [
   { photo: "photo-1441986300917-64674bd600d8", title: "Tu negocio" },
 ];
 
-type Phase = "scatter" | "line" | "circle";
 type Size = { width: number; height: number };
 const lerp = (a: number, b: number, progress: number) => a + (b - a) * progress;
 const round = (value: number) => Math.round(value * 1000) / 1000;
 
-function PhotoCard({ index, size, phase, progress, reduced }: {
-  index: number; size: Size; phase: Phase; progress: MotionValue<number>; reduced: boolean;
+function PhotoCard({ index, size, progress, reduced }: {
+  index: number; size: Size; progress: MotionValue<number>; reduced: boolean;
 }) {
   const mobile = size.width < 768;
   const radiusX = mobile ? size.width * .62 : Math.min(size.width * .46, 620);
@@ -43,18 +42,12 @@ function PhotoCard({ index, size, phase, progress, reduced }: {
   const arcY = Math.sin(arcAngle) * arcRadius + arcRadius + size.height * .35;
   const transform = useTransform(progress, p => `translateX(${round(lerp(circleX, arcX, reduced ? 0 : p))}px) translateY(${round(lerp(circleY, arcY, reduced ? 0 : p))}px) rotate(${round(lerp(circleRotation, arcAngle * 180 / Math.PI + 90, reduced ? 0 : p))}deg)`);
   const source = photos[index];
-  const intro = phase === "scatter"
-    ? { x: round(Math.sin(index * 17) * size.width * .5 - circleX), y: round(Math.cos(index * 13) * size.height * .5 - circleY), rotate: round(index * 27 - circleRotation), opacity: 0 }
-    : phase === "line"
-      ? { x: round((index - (photos.length - 1) / 2) * (mobile ? 48 : 90) - circleX), y: round(-radiusY - circleY), rotate: -circleRotation, opacity: 1 }
-      : { x: 0, y: 0, rotate: 0, opacity: 1 };
 
   return (
     <motion.div
       className="absolute left-1/2 top-1/2 h-[82px] w-[58px] -translate-x-1/2 -translate-y-1/2 md:h-[124px] md:w-[90px] lg:h-[148px] lg:w-[106px]"
       style={{ transform, perspective: "1000px" }}
     >
-      <motion.div className="size-full" animate={intro} transition={reduced ? { duration: 0 } : { type: "spring", stiffness: 65, damping: 19, delay: phase === "line" ? index * .025 : 0 }}>
       <motion.div className="relative size-full" style={{ transformStyle: "preserve-3d" }} whileHover={reduced ? undefined : { rotateY: 180 }} transition={{ duration: .5 }}>
         <div className="absolute inset-0 overflow-hidden rounded-xl border border-white/10 bg-zinc-900 shadow-lg" style={{ backfaceVisibility: "hidden" }}>
           <Image src={`https://images.unsplash.com/${source.photo}?auto=format&fit=crop&w=240&h=340&q=75`} alt="" fill sizes="(min-width: 1024px) 106px, (min-width: 768px) 90px, 58px" className="object-cover" />
@@ -63,7 +56,6 @@ function PhotoCard({ index, size, phase, progress, reduced }: {
           {source.title}
         </div>
       </motion.div>
-      </motion.div>
     </motion.div>
   );
 }
@@ -71,8 +63,9 @@ function PhotoCard({ index, size, phase, progress, reduced }: {
 export default function ScrollMorphHero({ children }: { children: React.ReactNode }) {
   const root = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
-  const [phase, setPhase] = useState<Phase>("scatter");
-  const [size, setSize] = useState<Size>({ width: 1200, height: 680 });
+  // Wait for the actual container size so photos start in their final circle,
+  // without briefly showing desktop coordinates on mobile.
+  const [size, setSize] = useState<Size | null>(null);
   const { scrollYProgress } = useScroll({ target: root, offset: ["start start", "end start"] });
   const morph = useTransform(scrollYProgress, [0, .6], [0, 1]);
   const progress = useSpring(morph, { stiffness: 90, damping: 25 });
@@ -88,16 +81,10 @@ export default function ScrollMorphHero({ children }: { children: React.ReactNod
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    const line = reduce === false ? setTimeout(() => setPhase("line"), 180) : undefined;
-    const circle = setTimeout(() => setPhase("circle"), reduce === false ? 1100 : 0);
-    return () => { clearTimeout(line); clearTimeout(circle); };
-  }, [reduce]);
-
   return (
     <section ref={root} aria-label="Marketing para tu negocio" className="relative isolate flex min-h-[calc(100svh-4rem)] items-center justify-center overflow-hidden border-b border-zinc-800 bg-zinc-950 py-24 md:py-32">
       <div className="absolute inset-0" aria-hidden="true">
-        {photos.map((photo, index) => <PhotoCard key={photo.photo} index={index} size={size} phase={phase} progress={progress} reduced={reduce !==false} />)}
+        {size && photos.map((photo, index) => <PhotoCard key={photo.photo} index={index} size={size} progress={progress} reduced={reduce !== false} />)}
       </div>
       <motion.div className="relative z-10 w-full" style={{ y: reduce !== false ? 0 : contentY }}>{children}</motion.div>
     </section>

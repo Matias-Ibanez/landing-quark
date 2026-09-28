@@ -1,5 +1,10 @@
 # Verificación del frontend
 
+## Portada sin secuencia de entrada — 2026-09-28
+
+- Se eliminan las fases dispersa/fila y sus temporizadores. Las fotos aparecen directamente en círculo, una vez medida la sección, evitando también mostrar coordenadas de escritorio brevemente en celular. Se conserva el movimiento al desplazar la página.
+- ESLint del componente, `tsc --noEmit` y `git diff --check`: aprobados. Recarga local: 12 fotos en sus posiciones finales, sin errores ni advertencias de consola. Cambio solo local, sin push.
+
 ## Landing comercial, revisión local — 2026-09-28
 
 - Portada con fotos de comercios que se organizan al entrar y cambian de posición al desplazar la página. Adaptación del componente aportado, con `motion/react` ya instalado: sin dependencias nuevas, aleatoriedad al renderizar ni bloqueo del scroll. Se conservan navegación, rutas y tipografía; el texto y los botones quedan visibles durante la animación.
