@@ -64,4 +64,4 @@ export const DEFAULT_MODEL_ID = AI_MODELS[0].id;
 export const DEFAULT_FUNCTION_ID = CHAT_FUNCTIONS[0].id;
 
 /** The navigable views inside /chat. */
-export type ActiveView = "chat" | "gallery" | "calendar" | "instagram";
+export type ActiveView = "chat" | "gallery" | "calendar" | "instagram" | "statistics";

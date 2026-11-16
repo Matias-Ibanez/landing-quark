@@ -6,4 +6,5 @@ Element.prototype.scrollIntoView = vi.fn();
 vi.mock("@phosphor-icons/react", () => Object.fromEntries([
   "Plus", "ArrowUp", "FilePdf", "Waveform", "X", "ArrowLeft", "ArrowRight", "Check", "PencilSimple",
   "Sparkle", "ImageSquare", "FilmStrip", "Lightbulb", "DownloadSimple", "Play", "ArrowUpRight", "FolderSimple",
+  "ArrowClockwise", "ChartBar", "Cpu", "Wallet",
 ].map(name => [name, () => null])));

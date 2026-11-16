@@ -13,9 +13,18 @@ import { CreativeBriefEditor, type BriefState } from "./creative-brief";
 import { ImageGallery } from "./image-gallery";
 import { ContentCalendar } from "./content-calendar";
 import { InstagramInbox } from "./instagram-inbox";
+import { UsageDashboard } from "./usage-dashboard";
 import { SettingsDialog, PlanDialog } from "./workspace-dialogs";
 import { api, type Project, type Job, type Settings, type Run, type CalendarEvent, type Asset } from "./api";
 import type { ActiveView, ChatMessage } from "./constants";
+
+const viewTitles: Record<ActiveView, string> = {
+  chat: "QUARK",
+  gallery: "Biblioteca",
+  calendar: "Calendario",
+  instagram: "Instagram",
+  statistics: "Estadísticas",
+};
 
 function rememberChat(id: string | null) {
   try { if (id) sessionStorage.setItem("quark:last-chat", id); else sessionStorage.removeItem("quark:last-chat"); }
@@ -136,10 +145,10 @@ export function ChatLayout() {
     <ChatSidebar isOpen={sidebarOpen} isCollapsed={sidebarCollapsed} onClose={closeSidebar} onToggleCollapse={() => setSidebarCollapsed(p => !p)} activeView={activeView} onViewChange={setActiveView}
       projects={projects} selectedId={selectedId} onSelect={select} onNew={() => select(null)} onSettings={() => setSettingsOpen(true)} />
     <main inert={sidebarOpen} className="flex min-w-0 flex-1 flex-col">
-      <ChatHeader onToggleSidebar={() => { setSidebarCollapsed(false); setSidebarOpen(p => !p); }} title={activeView === "chat" ? "QUARK" : activeView === "gallery" ? "Biblioteca" : activeView === "calendar" ? "Calendario" : "Instagram"} onFiles={selectedId && activeView === "chat" ? () => setFilesOpen(true) : undefined} fileCount={assets.length + renders.filter(j => j.status === "done").length} />
+      <ChatHeader onToggleSidebar={() => { setSidebarCollapsed(false); setSidebarOpen(p => !p); }} title={viewTitles[activeView]} onFiles={selectedId && activeView === "chat" ? () => setFilesOpen(true) : undefined} fileCount={assets.length + renders.filter(j => j.status === "done").length} />
       {error && <div role="alert" className="flex items-center justify-between gap-4 border-b border-rose-900/50 bg-rose-950/20 px-5 py-3 text-sm text-rose-300"><span>{error}</span><button onClick={() => setError("")} aria-label="Cerrar aviso"><X size={18} /></button></div>}
       {settings && !settings.hasDeepSeekKey && <div className="flex flex-wrap justify-between gap-2 border-b border-zinc-800 px-5 py-3 text-xs text-zinc-400"><span>El agente no está disponible en este momento.</span><button onClick={() => setSettingsOpen(true)} className="text-violet-300">Ver estado →</button></div>}
-      {!ready ? <p className="m-auto text-zinc-500">Conectando con tu espacio…</p> : activeView === "chat" ? <>
+      {activeView === "statistics" ? <UsageDashboard /> : !ready ? <p className="m-auto text-zinc-500">Conectando con tu espacio…</p> : activeView === "chat" ? <>
         <div data-chat-scroll className="flex min-h-0 flex-1 flex-col overflow-y-auto">
           {!selectedId && !messages.length ? <div className="relative flex flex-1 flex-col items-center justify-center gap-5 px-6 py-12 text-center">
             <div className="mb-1 flex size-12 items-center justify-center text-violet-300"><Sparkle size={32} weight="duotone" /></div>

@@ -11,6 +11,7 @@ import {
   Image,
   CalendarBlank,
   InstagramLogo,
+  ChartBar,
 } from "@phosphor-icons/react";
 import { Mark } from "@/components/ui/mark";
 import { site } from "@/lib/site";
@@ -54,6 +55,7 @@ const NAV_ITEMS: readonly { id: ActiveView; label: string; icon: typeof Chats }[
   { id: "gallery", label: "Biblioteca", icon: Image },
   { id: "calendar", label: "Calendario", icon: CalendarBlank },
   { id: "instagram", label: "Instagram", icon: InstagramLogo },
+  { id: "statistics", label: "Estadísticas", icon: ChartBar },
 ] as const;
 
 export function ChatSidebar({

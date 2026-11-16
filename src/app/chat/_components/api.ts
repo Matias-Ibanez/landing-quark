@@ -17,12 +17,27 @@ export interface Settings {
   provider: "hermes_deepseek"; model: string; hasDeepSeekKey: boolean; instagramConfigured: boolean;
   brand: { name: string; tone: string; context: string };
 }
-export interface DeepSeekBalance { configured: boolean; available: boolean; balances: { currency: string; total: string }[] }
 export interface CostSummary {
-  estimatedSpendUsd: number; unpricedRuns: number; allInAverageUsd: number | null;
-  images: { pieces: number; averageDirectUsd: number | null };
-  videos: { pieces: number; averageDirectUsd: number | null };
-  rateSource: string;
+  estimatedSpendUsd: number;
+  unpricedRuns: number;
+  incompleteCostOperations: number;
+  totalOperations: number;
+  meteredOperations: number;
+  agentRuns: number;
+  inputTokens: number;
+  outputTokens: number;
+  generatedImages: number;
+  generatedVideos: number;
+  dailySpend: { date: string; estimatedUsd: number }[];
+  runs: {
+    runId: string | null;
+    status: string;
+    mediaKind: string | null;
+    inputTokens: number | null;
+    outputTokens: number | null;
+    estimatedUsd: number | null;
+    createdAt: string;
+  }[];
 }
 export async function api<T>(path: string, method = "GET", body?: unknown): Promise<T> {
   const headers = new Headers();
